@@ -83,7 +83,7 @@ class Spw extends Tle
 
     arT() 
     {   if(this.cuT == this.spT) 
-        {   ENE.push(new Min(this.x - 16,this.y - 16,64,64,this));
+        {   ENE.push(new Min(this.x,this.y,64,64,this));
             this.enA++;
             this.cuT = 0;
         } 

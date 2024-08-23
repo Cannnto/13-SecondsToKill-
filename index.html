@@ -25,7 +25,8 @@
 </head>
 <body>
     <script src="scripts/functions.js"></script>
-    <script src="scripts/functionDraw.js"></script>
+    <script src="scripts/graphics/particles.js"></script>
+    <script src="scripts/graphics/functionDraw.js"></script>
     <script src="scripts/entities.js"></script>
     <script src="scripts/tilesAndMap/map.js"></script>
     <script src="scripts/tilesAndMap/levels.js"></script>
@@ -39,32 +40,37 @@
 
     
     var ENE = []; 
+    var par = [];
     var clv = 0;
     var map = new Map(empty());
     cma(map.arr);
-
     var tim = setInterval(loop,1000/30);
     var pla = new Pla(cnv.width/2, cnv.height/2, 64, 64);
+    var box = new Box(cnv.width/2,cnv.height/3);
+    var All = [];
 
     function loop()
     {   r(0,0,cnv.width,cnv.height,'black');
-        
         map.drw();
-        pla.dra();
-        for (let i = 0; i < ENE.length; i++) 
-        {   ENE[i].upd();   
-            ENE[i].dra();                   
-        }
-        pla.zin();
+        
+    
+        All = ENE.concat(pla,box);
+        All.sort((a,b) => a.y - b.y);
+        for(var i = 0; i<All.length; i++)       All[i].dra();
+        for (let i = 0; i < ENE.length; i++)    ENE[i].upd();                     
+        box.upd();
         pla.upd();
+        ang = Math.atan2(mou.y - (pla.y+pla.h/2), mou.x - (pla.x+pla.w/2));
+        pla.d.x = Math.cos(ang);
+        pla.d.y = Math.sin(ang);
 
+        if(key[87]) pla.spd.y = -5;
+        if(key[83]) pla.spd.y = +5;
+        if(key[65]) pla.spd.x = -5;
+        if(key[68]) pla.spd.x = +5;
 
-        if(key[87]) pla.d.y = -1;
-        if(key[83]) pla.d.y = +1;
-        if(key[65]) pla.d.x = -1;
-        if(key[68]) pla.d.x = +1;
-        if(!key[87] && !key[83]) pla.d.y = 0;
-        if(!key[65] && !key[68]) pla.d.x = 0;
+        if(key[69]) pla.atk();
+        if(!key[69]) pla.atC = 0;
     }
     </script>
 </body>

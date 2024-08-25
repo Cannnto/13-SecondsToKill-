@@ -31,8 +31,8 @@ class Ent
         this.w = w/2; 
         this.h = h/2; 
 
-        this.d = {x: 0, y: 0};
-        this.spd = {x: 0, y: 0};
+        this.d = new Vec(0,0);
+        this.spd = new Vec(0,0);
         this.c = 0;
         this.cnt = 1;
         this.rot = 0;
@@ -63,19 +63,23 @@ class Ent
             this.y + this.h >= oth[i].y &&       
             this.y <= oth[i].y + oth[i].h)    return true;
         }
-        return false;
     }
+    
+    urgh(o)
+    {   return {c:parseInt((this.x+this.w/2+((this.spd.x-0.1)/(abs(this.spd.x-0.1)))*16*o)/32), l:parseInt((this.y+this.h/2+((this.spd.y-0.1)/(abs(this.spd.y-0.1)))*16*o)/32)};
+    }
+    
     upd()
-    {   this.mpa = {c:parseInt((this.x+this.w/2+((this.spd.x-0.1)/(abs(this.spd.x-0.1)))*16)/32), l:parseInt((this.y+this.h/2+((this.spd.y-0.1)/(abs(this.spd.y-0.1)))*16)/32)};
-        if(map.arr[this.mpa.l][this.mpa.c].constructor.name == 'Wal') return true;
-
-
+    {   this.mpa1 = this.urgh(1);
+        this.mpa2 = this.urgh(-1);
+        return (map.arr[this.mpa1.l][this.mpa1.c].constructor.name == 'Wal' || map.arr[this.mpa2.l][this.mpa2.c].constructor.name == 'Wal');
     }
 }
 class Pla extends Ent
 {   constructor(x,y,w,h)
     {   super(x,y,w,h)
         this.atC = 0;
+        this.bal = [];
     }
     sid()
     {   cha(this);
@@ -111,62 +115,95 @@ class Pla extends Ent
         gau(this, this.cnt, 0);
         leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), 'white');
     }
-    atk()
-    {   if(this.atC>-90)this.atC-=10;
+    ATK()
+    {   var hit = {x:this.x + 40*this.d.x, y:this.y + 60*this.d.y-this.h/2, w:this.h, h:this.w*1.5};
+        //r(this.x + 40*this.d.x, this.y + 60*this.d.y-this.h/2, this.h, this.w*1.5,"red");
+        sla(hit);
         for(var i = 0; i<ENE.length; i++)
-        {   if(ENE[i].cld([{x:this.x + 40*this.d.x, y:this.y + 60*this.d.y-this.h/2, w:this.h, h:this.w*1.5}]))
-               if(ENE[i].die)ENE.splice(ENE.indexOf(ENE[i]),1);
+        {   if(ENE[i].cld([hit]))
+            {   ENE[i].lif-=50;
+
+                if(ENE[i].die())ENE.splice(ENE.indexOf(ENE[i]),1);
+            }
         }
     }
-    move(u)
-    {   eval(`this.x ${u}= this.spd.x*abs(this.spd.x/this.len, this.y ${u}= this.spd.y*abs(this.spd.y/this.len))`);
+    fir()
+    {   this.bal.push(new Ball(this.x, this.y, 16, 16, ang))
     }
+
+    move(o) 
+    {   this.x += this.spd.x*abs(this.spd.x/this.len)*o, this.y += this.spd.y*abs(this.spd.y/this.len)*o;
+    }
+
     upd()
-    {   paU();
+    {   //atack animation functions
+        if(this.atA)
+        {   this.atC+=20;
+            this.atk = 0;
+            if(!this.atC) this.ATK(), this.atA = 0;
+        }        
+        if(this.atk)
+        {   this.atC-=10;
+            if(this.atC<-90) this.atA = 1;
+        }
 
         this.len = this.spd.x||this.spd.y ? Math.sqrt(this.spd.x**2+this.spd.y**2) : 1;
-        this.move('+');
-        
-        if(super.upd())this.move('-');
-        if(this.cld([box])) box.psh(this, this.d.x, this.d.y), this.move('-');
+        this.move(1);
+        if(super.upd())this.move(-1);
+        if(this.cld([box])) box.psh(this, this.d.x, this.d.y), this.move(-1);
 
-        //r(this.x + 40*this.d.x, this.y + 60*this.d.y, this.w, this.h,"black");
         this.spd.x = 0;
         this.spd.y = 0;
-        
-
+    }
+}
+class Ball extends Ent
+{   constructor(x,y,w,h,a)
+    {   super(x,y,w,h);
+        this.a = a;
+    }
+    dra()
+    {   r(this.x,this.y,this.w,this.h,'red');
+        for (let i = 0; i < 5; i++) par.push(new Par(this, 'ora'));
+    }
+    die()
+    {   if(super.upd())     return true;
+        if(this.cld([box])) return true;
+        for(var i = 0; i<ENE.length; i++)
+        {   if(ENE[i].cld([this]))
+            {   ENE[i].lif-=100;
+                if(ENE[i].die())ENE.splice(ENE.indexOf(ENE[i]),1);
+                return true;
+            }
+        }
+    }
+    upd()
+    {   this.x += cos(this.a)*5;
+        this.y += sin(this.a)*5;
     }
 }
 class Box extends Ent 
-{   constructor(x,y) {
-    super(x,y,64,64);
-}
-    psh(obj){
-        // console.log(Math.round(x),Math.round(y));
-        // let ang = (Math.atan2((this.y+this.h/2) - box.y, (this.x+this.w/2) - box.x));
-        // console.log(Math.round(Math.cos(ang)), Math.round(Math.sin(ang)))
-        
-        // let blx = (obj.x+32>=this.x) || (obj.x+32<=this.x);
-        // let bly = (obj.y+32>=this.y) || (obj.y+32<=this.y);
-        
-        if (abs(obj.spd.x) != abs(obj.spd.y)) this.x += obj.spd.x, this.y += obj.spd.y;
+{   constructor(x,y) 
+    {   super(x,y,64,64);
+    }
+    psh(obj)
+    {   if(abs(obj.spd.x) != abs(obj.spd.y)) this.x += obj.spd.x, this.y += obj.spd.y;
         if(super.upd())  this.x -= obj.spd.x, this.y -= obj.spd.y;
     }
 
-    dra(){
-        r(this.x, this.y, this.w, this.h, 'red');
-    }
+    dra(){r(this.x, this.y, this.w, this.h, 'red')}
 }
 
 class Min extends Ent
 {   constructor(x,y,w,h) {
         super(x,y,w,h);
         this.lif = 100;
+        this.anC = 0;
+        this.gra = 0;
+
         this.spe = 1;
         this.spV = new Vec(0,0);
         this.acV = new Vec(0,0);
         this.r = 50;
-
         //enemy radius
         this.raE = 50;
         //player radius
@@ -180,7 +217,7 @@ class Min extends Ent
     {   cha(this);
             le1(this, this.cnt, '#3A4A13');
             mov(this);
-                bdS(this, '#5C0C0C', '#5C0C0C',1);
+                bdS(this, '#5C0C0C', '#5C0C0C',1, this.anC);
             res();
             hs2(this, this.cnt, '#3A4A13', 0);
             le2(this, this.cnt, '#3A4A13')
@@ -197,22 +234,28 @@ class Min extends Ent
     fro()
     {   mov(this);
             bdB(this, '#5C0C0C', '#5C0C0C');
-            ZhF(this);
+            ZhF(this, this.anC);
         res();
         HAN(this, this.cnt, '#3A4A13');
         leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), '#3A4A13');
     }
     die()
-    {   this.lif-=100;
-        if(this.lif<=0) return true;
-        return false;
+    {   return this.dea;
     }
     wlk(x,y) 
     {   this.x += x;
         this.y += y;
     }
     upd()
-    {   //vetor da soma entre todos os inimigos
+    {   //animate functions
+        if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1;
+        if(this.lif<=0)
+        {   this.gra += 0.25;
+            this.anC += this.gra;
+            for (let i = 0; i < 5; i++) par.push(new Par(this, 'red'));
+            blo.push(new Blo(this));
+        }
+        //vetor da soma entre todos os inimigos
         let sV = new Vec(0,0);
         //vetor entre o inimigo e o player
         let tV = new Vec(0,0);
@@ -234,8 +277,7 @@ class Min extends Ent
                 if (this.raP > 150) this.raP -= 0.2;
             }
 
-            if (this != oth && d <= this.raP && (oth.raP > this.raP || this.raP > oth.raP)) 
-                oth.raP = this.raP;
+            if (this != oth && d <= this.raP && (oth.raP > this.raP || this.raP > oth.raP)) oth.raP = this.raP;
             
 
             if (this != oth && d <= this.raE) 
@@ -244,13 +286,13 @@ class Min extends Ent
                 sV.sum(v);
             }
             
-            if (cnt > 0) sV.div(cnt);
+            if (cnt) sV.div(cnt);
             let s1 = Math.sqrt(Math.pow(sV.x, 2) + Math.pow(sV.y, 2));
-            if (s1 > 0) sV.div(s1);
+            if (s1) sV.div(s1);
             sV.mtp(this.spe*2);
             
             let s2 = Math.sqrt(Math.pow(tV.x, 2) + Math.pow(tV.y, 2));
-            if (s2 > 0) tV.div(s2);
+            if (s2) tV.div(s2);
             
             tV.mtp(this.spe*0.8);
             this.acV.sum(sV);
@@ -258,10 +300,9 @@ class Min extends Ent
             this.spV.sum(this.acV);
             this.spV.lim(this.spe);
 
-            this.d.x = tV.x;
-            this.d.y = tV.y;
-            this.spd.x = tV.x;
-            this.spd.y = tV.y;
+            if(this.anC) this.spV.mtp(0), tV.mtp(0);
+            this.d = tV;
+            this.spd = tV;
         }
 
         this.wlk(this.spV.x,this.spV.y);

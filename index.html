@@ -41,6 +41,7 @@
     
     var ENE = []; 
     var par = [];
+    var blo = [];
     var clv = 0;
     var map = new Map(empty());
     cma(map.arr);
@@ -52,17 +53,21 @@
     function loop()
     {   r(0,0,cnv.width,cnv.height,'black');
         map.drw();
+        for(let i = 0; i<blo.length; i++)   blo[i].dra();
         
-    
-        All = ENE.concat(pla,box);
+        All = ENE.concat(pla, pla.bal, par, box);
         All.sort((a,b) => a.y - b.y);
-        for(var i = 0; i<All.length; i++)       All[i].dra();
-        for (let i = 0; i < ENE.length; i++)    ENE[i].upd();                     
+        for(let i = 0; i<All.length; i++)   All[i].dra();
+
+
+        upT(pla.bal);
+        upT(ENE);
+        upT(par);
         box.upd();
         pla.upd();
         ang = Math.atan2(mou.y - (pla.y+pla.h/2), mou.x - (pla.x+pla.w/2));
-        pla.d.x = Math.cos(ang);
-        pla.d.y = Math.sin(ang);
+        pla.d.x = cos(ang);
+        pla.d.y = sin(ang);
 
         if(key[87]) pla.spd.y = -5;
         if(key[83]) pla.spd.y = +5;
@@ -70,7 +75,7 @@
         if(key[68]) pla.spd.x = +5;
 
         if(key[69]) pla.atk();
-        if(!key[69]) pla.atC = 0;
+        // if(!key[69]) pla.atC = 0;
     }
     </script>
 </body>

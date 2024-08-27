@@ -6,8 +6,8 @@ document.addEventListener("mouseup",mU);
 document.addEventListener('contextmenu', a=> {a.preventDefault()})
 var key = [];
 var mou ={
-    x:0,
-    y:0
+    x:undefined,
+    y:undefined
 }
 var ang = 0
 function mD(event)

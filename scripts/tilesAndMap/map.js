@@ -1,3 +1,17 @@
+class lvl 
+{   constructor(map,boxes)
+    {
+        this.map = map
+        cma(this.map.arr)
+        this.boxes = boxes
+    }
+
+    drw()
+    {
+        this.map.drw()
+    }
+}
+
 class Map
 {   constructor(arr)
     {   this.arr = arr;
@@ -5,7 +19,8 @@ class Map
 
     drw() // Draw
     {   for(var lne = 0;lne < this.arr.length; lne++) // Linhas
-            for(var col = 0; col < this.arr[lne].length; col++) if(this.arr[lne][col] != 0) this.arr[lne][col].upd(); // Draw each tile 
+            for(var col = 0; col < this.arr[lne].length; col++)
+                if(this.arr[lne][col] != 0) this.arr[lne][col].upd(); // Draw each tile 
     }
 }
 class Tle
@@ -29,6 +44,9 @@ class Tle
         }
         return false;
     }
+
+    upd(){
+    }
 }
 class Wal extends Tle
 {   constructor(x,y,clr)
@@ -43,12 +61,11 @@ class Wal extends Tle
 class flr extends Tle
 {   constructor(x,y)
     {   super(x,y);
-        this.clr = "#3d3d3b";
     }
 
     upd()
     {   if(this.collide())  pla.fri = 0.2;
-        this.drw();
+        ground(this);
     }
 }
 class dor extends Tle
@@ -60,16 +77,14 @@ class dor extends Tle
     upd()
     {   this.drw();
         if(this.collide())
-        {   clv++;
-
-            map.arr = empty();
-            cma(map.arr);
-            pla.x = map.arr[22][26].x;
-            pla.y = map.arr[22][26].y;
-            
+        {   clv++;    
+            pla.x = levels[clv].spwPoint.x
+            pla.y = levels[clv].spwPoint.y
             ENE = [];
+            blo = [];
+            par = [];
+            pla.bal = [];
         }
-
     }
 }
 class Spw extends Tle

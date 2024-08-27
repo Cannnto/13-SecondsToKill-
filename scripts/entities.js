@@ -65,14 +65,15 @@ class Ent
         }
     }
     
-    urgh(o)
-    {   return {c:parseInt((this.x+this.w/2+((this.spd.x-0.1)/(abs(this.spd.x-0.1)))*16*o)/32), l:parseInt((this.y+this.h/2+((this.spd.y-0.1)/(abs(this.spd.y-0.1)))*16*o)/32)};
-    }
+    u(o)
+    {    return !lvls[clv].map.arr[o.l][o.c];}
     
-    upd()
-    {   this.mpa1 = this.urgh(1);
-        this.mpa2 = this.urgh(-1);
-        return (map.arr[this.mpa1.l][this.mpa1.c].constructor.name == 'Wal' || map.arr[this.mpa2.l][this.mpa2.c].constructor.name == 'Wal');
+    CWL()
+    {   this.mp1 = {c:parseInt((this.x)/32), l:parseInt((this.y)/32)};
+        this.mp2 = {c:parseInt((this.x+this.w)/32), l:parseInt((this.y)/32)};
+        this.mp3 = {c:parseInt((this.x+this.w)/32), l:parseInt((this.y+this.h)/32)};
+        this.mp4 = {c:parseInt((this.x)/32), l:parseInt((this.y+this.h)/32)};
+        return (this.u(this.mp1) || this.u(this.mp2) ||this.u(this.mp3) ||this.u(this.mp4));
     }
 }
 class Pla extends Ent
@@ -119,21 +120,20 @@ class Pla extends Ent
     {   var hit = {x:this.x + 40*this.d.x, y:this.y + 60*this.d.y-this.h/2, w:this.h, h:this.w*1.5};
         //r(this.x + 40*this.d.x, this.y + 60*this.d.y-this.h/2, this.h, this.w*1.5,"red");
         sla(hit);
+
+        for(var i=0; i<lvls[clv].boxes.length; i++)
+            if(lvls[clv].boxes[i].cld([hit])) lvls[clv].boxes[i].x = cnv.width/2, lvls[clv].boxes[i].y = cnv.height/3;
+
         for(var i = 0; i<ENE.length; i++)
         {   if(ENE[i].cld([hit]))
-            {   ENE[i].lif-=50;
-
-                if(ENE[i].die())ENE.splice(ENE.indexOf(ENE[i]),1);
-            }
+                ENE[i].lif-=50;
         }
     }
     fir()
-    {   this.bal.push(new Ball(this.x, this.y, 16, 16, ang))
-    }
+    {   this.bal.push(new Ball(this.x, this.y, 16, 16, ang));}
 
     move(o) 
-    {   this.x += this.spd.x*abs(this.spd.x/this.len)*o, this.y += this.spd.y*abs(this.spd.y/this.len)*o;
-    }
+    {   this.x += this.spd.x*abs(this.spd.x/this.len)*o, this.y += this.spd.y*abs(this.spd.y/this.len)*o;}
 
     upd()
     {   //atack animation functions
@@ -149,9 +149,10 @@ class Pla extends Ent
 
         this.len = this.spd.x||this.spd.y ? Math.sqrt(this.spd.x**2+this.spd.y**2) : 1;
         this.move(1);
-        if(super.upd())this.move(-1);
-        if(this.cld([box])) box.psh(this, this.d.x, this.d.y), this.move(-1);
-
+        if(this.CWL())this.move(-1);
+        for(var i=0; i<lvls[clv].boxes.length; i++)
+            if(this.cld([lvls[clv].boxes[i]])) lvls[clv].boxes[i].psh(this, this.d.x, this.d.y), this.move(-1);
+        
         this.spd.x = 0;
         this.spd.y = 0;
     }
@@ -166,15 +167,15 @@ class Ball extends Ent
         for (let i = 0; i < 5; i++) par.push(new Par(this, 'ora'));
     }
     die()
-    {   if(super.upd())     return true;
-        if(this.cld([box])) return true;
+    {   if(this.CWL())      return true;
+        for(var i=0; i<lvls[clv].boxes.length; i++)
+            if(this.cld([lvls[clv].boxes[i]])) return true;
+
         for(var i = 0; i<ENE.length; i++)
-        {   if(ENE[i].cld([this]))
+            if(ENE[i].cld([this]))
             {   ENE[i].lif-=100;
-                if(ENE[i].die())ENE.splice(ENE.indexOf(ENE[i]),1);
                 return true;
             }
-        }
     }
     upd()
     {   this.x += cos(this.a)*5;
@@ -186,13 +187,12 @@ class Box extends Ent
     {   super(x,y,64,64);
     }
     psh(obj)
-    {   if(abs(obj.spd.x) != abs(obj.spd.y)) this.x += obj.spd.x, this.y += obj.spd.y;
-        if(super.upd())  this.x -= obj.spd.x, this.y -= obj.spd.y;
+    {   if(abs(obj.spd.x) != abs(obj.spd.y))    this.x += obj.spd.x, this.y += obj.spd.y;
+        if(this.CWL())                          this.x -= obj.spd.x, this.y -= obj.spd.y;
     }
 
     dra(){r(this.x, this.y, this.w, this.h, 'red')}
 }
-
 class Min extends Ent
 {   constructor(x,y,w,h) {
         super(x,y,w,h);
@@ -240,7 +240,7 @@ class Min extends Ent
         leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), '#3A4A13');
     }
     die()
-    {   return this.dea;
+    {  return this.dea;
     }
     wlk(x,y) 
     {   this.x += x;
@@ -306,8 +306,10 @@ class Min extends Ent
         }
 
         this.wlk(this.spV.x,this.spV.y);
-        if(super.upd()) this.wlk(-this.spV.x, -this.spV.y);   
-        if(this.cld([box])) box.psh(this, this.d.x, this.d.y), this.wlk(-this.spV.x, -this.spV.y);
+        if(this.CWL()) this.wlk(-this.spV.x, -this.spV.y);   
+        for(var i=0; i<lvls[clv].boxes.length; i++)
+            if(this.cld([lvls[clv].boxes[i]])) lvls[clv].boxes[i].psh(this, this.d.x, this.d.y), this.wlk(-this.spV.x, -this.spV.y);
+        
 
         this.acV.mtp(0);
         this.spV.mtp(0);

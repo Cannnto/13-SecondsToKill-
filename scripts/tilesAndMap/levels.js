@@ -11,6 +11,7 @@ function cma(arr)
                 case 2: arr[lne][col] = new Wal(col*32,lne*32);break;  // wall
                 case 3: arr[lne][col] = new dor(col*32,lne*32);break;
                 case 4: arr[lne][col] = new Spw(col*32,lne*32);break;
+                case 5: arr[lne][col] = new Bxs(col*32,lne*32);break;
             }
         }
     }
@@ -67,6 +68,7 @@ function lv2(arr)
     Llvl(arr)
     arr[0][16] = arr[0][15] = 3;
     arr[1][1] = arr[22][30] = 4;
+    //arr[10][10] = 5;
     return arr
 }
 function lv3(arr)

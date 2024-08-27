@@ -3,7 +3,7 @@ class lvl
     {
         this.map = map
         cma(this.map.arr)
-        this.boxes = boxes
+        this.boxes = boxes;
     }
 
     drw()
@@ -108,5 +108,19 @@ class Spw extends Tle
     upd() 
     {   super.drw();
         if (this.enA < 30) this.arT();
+    }
+}
+
+//Box spawner
+
+class Bxs extends Tle {
+    constructor (x,y)
+    {   super(x,y);
+        this.clr = "#FF9633"
+        this.box = new Box(this.x,this.y);
+        lvls[clv].boxes.push(this.box);
+    }
+    upd()
+    {   super.drw();
     }
 }

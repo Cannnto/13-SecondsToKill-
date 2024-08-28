@@ -122,7 +122,8 @@ class Pla extends Ent
         sla(hit);
 
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            if(lvls[clv].boxes[i].cld([hit])) lvls[clv].boxes[i].x = cnv.width/2, lvls[clv].boxes[i].y = cnv.height/3;
+            //caso o player bata na caixa, ela retorna pro seu ponto de origem
+            if(lvls[clv].boxes[i].cld([hit])) lvls[clv].boxes[i].x = lvls[clv].boxes[i].spX, lvls[clv].boxes[i].y = lvls[clv].boxes[i].spY;
 
         for(var i = 0; i<ENE.length; i++)
         {   if(ENE[i].cld([hit]))
@@ -185,6 +186,9 @@ class Ball extends Ent
 class Box extends Ent 
 {   constructor(x,y) 
     {   super(x,y,64,64);
+        //ponto de origem da caixa (spawner)
+        this.spX = x;
+        this.spY = y;
     }
     psh(obj)
     {   if(abs(obj.spd.x) != abs(obj.spd.y))    this.x += obj.spd.x, this.y += obj.spd.y;

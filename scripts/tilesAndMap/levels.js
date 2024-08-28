@@ -68,13 +68,14 @@ function lv2(arr)
     Llvl(arr)
     arr[0][16] = arr[0][15] = 3;
     arr[1][1] = arr[22][30] = 4;
-    //arr[10][10] = 5;
-    return arr
+    arr[9][9] = arr[9][15] = 5; //tiles de spawner de caixa
+;    return arr
 }
 function lv3(arr)
 {   //add Walls
     Tlvl(arr)
     arr[0][16] = arr[0][15] = 3;
+    lvlbox=[];
     return arr
 }
 function lv4(arr)

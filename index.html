@@ -36,14 +36,13 @@
         document.body.appendChild(cnv);
         cnv.width = 1024;
         cnv.height = 768;
-
     var lvls = [
-        new lvl(new Map(lv1(empty())),[]),
-        //new lvl(new Map(lv2(empty())),[new Box(cnv.width/2,cnv.height/3),]),
-        new lvl(new Map(lv2(empty())),[]),
-        new lvl(new Map(lv3(empty())),[]),
-        new lvl(new Map(lv4(empty())),[]),
-        new lvl(new Map(lv5(empty())),[]),
+        //sem definição de caixas aqui :DDDDDD
+        new lvl(new Map(lv1(empty()))),
+        new lvl(new Map(lv2(empty()))),
+        new lvl(new Map(lv3(empty()))),
+        new lvl(new Map(lv4(empty()))),
+        new lvl(new Map(lv5(empty()))),
     ]
         
     function ground(obj)

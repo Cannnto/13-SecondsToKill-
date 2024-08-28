@@ -1,9 +1,13 @@
 class lvl 
-{   constructor(map,boxes)
+{   constructor(map)
     {
         this.map = map
+        this.boxes = [];
         cma(this.map.arr)
-        this.boxes = boxes;
+        //Checa cada tile da fase pra ver se é spawner de caixa, se for, adiciona na lista de boxes
+        for(var lne = 0;lne < this.map.arr.length; lne++) 
+            for(var col = 0; col < this.map.arr[lne].length; col++)
+                if(this.map.arr[lne][col].constructor.name == "Bxs") this.boxes.push(this.map.arr[lne][col].box);
     }
 
     drw()
@@ -118,7 +122,6 @@ class Bxs extends Tle {
     {   super(x,y);
         this.clr = "#FF9633"
         this.box = new Box(this.x,this.y);
-        lvls[clv].boxes.push(this.box);
     }
     upd()
     {   super.drw();

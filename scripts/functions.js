@@ -42,6 +42,25 @@ function bal(x,y,r,cor)
     ctx.closePath();
     ctx.fill();
 }
+function d(e, w, h)
+{   return sqr(pow((e.x+w/2) - (pla.x+pla.w/2), 2) + pow((e.y+h/2) - (pla.y+pla.h/2), 2))*bli < dis;}
+
+function sgr(name,arr,rcv)
+{   for(var i = 0;i<arr.length;i++)
+        for(var j = 0; j<arr[i].length;j++)
+            if(arr[i][j].constructor.name == name)
+                rcv.push(arr[i][j]);
+}
+function shf(arr) 
+{   let I = arr.length;
+    // While there remain elements to shuffle...
+    while (I)
+    {   let rnI = Math.floor(Math.random() * I);
+        I--;
+
+        [arr[I], arr[rnI]] = [arr[rnI], arr[I]];
+    }
+}
 
 
 
@@ -56,5 +75,7 @@ function cP(){ctx.closePath()};
 function mT(x,y){ctx.moveTo(x,y)};
 function lT(x,y){ctx.lineTo(x,y)};
 function rng(){return Math.random()};
-function sin(a){return Math.sin(a)}
-function cos(a){return Math.cos(a)}
+function sin(a){return Math.sin(a)};
+function cos(a){return Math.cos(a)};
+function sqr(a){return Math.sqrt(a)};
+function pow(a,b){return Math.pow(a,b)}

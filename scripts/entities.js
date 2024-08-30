@@ -193,7 +193,9 @@ class Box extends Ent
         if(this.CWL())                          this.x -= obj.spd.x, this.y -= obj.spd.y;
     }
 
-    drw(){r(this.x, this.y, this.w, this.h, 'red')}
+    drw()
+    {   box(this);
+    }
 }
 class Min extends Ent
 {   constructor(x,y,w,h)
@@ -257,6 +259,12 @@ class Min extends Ent
             for (let i = 0; i < 5; i++) par.push(new Par(this, 'red'));
             blo.push(new Blo(this));
         }
+        else
+        {   r(this.x, this.y - this.h/4, this.w, this.h/8, 'white');
+            r(this.x, this.y - this.h/4, (this.w*this.lif)/100, this.h/8, 'red');
+        }
+        
+
         //vetor da soma entre todos os inimigos
         let sV = new Vec(0,0);
         //vetor entre o inimigo e o player

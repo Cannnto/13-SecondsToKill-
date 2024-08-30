@@ -84,8 +84,10 @@
 
     var cpd = true;
     var nxt = 0;
-    var bli = 1;
-    var dis = 200;
+
+    var bli = 0;
+    var dis = 100;
+    var rev = 0;
     var tim = setInterval(loop,1000/30);
     var pla = new Pla(cnv.width/2, cnv.height/2, 64, 64);
     var All = [];
@@ -106,17 +108,16 @@
         upT(ENE);
         upT(par);
         pla.upd();
-        ang = Math.atan2(mou.y - (pla.y+pla.h/2), mou.x - (pla.x+pla.w/2));
+        ang = Math.atan2(mou.y - (pla.y+pla.h/2), mou.x - (pla.x+pla.w/2)) + Math.PI*rev;
         pla.d.x = cos(ang);
         pla.d.y = sin(ang);
-
-        if(key[87]) pla.spd.y = -5;
-        if(key[83]) pla.spd.y = +5;
-        if(key[65]) pla.spd.x = -5;
-        if(key[68]) pla.spd.x = +5;
-        if(key[69]) pla.atk();
+        ctx.translate(RNG(),RNG());
+        if(key[87-rev*4]) pla.spd.y = -5;
+        if(key[83+rev*4]) pla.spd.y = +5;
+        if(key[65+rev*3]) pla.spd.x = -5;
+        if(key[68-rev*3]) pla.spd.x = +5;
         // if(!key[69]) pla.atC = 0;
-        r(0,0,cnv.width,cnv.height,'rgba(138,43,226,0.4)');
+        r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
     }
     </script></body>
 </html>

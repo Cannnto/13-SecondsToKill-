@@ -42,9 +42,17 @@ function bal(x,y,r,cor)
     ctx.closePath();
     ctx.fill();
 }
+function eli(x,y,rw,rh,an,c)
+{   ctx.fillStyle = c;
+    bP();
+    ctx.ellipse(x, y, rw, rh, an, 0, Math.PI * 2);
+    ctx.fill();
+}
 function d(e, w, h)
 {   return sqr(pow((e.x+w/2) - (pla.x+pla.w/2), 2) + pow((e.y+h/2) - (pla.y+pla.h/2), 2))*bli < dis;}
 
+function RNG()
+{   return  rng()*(rng()<0.5?1:-1) *rev}
 function sgr(name,arr,rcv)
 {   for(var i = 0;i<arr.length;i++)
         for(var j = 0; j<arr[i].length;j++)

@@ -56,6 +56,8 @@ function lv1(arr)
     sqlv(arr);
     arr[0][16] = arr[0][15] = 3;
     arr[1][1] = arr[22][30] = 4;
+    arr[9][9] = arr[9][15] = 5;
+    arr[4][5] = arr[6][5] = arr[4][7] = arr[6][7] = 6;
     return arr;
 }
 function lv2(arr)

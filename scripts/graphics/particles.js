@@ -25,7 +25,7 @@ class Par
     die(){return this.a<0}
     upd() {
       this.x += this.vx;
-      this.y += this.vy;
+      this.y += this.vy*(1-rev*2);
       this.a -= 0.03;
       if(this.r>1) this.r -= 0.05+rng()*0.05;
     }

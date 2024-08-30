@@ -37,6 +37,7 @@ class Tle
 {   constructor(x,y)
     {   this.x = x;
         this.y = y;
+        this.w = this.h = 32;
         //this.clr = "black"; // Color
     }
 
@@ -136,6 +137,11 @@ class Btn extends Tle
         }
         else
             this.cld = false;
+    }
+    drw()
+    {   ground(this);
+        //super.drw();
+        btn(this, this.clr);
     }
 }
 

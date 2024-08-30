@@ -39,7 +39,7 @@ class Ent
         this.par = [];
     }
 
-    dra()
+    drw()
     {   if(this.d.x){   this.a = this.sid, this.c = 0; if(this.d.x<0) this.c = 1;}
         if(this.d.y>0 && abs(this.d.y)>abs(this.d.x))  this.a = this.fro, this.c=0;
         if(this.d.y<0 && abs(this.d.y)>abs(this.d.x))  this.a = this.bac, this.c=0;
@@ -66,7 +66,7 @@ class Ent
     }
     
     u(o)
-    {    return !lvls[clv].map.arr[o.l][o.c];}
+    {    return !lvls[clv].map.arr[o.l][o.c]}// || lvls[clv].map.arr[o.l][o.c].constructor.name == "dor";}
     
     CWL()
     {   this.mp1 = {c:parseInt((this.x)/32), l:parseInt((this.y)/32)};
@@ -122,8 +122,7 @@ class Pla extends Ent
         sla(hit);
 
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            //caso o player bata na caixa, ela retorna pro seu ponto de origem
-            if(lvls[clv].boxes[i].cld([hit])) lvls[clv].boxes[i].x = lvls[clv].boxes[i].spX, lvls[clv].boxes[i].y = lvls[clv].boxes[i].spY;
+            if(lvls[clv].boxes[i].box.cld([hit])) lvls[clv].boxes[i].box.x = lvls[clv].boxes[i].box.spX, lvls[clv].boxes[i].box.y = lvls[clv].boxes[i].box.spY;
 
         for(var i = 0; i<ENE.length; i++)
         {   if(ENE[i].cld([hit]))
@@ -148,11 +147,11 @@ class Pla extends Ent
             if(this.atC<-90) this.atA = 1;
         }
 
-        this.len = this.spd.x||this.spd.y ? Math.sqrt(this.spd.x**2+this.spd.y**2) : 1;
+        this.len = this.spd.x||this.spd.y ? sqr(this.spd.x**2+this.spd.y**2) : 1;
         this.move(1);
         if(this.CWL())this.move(-1);
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            if(this.cld([lvls[clv].boxes[i]])) lvls[clv].boxes[i].psh(this, this.d.x, this.d.y), this.move(-1);
+            if(this.cld([lvls[clv].boxes[i].box])) lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.move(-1);
         
         this.spd.x = 0;
         this.spd.y = 0;
@@ -163,14 +162,14 @@ class Ball extends Ent
     {   super(x,y,w,h);
         this.a = a;
     }
-    dra()
+    drw()
     {   r(this.x,this.y,this.w,this.h,'red');
         for (let i = 0; i < 5; i++) par.push(new Par(this, 'ora'));
     }
     die()
     {   if(this.CWL())      return true;
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            if(this.cld([lvls[clv].boxes[i]])) return true;
+            if(this.cld([lvls[clv].boxes[i].box])) return true;
 
         for(var i = 0; i<ENE.length; i++)
             if(ENE[i].cld([this]))
@@ -186,7 +185,6 @@ class Ball extends Ent
 class Box extends Ent 
 {   constructor(x,y) 
     {   super(x,y,64,64);
-        //ponto de origem da caixa (spawner)
         this.spX = x;
         this.spY = y;
     }
@@ -195,11 +193,13 @@ class Box extends Ent
         if(this.CWL())                          this.x -= obj.spd.x, this.y -= obj.spd.y;
     }
 
-    dra(){r(this.x, this.y, this.w, this.h, 'red')}
+    drw()
+    {   box(this);
+    }
 }
 class Min extends Ent
-{   constructor(x,y,w,h) {
-        super(x,y,w,h);
+{   constructor(x,y,w,h)
+    {   super(x,y,w,h);
         this.lif = 100;
         this.anC = 0;
         this.gra = 0;
@@ -224,7 +224,7 @@ class Min extends Ent
                 bdS(this, '#5C0C0C', '#5C0C0C',1, this.anC);
             res();
             hs2(this, this.cnt, '#3A4A13', 0);
-            le2(this, this.cnt, '#3A4A13')
+            le2(this, this.cnt, '#3A4A13');
         res();
     }
     bac()
@@ -259,6 +259,12 @@ class Min extends Ent
             for (let i = 0; i < 5; i++) par.push(new Par(this, 'red'));
             blo.push(new Blo(this));
         }
+        else
+        {   r(this.x, this.y - this.h/4, this.w, this.h/8, 'white');
+            r(this.x, this.y - this.h/4, (this.w*this.lif)/100, this.h/8, 'red');
+        }
+        
+
         //vetor da soma entre todos os inimigos
         let sV = new Vec(0,0);
         //vetor entre o inimigo e o player
@@ -268,9 +274,9 @@ class Min extends Ent
 
         for (let oth of ENE) 
         {   //distancia entre os inimigos
-            let d = Math.sqrt(Math.pow((this.x+this.w/2) - (oth.x+oth.w/2), 2) + Math.pow((this.y+this.h/2) - (oth.y+oth.h/2), 2));
+            let d = sqr(pow((this.x+this.w/2) - (oth.x+oth.w/2), 2) + pow((this.y+this.h/2) - (oth.y+oth.h/2), 2));
             //distancia entre o inimigo e o player
-            let dp = Math.sqrt(Math.pow((this.x+this.w/2) - (pla.x+pla.w/2), 2) + Math.pow((this.y+this.h/2) - (pla.y+pla.h/2), 2));
+            let dp = sqr(pow((this.x+this.w/2) - (pla.x+pla.w/2), 2) + pow((this.y+this.h/2) - (pla.y+pla.h/2), 2));
             
             //persegue o player caso o player esteja dentro do seu raio de detecção
             if (dp <= this.raP) {
@@ -291,11 +297,11 @@ class Min extends Ent
             }
             
             if (cnt) sV.div(cnt);
-            let s1 = Math.sqrt(Math.pow(sV.x, 2) + Math.pow(sV.y, 2));
+            let s1 = sqr(pow(sV.x, 2) + pow(sV.y, 2));
             if (s1) sV.div(s1);
             sV.mtp(this.spe*2);
             
-            let s2 = Math.sqrt(Math.pow(tV.x, 2) + Math.pow(tV.y, 2));
+            let s2 = sqr(pow(tV.x, 2) + pow(tV.y, 2));
             if (s2) tV.div(s2);
             
             tV.mtp(this.spe*0.8);
@@ -312,9 +318,8 @@ class Min extends Ent
         this.wlk(this.spV.x,this.spV.y);
         if(this.CWL()) this.wlk(-this.spV.x, -this.spV.y);   
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            if(this.cld([lvls[clv].boxes[i]])) lvls[clv].boxes[i].psh(this, this.d.x, this.d.y), this.wlk(-this.spV.x, -this.spV.y);
+            if(this.cld([lvls[clv].boxes[i].box])) lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.wlk(-this.spV.x, -this.spV.y);
         
-
         this.acV.mtp(0);
         this.spV.mtp(0);
     }

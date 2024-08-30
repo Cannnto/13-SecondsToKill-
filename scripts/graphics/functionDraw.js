@@ -193,13 +193,11 @@ function heZ(e,c)
 
         // r(bl1.x,bl1.y,bl1.w,bl1.h, 'purple')
         // r(bl2.x,bl2.y,bl2.w,bl2.h,'purple')
-          
         //for (let i = 0; i < 5; i++) par.push(new Par(bl, 'ora'));
     }
     function sla(e)
     {   ctx.fillStyle = 'red';
         RTT(e, ang*180/Math.PI);
-            console.log(ang)
             bP();
                 mT(e.x, e.y);
                 lT(e.x + e.w/2, e.y + e.h/6);
@@ -212,4 +210,31 @@ function heZ(e,c)
             cP();
         res();
         ctx.fill();
+    }
+//box
+    function box(e)
+    {   let a = {x:e.x+e.w/2-e.w/16, y:e.y+e.w/3-6, w: e.w/8, h: e.h};
+        let b = {x:e.x+e.w/2-e.w/16, y:e.y-7.5, w: e.w/16, h: e.h/1.2};
+        let li = '#E29628', mli = '#B5701D';
+        
+        r(e.x, e.y, e.w, e.h, '#995F12');
+        RTT(a,-60);
+            r(a.x,a.y,a.w,a.h, mli);
+        res();
+        RTT(b,82);
+            r(b.x,b.y,b.w,b.h, mli);
+        res();
+        // r(e.x,e.y,e.w,e.h/4, '#806D4D');
+        
+        r(e.x,e.y,e.w/8,e.h, li);
+        r(e.x,e.y,e.w,e.h/12, li);
+        r(e.x,e.y+e.h/4,e.w,e.h/8, li);
+        r(e.x+e.w*0.875,e.y,e.w/8,e.h, li);
+        r(e.x,e.y+e.h*0.875,e.w,e.h/8, li);
+    }
+    function btn(e, cor)
+    {   eli(e.x+e.w/2, e.y+e.h/8, e.w/3, e.h/8, 0, cor);
+        eli(e.x+e.w/2, e.y+e.h/1.2, e.w/2.5, e.h/5, 0, 'gray');
+        eli(e.x+e.w/2, e.y+e.h/1.2, e.w/3, e.h/8, 0, cor);
+        r(e.x+e.w/6, e.y+e.h/8, e.w/1.5, e.h/1.5, cor);
     }

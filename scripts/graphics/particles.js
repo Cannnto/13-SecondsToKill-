@@ -25,12 +25,12 @@ class Par
     die(){return this.a<0}
     upd() {
       this.x += this.vx;
-      this.y += this.vy;
+      this.y += this.vy*(1-rev*2);
       this.a -= 0.03;
       if(this.r>1) this.r -= 0.05+rng()*0.05;
     }
   
-    dra()
+    drw()
     { switch (this.cor)
       { case 'red': var c = `rgba(${100+rng()*155}, 10, ${10}, ${this.a})`;
         break;
@@ -58,7 +58,7 @@ class Blo
     this.r = rng()*7.5;
     this.c = `rgb(${100+rng()*155}, 10, ${10})`;
   }
-  dra()
+  drw()
   { bal(this.x, this.y, this.r, this.c);
   }
 }

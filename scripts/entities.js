@@ -66,7 +66,7 @@ class Ent
     }
     
     u(o)
-    {    return !lvls[clv].map.arr[o.l][o.c]}// || lvls[clv].map.arr[o.l][o.c].constructor.name == "dor";}
+    {    return (!lvls[clv].map.arr[o.l][o.c] || lvls[clv].map.arr[o.l][o.c].constructor.name == "dor" && !cpd);}
     
     CWL()
     {   this.mp1 = {c:parseInt((this.x)/32), l:parseInt((this.y)/32)};

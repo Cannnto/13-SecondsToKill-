@@ -12,6 +12,7 @@ function cma(arr)
                 case 4: arr[lne][col] = new Spw(col*32,lne*32);break;
                 case 5: arr[lne][col] = new Bxs(col*32,lne*32);break;
                 case 6: arr[lne][col] = new Btn(col*32,lne*32);break;
+                case 7: arr[lne][col] = new BDT(col*32,lne*32);break;
             }
         }
     }
@@ -58,6 +59,7 @@ function lv1(arr)
     arr[1][1] = arr[22][30] = 4;
     arr[9][9] = arr[9][15] = 5;
     arr[4][5] = arr[6][5] = arr[4][7] = arr[6][7] = 6;
+    arr[12][9] = arr[12][15] = 7;
     return arr;
 }
 function lv2(arr)

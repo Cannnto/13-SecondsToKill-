@@ -24,6 +24,13 @@
     </style>
 </head>
 <body>
+    <script>
+        var cnv = document.createElement("canvas");
+        var ctx = cnv.getContext("2d");
+        document.body.appendChild(cnv);
+        cnv.width = 1024;
+        cnv.height = 768;
+    </script>
     <script src="scripts/functions.js"></script>
     <script src="scripts/graphics/particles.js"></script>
     <script src="scripts/graphics/functiondraw.js"></script>
@@ -31,12 +38,6 @@
     <script src="scripts/tilesAndMap/levels.js"></script>
     <script src="scripts/tilesAndMap/map.js"></script>
     <script>
-        var cnv = document.createElement("canvas");
-        var ctx = cnv.getContext("2d");
-        document.body.appendChild(cnv);
-        cnv.width = 1024;
-        cnv.height = 768;
-
     var lvls = [
         new lvl(new Map(lv1(empty()))),
         new lvl(new Map(lv2(empty()))),
@@ -77,14 +78,13 @@
     }
     ]
     
-    var ENE = []; 
+    var ENE = [new Cur(100,cnv.height/2,64,64)]; 
     var par = [];
     var blo = [];
     var clv = 0;
 
-    var cpd = true;
+    var cpd = false;
     var nxt = 0;
-
     var bli = 0;
     var dis = 100;
     var rev = 0;
@@ -95,7 +95,7 @@
     function loop()
     {   r(0,0,cnv.width,cnv.height,'black');
         lvls[clv].drw();
-
+        
         for(let i = 0; i<blo.length; i++)
            if(d(blo[i],0,0))blo[i].drw();
         

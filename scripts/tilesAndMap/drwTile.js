@@ -1,0 +1,4 @@
+function wal(e)
+{
+
+}

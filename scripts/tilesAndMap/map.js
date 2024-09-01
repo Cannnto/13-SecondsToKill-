@@ -42,9 +42,10 @@ class Map
     {   for(var lne = 0;lne < this.arr.length; lne++) // Linhas
             for(var col = 0; col < this.arr[lne].length; col++)
             {   if(this.arr[lne][col] && d(this.arr[lne][col], 32, 32)) this.arr[lne][col].drw();
-
+                
                 if(this.arr[lne][col]) this.arr[lne][col].upd(); // Draw each tile 
             }
+            console.log(this.arr)
     }
 }
 class Tle
@@ -73,7 +74,11 @@ class Tle
 class Wal extends Tle
 {   constructor(x,y)
     {   super(x,y);
-        this.clr = "#d97018";
+        // this.clr = "#d97018";
+    }
+    drw()
+    {   wal(this);
+
     }
 }
 class flr extends Tle

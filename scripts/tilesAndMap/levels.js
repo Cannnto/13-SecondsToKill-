@@ -1,5 +1,5 @@
 function empty()
-{   return Array.from({length:24},(i) => Array.from({length:32}, (r)=>0));
+{   return Array.from({length:24},(i) => Array.from({length:32}, (r)=>2));
 }
 function cma(arr)
 {   for(var lne = 0;lne < arr.length; lne++) // Linhas

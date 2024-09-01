@@ -34,6 +34,7 @@
     <script src="scripts/functions.js"></script>
     <script src="scripts/graphics/particles.js"></script>
     <script src="scripts/graphics/functiondraw.js"></script>
+    <script src="scripts/tilesAndMap/drwTile.js"></script>
     <script src="scripts/entities.js"></script>
     <script src="scripts/tilesAndMap/levels.js"></script>
     <script src="scripts/tilesAndMap/map.js"></script>
@@ -47,13 +48,14 @@
     ]
         
     function ground(obj)
-    {   r(obj.x,obj.y+16,32,1,"black");
-        r(obj.x+16,obj.y,1,32,"black");
+    {   
+        r(obj.x,obj.y,32,1,"rgba(255,255,255,0.2)");
+        r(obj.x,obj.y,1,32,"rgba(255,255,255,0.2)");
 
-        r(obj.x+1,obj.y+1,15,15,"#1e2636")
-        r(obj.x+17,obj.y+17,15,15,"#1e2636")
-        r(obj.x+1,obj.y+17,15,15,"#1e2636")
-        r(obj.x+17,obj.y+1,15,15,"#1e2636")
+        // r(obj.x+1,obj.y+1,15,15,"#1e2636")
+        // r(obj.x+17,obj.y+17,15,15,"#1e2636")
+        // r(obj.x+1,obj.y+17,15,15,"#1e2636")
+        // r(obj.x+17,obj.y+1,15,15,"#1e2636")
     }
 
     var levels = [
@@ -93,7 +95,7 @@
     var All = [];
 
     function loop()
-    {   r(0,0,cnv.width,cnv.height,'black');
+    {   r(0,0,cnv.width,cnv.height,'#1e2636');
         lvls[clv].drw();
         
         for(let i = 0; i<blo.length; i++)
@@ -118,6 +120,7 @@
         if(key[68-rev*3]) pla.spd.x = +5;
         // if(!key[69]) pla.atC = 0;
         r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
+        // r(0,0,cnv.width*rev,cnv.height,'rgba(75,0,130,0.4)');
     }
     </script></body>
 </html>

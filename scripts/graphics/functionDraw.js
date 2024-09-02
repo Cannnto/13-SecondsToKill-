@@ -251,7 +251,6 @@ function heZ(e,c)
     {   let a = {x:e.x+e.w/2-e.w/16, y:e.y+e.w/3-6, w: e.w/8, h: e.h};
         let b = {x:e.x+e.w/2-e.w/16, y:e.y-7.5, w: e.w/16, h: e.h/1.2};
         let li = '#E29628', mli = '#B5701D';
-        
         r(e.x, e.y, e.w, e.h, '#995F12');
         RTT(a,-60);
             r(a.x,a.y,a.w,a.h, mli);
@@ -260,12 +259,11 @@ function heZ(e,c)
             r(b.x,b.y,b.w,b.h, mli);
         res();
         // r(e.x,e.y,e.w,e.h/4, '#806D4D');
-        
-        r(e.x,e.y,e.w/8,e.h, li);
-        r(e.x,e.y,e.w,e.h/12, li);
-        r(e.x,e.y+e.h/4,e.w,e.h/8, li);
-        r(e.x+e.w*0.875,e.y,e.w/8,e.h, li);
-        r(e.x,e.y+e.h*0.875,e.w,e.h/8, li);
+        r(e.x+1,e.y+1,e.w/8-2,e.h-2, li);
+        r(e.x+1,e.y+1,e.w-2,e.h/12-2, li);
+        r(e.x+1,e.y+e.h/4+1,e.w-2,e.h/8-2, li);
+        r(e.x+1+e.w*0.875,e.y+1,e.w/8-2,e.h-2, li);
+        r(e.x+1,e.y+e.h*0.875+1,e.w-2,e.h/8-2, li);
     }
     function btn(e, cor)
     {   eli(e.x+e.w/2, e.y+e.h/8, e.w/3, e.h/8, 0, cor);
@@ -292,5 +290,4 @@ function heZ(e,c)
         ctx.textAlign = 'center';
         ctx.fillStyle = 'white';
         ctx.fillText('[E]', e.x+e.w/2, e.y-e.h/4);
-
     }

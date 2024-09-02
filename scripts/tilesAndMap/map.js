@@ -30,7 +30,7 @@ class lvl
             }
         }
         //se não tiver caixas ele não passa imediatamente        
-        bCM == this.boxT.length && bCM != 0?cpd = true:cpd = false;
+        bCM == this.boxT.length && bCM != 0?cpd = true:cpd = true;
     }
 }
 class Map
@@ -45,7 +45,6 @@ class Map
                 
                 if(this.arr[lne][col]) this.arr[lne][col].upd(); // Draw each tile 
             }
-            console.log(this.arr)
     }
 }
 class Tle
@@ -74,11 +73,15 @@ class Tle
 class Wal extends Tle
 {   constructor(x,y)
     {   super(x,y);
+        this.col = true;
         // this.clr = "#d97018";
+        // this.drw = function(){waS(this)};
+        // if(nex(this,1)&&nex(this,-1)) this.drw = function(){waF(this)};
+        // console.log(nex(this.x,this.y,1)&&nex(this.x,this.y,-1))
     }
     drw()
-    {   wal(this);
-
+    {   if(nex(this,1) && nex(this,-1)) this.drw = function(){waF(this)};
+        else                            this.drw = function(){waS(this)};
     }
 }
 class flr extends Tle
@@ -196,6 +199,7 @@ class BDT extends Tle {
         this.bCD()?this.clr = "green":this.clr = "purple";
     }
 }
+//placa Sign
 class Sgn extends Tle
 {   constructor(x,y)
     {   super(x,y);
@@ -208,4 +212,34 @@ class Sgn extends Tle
     upd()
     {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50) int(this);
     }
+}
+//graphics
+class Gbx extends Tle
+{   constructor(x,y)
+    {   super(x,y);
+        this.col = true;
+        this.bx1 = {x:this.x, y:this.y, w:this.w, h:this.h};
+        this.bx2 = {x:this.x, y:this.y-this.h/1.4, w:this.w, h:this.h};
+    }
+    drw()
+    {   box(this.bx1);
+        box(this.bx2);
+    }
+}
+class Gbo extends Tle
+{   constructor(x,y)
+    {   super(x,y);
+        this.col = true;
+    }
+    drw(){box(this)};
+}
+class Gdi extends Tle
+{   constructor(x,y)
+    {   super(x,y);
+        this.r = (90*parseInt(rng()*4));
+    }
+    drw()
+    {   ground(this);
+        dir(this,this.r);
+    };
 }

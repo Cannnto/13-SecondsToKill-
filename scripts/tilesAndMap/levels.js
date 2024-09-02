@@ -14,6 +14,10 @@ function cma(arr)
                 case 6: arr[lne][col] = new Btn(col*32,lne*32);break;
                 case 7: arr[lne][col] = new BDT(col*32,lne*32);break;
                 case 8: arr[lne][col] = new Sgn(col*32,lne*32);break;
+                //graphics
+                case 9: arr[lne][col] = new Gbx(col*32,lne*32);break;
+                case 10: arr[lne][col] = new Gbo(col*32,lne*32);break;
+                case 11: arr[lne][col] = new Gdi(col*32,lne*32);break;
             }
         }
     }
@@ -58,10 +62,19 @@ function lv1(arr)
     sqlv(arr);
     arr[0][16] = arr[0][15] = 3;
     arr[1][1] = arr[22][30] = 4;
-    arr[9][9] = arr[9][15] = 5;
-    arr[4][5] = arr[6][5] = arr[4][7] = arr[6][7] = 6;
-    arr[12][9] = arr[12][15] = 7;
-    arr[12][28] = 8
+    // arr[9][9] = arr[9][15] = 5;
+    // arr[4][5] = arr[6][5] = arr[4][7] = arr[6][7] = 6;
+    // arr[12][9] = arr[12][15] = 7;
+    arr[12][28] = 8;
+    let i =0;
+    while(i<10)
+    {   let l = parseInt(rng()*22);
+        let c = parseInt(rng()*30);
+        if(arr[l][c] == 1) arr[l][c] = 11, i++;
+    }
+    arr[2][23] = arr[2][24] = arr[1][24] = arr[1][25] = 9;
+    arr[2][25] = arr[1][22] = arr[1][23] = arr[1][26] = 10;
+    // arr[5][30] = arr[22][8] = arr[8][3] = arr[10][20] = 11;
     return arr;
 }
 function lv2(arr)

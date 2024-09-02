@@ -87,3 +87,14 @@ function sin(a){return Math.sin(a)};
 function cos(a){return Math.cos(a)};
 function sqr(a){return Math.sqrt(a)};
 function pow(a,b){return Math.pow(a,b)}
+
+//dialogue function
+
+function dlg(str, clr) {
+    r(0, cnv.height-100, cnv.width, 100, "rgba(255,255,255,0.5)");
+    r(10, cnv.height-90, cnv.width-20, 80, "rgba(0,0,0,0.5)");
+    ctx.fillStyle = clr;
+    ctx.font = "20px Arial"; //fonte a mudar
+    ctx.textAlign = "center";
+    ctx.fillText(str, cnv.width / 2, cnv.height - 50);
+}

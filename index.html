@@ -77,6 +77,7 @@
     }
     ]
     
+    var tBX = {t:0 , txt: "", clr:""};
     var ENE = []; 
     var par = [];
     var blo = [];
@@ -116,7 +117,11 @@
         if(key[83+rev*4]) pla.spd.y = +5;
         if(key[65+rev*3]) pla.spd.x = -5;
         if(key[68-rev*3]) pla.spd.x = +5;
-        // if(!key[69]) pla.atC = 0;
+        if(key[69]) tBX.t = 100, tBX.txt = "Lorem Ipsum";
+        if (tBX.t != 0) {
+            dlg(tBX.txt, "black", tBX.t);
+            tBX.t--;
+        }
         r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
     }
     </script></body>

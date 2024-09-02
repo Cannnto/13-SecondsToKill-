@@ -100,11 +100,11 @@ function dlg(str, clr) {
     ctx.fillText(str, cnv.width / 2, cnv.height - 45);
 }
 
-function adT(str, clr, lim, tim) {
+function adT(str, clr, tim) {
     var ful = str;
-    var cST = ful.slice(0,lim);
-    var rST = ful.slice(lim);
-    console.log(rST)
+    var ind = ful.indexOf(";")
+    var cST = ful.slice(0,ind);
+    var rST = ful.slice(ind+1);
     tBX.sTX = cST;
     tBX.aTX = rST;
     tBX.clr = clr;

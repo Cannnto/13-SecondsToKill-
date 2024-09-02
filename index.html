@@ -24,19 +24,21 @@
     </style>
 </head>
 <body>
-    <script src="scripts/functions.js"></script>
-    <script src="scripts/graphics/particles.js"></script>
-    <script src="scripts/graphics/functiondraw.js"></script>
-    <script src="scripts/entities.js"></script>
-    <script src="scripts/tilesAndMap/levels.js"></script>
-    <script src="scripts/tilesAndMap/map.js"></script>
     <script>
         var cnv = document.createElement("canvas");
         var ctx = cnv.getContext("2d");
         document.body.appendChild(cnv);
         cnv.width = 1024;
         cnv.height = 768;
-
+    </script>
+    <script src="scripts/functions.js"></script>
+    <script src="scripts/graphics/particles.js"></script>
+    <script src="scripts/graphics/functiondraw.js"></script>
+    <script src="scripts/tilesAndMap/drwTile.js"></script>
+    <script src="scripts/entities.js"></script>
+    <script src="scripts/tilesAndMap/levels.js"></script>
+    <script src="scripts/tilesAndMap/map.js"></script>
+    <script>
     var lvls = [
         new lvl(new Map(lv1(empty()))),
         new lvl(new Map(lv2(empty()))),
@@ -46,13 +48,14 @@
     ]
         
     function ground(obj)
-    {   r(obj.x,obj.y+16,32,1,"black");
-        r(obj.x+16,obj.y,1,32,"black");
+    {   
+        // r(obj.x,obj.y,32,1,"rgba(10,10,10,0.1)");
+        // r(obj.x,obj.y,1,32,"rgba(10,10,10,0.1)");
 
-        r(obj.x+1,obj.y+1,15,15,"#1e2636")
-        r(obj.x+17,obj.y+17,15,15,"#1e2636")
-        r(obj.x+1,obj.y+17,15,15,"#1e2636")
-        r(obj.x+17,obj.y+1,15,15,"#1e2636")
+        // r(obj.x+1,obj.y+1,15,15,"#1e2636")
+        // r(obj.x+17,obj.y+17,15,15,"#1e2636")
+        // r(obj.x+1,obj.y+17,15,15,"#1e2636")
+        // r(obj.x+17,obj.y+1,15,15,"#1e2636")
     }
 
     var levels = [
@@ -77,23 +80,24 @@
     }
     ]
     
-    var ENE = []; 
+    var ENE = [new Cur(100,cnv.height/2,64,64)]; 
     var par = [];
     var blo = [];
     var clv = 0;
 
     var cpd = true;
     var nxt = 0;
-    var bli = 1;
-    var dis = 200;
+    var bli = 0;
+    var dis = 100;
+    var rev = 0;
     var tim = setInterval(loop,1000/30);
     var pla = new Pla(cnv.width/2, cnv.height/2, 64, 64);
     var All = [];
 
     function loop()
-    {   r(0,0,cnv.width,cnv.height,'black');
+    {   r(0,0,cnv.width,cnv.height,'#1e2636');
         lvls[clv].drw();
-
+        
         for(let i = 0; i<blo.length; i++)
            if(d(blo[i],0,0))blo[i].drw();
         
@@ -106,17 +110,17 @@
         upT(ENE);
         upT(par);
         pla.upd();
-        ang = Math.atan2(mou.y - (pla.y+pla.h/2), mou.x - (pla.x+pla.w/2));
+        ang = Math.atan2(mou.y - (pla.y+pla.h/2), mou.x - (pla.x+pla.w/2)) + Math.PI*rev;
         pla.d.x = cos(ang);
         pla.d.y = sin(ang);
-
-        if(key[87]) pla.spd.y = -5;
-        if(key[83]) pla.spd.y = +5;
-        if(key[65]) pla.spd.x = -5;
-        if(key[68]) pla.spd.x = +5;
-        if(key[69]) pla.atk();
+        ctx.translate(RNG(),RNG());
+        if(key[87-rev*4]) pla.spd.y = -5;
+        if(key[83+rev*4]) pla.spd.y = +5;
+        if(key[65+rev*3]) pla.spd.x = -5;
+        if(key[68-rev*3]) pla.spd.x = +5;
         // if(!key[69]) pla.atC = 0;
-        r(0,0,cnv.width,cnv.height,'rgba(138,43,226,0.4)');
+        r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
+        // r(0,0,cnv.width*rev,cnv.height,'rgba(75,0,130,0.4)');
     }
     </script></body>
 </html>

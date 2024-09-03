@@ -118,8 +118,7 @@
         if(key[65+rev*3]) pla.spd.x = -5;
         if(key[68-rev*3]) pla.spd.x = +5;
         if(key[69]) adT("Fool!;You dare bring light into my lair?;You must die!;", "black", 100); //inicia diálogo
-        if(key[67]) tBX.t = 0;
-        (tBX.t != 0) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
+        (tBX.t != 0) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
         r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
     }
     </script></body>

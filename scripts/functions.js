@@ -111,3 +111,8 @@ function adT(str, clr, tim) {
     tBX.t = tim;
     tBX.cTM = tim;
 }
+
+function dS(event) {
+    if (event.keyCode == 67) tBX.t = 0;
+    document.removeEventListener("keyup", dS);
+}

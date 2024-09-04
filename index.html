@@ -34,28 +34,29 @@
     <script src="scripts/functions.js"></script>
     <script src="scripts/graphics/particles.js"></script>
     <script src="scripts/graphics/functiondraw.js"></script>
+    <script src="scripts/graphics/bossDraw.js"></script>
     <script src="scripts/tilesAndMap/drwTile.js"></script>
     <script src="scripts/entities.js"></script>
     <script src="scripts/tilesAndMap/levels.js"></script>
     <script src="scripts/tilesAndMap/map.js"></script>
     <script>
     var lvls = [
-        new lvl(new Map(lv1(empty()))),
-        new lvl(new Map(lv2(empty()))),
-        new lvl(new Map(lv3(empty()))),
-        new lvl(new Map(lv4(empty()))),
-        new lvl(new Map(lv5(empty()))),
+        new lvl(new Map(lv1(fill(1)))),
+        new lvl(new Map(lv2(fill(1)))),
+        new lvl(new Map(lv3(fill(1)))),
+        new lvl(new Map(lv4(fill(12)))),
+        new lvl(new Map(lv5(fill(1)))),
     ]
         
     function ground(obj)
-    {   
-        // r(obj.x,obj.y,32,1,"rgba(10,10,10,0.1)");
-        // r(obj.x,obj.y,1,32,"rgba(10,10,10,0.1)");
+    {   //r(obj.x,obj.y,32,1,"rgba(10,10,10,0.1)");
+        //r(obj.x,obj.y,1,32,"rgba(10,10,10,0.1)");
 
         // r(obj.x+1,obj.y+1,15,15,"#1e2636")
         // r(obj.x+17,obj.y+17,15,15,"#1e2636")
         // r(obj.x+1,obj.y+17,15,15,"#1e2636")
         // r(obj.x+17,obj.y+1,15,15,"#1e2636")
+        r(obj.x,obj.y,32,32,"#24282E")
     }
 
     var levels = [
@@ -80,7 +81,11 @@
     }
     ]
     
-    var ENE = [new Cur(100,cnv.height/2,64,64)]; 
+    var tBX = {t:0 , sTX: "", aTX: "", clr:"", cTM :0};
+    var ENE = [new Dre(100,cnv.height/2,128,128)];
+    
+    //new Cur(100,cnv.height/2,64,64) 
+    // var nec = new Dre(100,cnv.height/2,128,128);
     var par = [];
     var blo = [];
     var clv = 0;
@@ -88,37 +93,73 @@
     var cpd = true;
     var nxt = 0;
     var bli = 0;
-    var dis = 100;
+    var dis = 200;
     var rev = 0;
     var tim = setInterval(loop,1000/30);
     var pla = new Pla(cnv.width/2, cnv.height/2, 64, 64);
     var All = [];
+    var frictional = [];
 
     function loop()
-    {   r(0,0,cnv.width,cnv.height,'#1e2636');
+    {   r(0,0,cnv.width,cnv.height,'black');
+        frictional = ENE.concat(pla,adi("box",lvls[clv].boxes));
+
         lvls[clv].drw();
         
+        for(var i = 0;i<adi("box",lvls[clv].boxes).length;i++)
+        {   adi("box",lvls[clv].boxes)[i].upd()
+        }       
+
         for(let i = 0; i<blo.length; i++)
            if(d(blo[i],0,0))blo[i].drw();
         
-        All = ENE.concat(pla, pla.bal, par);
+        All = ENE.concat(pla, pla.bal);
         All.sort((a,b) => a.y - b.y);
         for(let i = 0; i<All.length; i++)
             if(d(All[i], All[i].w, All[i].h))    All[i].drw();
 
+        for(let i = 0; i<par.length; i++)
+           if(d(par[i],0,0))par[i].drw();
+
+        // upT()
         upT(pla.bal);
         upT(ENE);
         upT(par);
+        // nec.upd();
+
         pla.upd();
         ang = Math.atan2(mou.y - (pla.y+pla.h/2), mou.x - (pla.x+pla.w/2)) + Math.PI*rev;
         pla.d.x = cos(ang);
         pla.d.y = sin(ang);
-        ctx.translate(RNG(),RNG());
-        if(key[87-rev*4]) pla.spd.y = -5;
-        if(key[83+rev*4]) pla.spd.y = +5;
-        if(key[65+rev*3]) pla.spd.x = -5;
-        if(key[68-rev*3]) pla.spd.x = +5;
-        // if(!key[69]) pla.atC = 0;
+        tra(RNG(),RNG());
+
+        // if(key[87-rev*4]) pla.spd.y = -5;
+        // if(key[83+rev*4]) pla.spd.y = +5;
+        // if(key[65+rev*3]) pla.spd.x = -5;
+        // if(key[68-rev*3]) pla.spd.x = +5;
+
+        if(key[87-rev*4])
+            if(pla.spd.y > -pla.msp)
+                pla.spd.y -= pla.acel;
+                if(pla.spd.y < -pla.msp)pla.spd.y = -pla.msp;
+        if(key[83+rev*4])
+            if(pla.spd.y < pla.msp)
+                pla.spd.y += pla.acel;
+                if(pla.spd.y > pla.msp)pla.spd.y = pla.msp;
+        if(key[65+rev*3])
+            if(pla.spd.x > -pla.msp)
+                pla.spd.x -= pla.acel;
+                if(pla.spd.x < -pla.msp)pla.spd.x = -pla.msp;
+        if(key[68-rev*3])
+            if(pla.spd.x < pla.msp)
+                pla.spd.x += pla.acel;
+                if(pla.spd.x > pla.msp)pla.spd.x = pla.msp;
+
+        // console.log(pla.spd)
+        if(key[69]) adT("Fool!;You dare bring light into my lair?;You must die!;", "black", 100); //inicia diálogo
+        if(key[70]) adT("salve!;fml?;é os guri pae;", "red", 30); //inicia diálogo
+        (tBX.t != 0) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
+               
         r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
         // r(0,0,cnv.width*rev,cnv.height,'rgba(75,0,130,0.4)');
     }

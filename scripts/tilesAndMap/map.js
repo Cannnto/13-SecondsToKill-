@@ -60,11 +60,11 @@ class Tle
         ctx.fillRect(this.x,this.y,32,32);
     }
     upd(){}
-    collide()
-    {   if (this.x + 32 >= pla.x &&    
-            this.x <= pla.x + pla.w &&      
-            this.y + 32 >= pla.y &&      
-            this.y <= pla.y + pla.h) {      
+    collide(other)
+    {   if (this.x + 32 >= other.x &&
+            this.x <= other.x + other.w &&
+            this.y + 32 >= other.y &&
+            this.y <= other.y + other.h) {
             return true;
         }
         return false;
@@ -80,8 +80,15 @@ class Wal extends Tle
         // console.log(nex(this.x,this.y,1)&&nex(this.x,this.y,-1))
     }
     drw()
-    {   if(nex(this,1) && nex(this,-1)) this.drw = function(){waF(this)};
-        else                            this.drw = function(){waS(this)};
+    {   if(nex(this,1,0) && nex(this,-1,0)) this.drw = function(){ground(this),waF(this)};
+        else
+        {   if(nex(this,0,-1) && nex(this,0,1)) this.drw = function(){waS(this)}; 
+            else
+            {   if(!nex(this,0,-1) && !nex(this,0,1))this.drw = function(){waS(this),r(this.x,this.y+this.h-1,this.w,1,'#6D798B'),r(this.x,this.y,this.w,1,'#6D798B')};
+                if(nex(this,0,-1))  this.drw = function(){waS(this),r(this.x,this.y+this.h-1,this.w,1,'#6D798B')};
+                if(nex(this,0,+1))  this.drw = function(){waS(this),r(this.x,this.y,this.w,1,'#6D798B')};
+            }      
+        }
     }
 }
 class flr extends Tle
@@ -92,7 +99,12 @@ class flr extends Tle
     drw()
         {ground(this);}
     upd()
-        {if(this.collide())  pla.fri = 0.2;}
+    {   for(var i = 0; i<frictional.length; i++){
+            if(this.collide(frictional[i]))  frictional[i].fri = 1, frictional[i].acel = 5;
+        }
+        // console.log()
+
+    }
 }
 class dor extends Tle
 {   constructor(x,y)
@@ -101,7 +113,7 @@ class dor extends Tle
     }
 
     upd()
-    {   if(this.collide() && cpd)
+    {   if(this.collide(pla) && cpd)
         {   clv++;
             pla.x = levels[clv].spwPoint.x;
             pla.y = levels[clv].spwPoint.y;
@@ -145,7 +157,7 @@ class Btn extends Tle
     }
 
     upd()
-    {   if(this.collide())
+    {   if(this.collide(pla))
         {   if(lvls[clv].btns[nxt] == this && !this.cld)
             {   this.clr = "green";
                 nxt++;
@@ -204,6 +216,7 @@ class Sgn extends Tle
 {   constructor(x,y)
     {   super(x,y);
         this.clr = '#7C653C';
+        this.col = true;
     }
     drw()
     {   ground(this);
@@ -213,6 +226,20 @@ class Sgn extends Tle
     {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50) int(this);
     }
 }
+class Ice extends Tle{
+    constructor(x,y)
+    {   super(x,y);
+        this.clr = "lightblue";
+    }
+
+    upd()
+    {   for(var i = 0; i<frictional.length; i++)
+            if(this.collide(frictional[i]))  frictional[i].fri = 0.02, frictional[i].acel = 0.1;    
+    }
+}
+
+
+
 //graphics
 class Gbx extends Tle
 {   constructor(x,y)
@@ -240,6 +267,9 @@ class Gdi extends Tle
     }
     drw()
     {   ground(this);
+        
+        sB(3,'black');
         dir(this,this.r);
+        sB(0);
     };
 }

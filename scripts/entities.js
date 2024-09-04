@@ -37,6 +37,8 @@ class Ent
         this.cnt = 1;
         this.rot = 0;
         this.par = [];
+        this.fri = 0;
+        this.acel = 0;
     }
 
     drw()
@@ -82,10 +84,12 @@ class Pla extends Ent
     {   super(x,y,w,h)
         this.atC = 0;
         this.bal = [];
+        this.msp = 5;
     }
     sid()
     {   cha(this);
-            gaS(this,this.cnt);
+            //gaS(this,this.cnt);
+            hs1(this, this.cnt,'white');
             le1(this, this.cnt,'white');
             mov(this);
                 heS(this);
@@ -98,8 +102,10 @@ class Pla extends Ent
     }
     bac()
     {   swo(this, this.x, -this.cnt, this.atC,'red');
+        
         han(this, -this.cnt, 0, this.atC, 'white',0);
-        gau(this, -this.cnt, this.w*3/4)
+        han(this, this.cnt, this.w*3/4, 0, 'white',0);
+        //gau(this, -this.cnt, this.w*3/4)
         leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), 'white','white',0);
         
         mov(this);
@@ -113,8 +119,10 @@ class Pla extends Ent
             bdF(this);
         res();
         han(this, this.cnt, this.w*3/4, this.atC, 'white',0);
+        han(this, -this.cnt, this.w*0/4, 0, 'white',0);
+        // HAN(this, this.cnt, 'white', 0);
         swo(this, this.x+this.w*3/4, this.cnt, this.atC,'red');
-        gau(this, this.cnt, 0);
+        //gau(this, this.cnt, 0);
         leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), 'white','white',0);
     }
     ATK()
@@ -148,14 +156,23 @@ class Pla extends Ent
             if(this.atC<-90) this.atA = 1;
         }
 
+        
         this.len = this.spd.x||this.spd.y ? sqr(this.spd.x**2+this.spd.y**2) : 1;
         this.move(1);
-        if(this.CWL())this.move(-1);
+        if(this.CWL())this.move(-1), this.spd.mtp(0);
         for(var i=0; i<lvls[clv].boxes.length; i++)
             if(this.cld([lvls[clv].boxes[i].box])) lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.move(-1);
         
-        this.spd.x = 0;
-        this.spd.y = 0;
+        if(this.spd.x) this.spd.x += this.fri*Math.sign(this.spd.x)*-1;
+        if(this.spd.y) this.spd.y += this.fri*Math.sign(this.spd.y)*-1;
+
+        this.spd.x = Number(this.spd.x.toFixed(2))
+        this.spd.y = Number(this.spd.y.toFixed(2))
+
+
+        // let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
+        // console.log(lvls[clv].map.arr[mp.l][mp.c].constructor.name)
+
     }
 }
 class Ball extends Ent
@@ -181,6 +198,9 @@ class Ball extends Ent
     upd()
     {   this.x += cos(this.a)*5;
         this.y += sin(this.a)*5;
+        let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
+        console.log(mp)
+        if(lvls[clv].map.arr[mp.l][mp.c].constructor.name == 'Ice')lvls[clv].map.arr[mp.l][mp.c] = new flr(mp.c*32,mp.l*32)
     }
 }
 class Box extends Ent 
@@ -190,13 +210,30 @@ class Box extends Ent
         this.spY = y;
     }
     psh(obj)
-    {   if(abs(obj.spd.x) != abs(obj.spd.y))    this.x += obj.spd.x, this.y += obj.spd.y;
-        if(this.CWL())                          this.x -= obj.spd.x, this.y -= obj.spd.y;
+    {   this.spd.x = obj.spd.x, this.spd.y = obj.spd.y;
     }
 
     drw()
     {   box(this);
     }
+
+    upd()
+    {   this.x += this.spd.x
+        this.y += this.spd.y
+
+        if(this.CWL())
+        {   this.x -= this.spd.x;
+            this.y -= this.spd.y    ;
+            this.spd.x = 0;
+            this.spd.y = 0;
+        }
+        if(this.spd.x != 0)this.spd.x += this.fri*Math.sign(this.spd.x)*-1;
+        if(this.spd.y != 0)this.spd.y += this.fri*Math.sign(this.spd.y)*-1;
+
+        this.spd.x = Number(this.spd.x.toFixed(2))
+        this.spd.y = Number(this.spd.y.toFixed(2))
+    }
+
 }
 class Ene extends Ent
 {   constructor(x,y,w,h)
@@ -282,7 +319,10 @@ class Ene extends Ent
             if(this.cld([lvls[clv].boxes[i].box])) lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.wlk(-this.spV.x, -this.spV.y);
         
         this.acV.mtp(0);
-        this.spV.mtp(0.99);
+        if(this.spV.x)this.spV.x += this.fri*Math.sign(this.spV.x)*-1;
+        if(this.spV.y)this.spV.y += this.fri*Math.sign(this.spV.y)*-1;
+        this.spV.x = Number(this.spV.x.toFixed(2))
+        this.spV.y = Number(this.spV.y.toFixed(2))    
     }
 }
 class Min extends Ene
@@ -386,5 +426,47 @@ class Cur extends Ene
         {   r(this.x, this.y - this.h/1.25, this.w, this.h/8, 'white');
             r(this.x, this.y - this.h/1.25, (this.w*this.lif.c)/this.lif.m, this.h/8, 'red');
         } 
+    }
+}
+
+class Dre extends Ene
+{   constructor(x,y,w,h)
+    {   super(x,y,w,h);
+        this.lif = {m:200,c:200};
+        this.spd.x = 1;
+    }
+    sid()
+    {   cha(this);
+            gaS(this,this.cnt);
+            tra(0,this.cnt/8)    
+                Dbd(this, 1);
+                spk(this,0);
+                spk(this,this.w/3);
+                spk(this,this.w/1.6);
+            tra(0,-this.cnt/8)    
+            hs2(this, this.cnt,'black', 0,0);
+        res();
+        for (let i = 0; i < 10; i++) par.push(new Par(this, 'bla'));
+    }
+    fro()
+    {   tra(0,this.cnt/8);
+            DFb(this, this.cnt);
+            DFh(this, this.cnt);
+        tra(0,-this.cnt/8);
+        HAN(this, this.cnt, 'black',0);
+        gau(this, this.cnt, 0);
+        for (let i = 0; i < 10; i++) par.push(new Par(this, 'bla'));
+    }
+    bac()
+    {   HAN(this, this.cnt, 'black',0);
+        gau(this, -this.cnt, this.w*3/4);
+        tra(0,this.cnt/8)    
+            Dbd(this, 0, 1);
+            //Dhe(this);
+            spk(this,0);
+            spk(this,this.w/3);
+            spk(this,this.w/1.6);
+        tra(0,-this.cnt/8)    
+        for (let i = 0; i < 10; i++) par.push(new Par(this, 'bla'));
     }
 }

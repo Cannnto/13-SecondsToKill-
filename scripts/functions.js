@@ -33,10 +33,9 @@ function r(x,y,w,h,c)
 }
 function bal(x,y,r,cor)
 {   ctx.fillStyle = cor
-    ctx.beginPath();
+    bP();
     ctx.arc(x, y, r, 0, Math.PI*2);
-    ctx.closePath();
-    ctx.fill();
+    cP();
 }
 function eli(x,y,rw,rh,an,c)
 {   ctx.fillStyle = c;
@@ -66,7 +65,41 @@ function shf(arr)
     }
 }
 
+function adi(name,arr1)
+{   var arr2 = []
+    for(var i = 0; i<arr1.length;i++)
+    {   if(arr1[i])
+        {arr2[i] = arr1[i][name]}
+    }
+    return arr2
+}
 
+function dlg(str, clr) {
+    r(0, cnv.height-100, cnv.width, 100, "rgba(255,255,255,0.5)");
+    r(10, cnv.height-90, cnv.width-20, 80, "rgba(0,0,0,0.5)");
+    ctx.fillStyle = clr;
+    var tSZ = 20;
+    ctx.font = tSZ + "px Arial"; //fonte a mudar
+    ctx.textAlign = "center";
+    ctx.fillText(str, cnv.width / 2, cnv.height - 45);
+}
+
+function adT(str, clr, tim) {
+    var ful = str;
+    var ind = ful.indexOf(";")
+    var cST = ful.slice(0,ind);
+    var rST = ful.slice(ind+1);
+    tBX.sTX = cST;
+    tBX.aTX = rST;
+    tBX.clr = clr;
+    tBX.t = tim;
+    tBX.cTM = tim;
+}
+
+function dS(event) {
+    if (event.keyCode == 67) tBX.t = 0;
+    document.removeEventListener("keyup", dS);
+}
 
 function sav(){ctx.save()};
 function res(){ctx.restore()};
@@ -75,10 +108,21 @@ function scl(x,y){ctx.scale(x,y)};
 function rtt(ang){ctx.rotate(ang)};
 function abs(a){return Math.abs(a)};
 function bP(){ctx.beginPath()};
-function cP(){ctx.closePath()};
-function mT(x,y){ctx.moveTo(x,y)};
+function cP()
+{   ctx.closePath()
+    ctx.fill();
+};
+function mT(x,y,cor)
+{   ctx.fillStyle = cor;
+    bP();
+    ctx.moveTo(x,y)
+};
 function lT(x,y){ctx.lineTo(x,y)};
 function rng(){return Math.random()};
 function sin(a){return Math.sin(a)};
 function cos(a){return Math.cos(a)};
 function sqr(a){return Math.sqrt(a)};
+function sB(n,c)
+{   ctx.shadowColor = c;
+    ctx.shadowBlur = n;
+}

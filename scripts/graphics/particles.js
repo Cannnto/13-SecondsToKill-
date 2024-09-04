@@ -5,8 +5,6 @@ function upT(e)
     }
 }
 
-
-
 class Par 
 {   constructor(e, c) 
     { this.x = e.x+rng()*e.w;
@@ -18,6 +16,7 @@ class Par
       this.w = e.w;
       this.h = e.h;
       this.cor = c;
+      this.e = e;
       // this.life=0;
       // this.max = 60;
     }
@@ -32,9 +31,18 @@ class Par
   
     drw()
     { switch (this.cor)
-      { case 'red': var c = `rgba(${100+rng()*155}, 10, ${10}, ${this.a})`;
+      { case 'red': this.drw = function(){bal(this.x, this.y, this.r, `rgba(${100+rng()*155}, 10, ${10}, ${this.a})`)}
         break;
-        case 'ora': var c = `rgba(${200+rng()*30}, ${50+rng()*100}, ${10}, ${this.a})`;
+        case 'ora': this.drw = function(){bal(this.x, this.y, this.r, `rgba(${200+rng()*30}, ${50+rng()*100}, ${10}, ${this.a})`)}
+        break;
+        case 'pur': this.y=this.e.y+this.e.h;
+          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${60+rng()*200}, ${rng()*115}, 255, ${this.a})`)}
+        break;
+        case 'bla': this.y=this.e.y+this.e.h;
+          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${rng()*10}, ${rng()*10}, ${rng()*10}, ${this.a})`)}
+        break;
+        case 'blu': this.y=this.e.y+this.e.h;
+          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${10}, ${50+Math.random()*100}, ${200+Math.random()*30}, ${this.a})`)}
         break;
       } 
       // SCL(this,0.5)
@@ -43,7 +51,6 @@ class Par
       //bal(this.x,this.y,this.r,`rgba(${10}, ${50+Math.random()*100}, ${200+Math.random()*30}, ${this.a})`)
       //red
       //bal(this.x,this.y,this.r,`rgba(${200+rng()*30}, ${50+rng()*100}, ${10}, ${this.a})`)
-      bal(this.x, this.y, this.r, c)
       //green
       //bal(this.x,this.y,this.r,`rgba(${50+rng()*100}, ${200+rng()*30}, ${10}, ${this.a})`)
       //rainbow

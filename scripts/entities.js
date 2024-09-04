@@ -37,6 +37,8 @@ class Ent
         this.cnt = 1;
         this.rot = 0;
         this.par = [];
+        this.fri = 0;
+        this.acel = 0;
     }
 
     drw()
@@ -52,8 +54,9 @@ class Ent
         }
         else    this.cnt>0 ? this.cnt-=0.25 : (this.cnt<0 ? this.cnt+=0.25 : null);
         this.a();
+        this.lfB();
     }
-
+    lfB(){}
     a(){this.fro()};
 
     cld(oth)
@@ -66,7 +69,7 @@ class Ent
     }
     
     u(o)
-    {    return (!lvls[clv].map.arr[o.l][o.c] || lvls[clv].map.arr[o.l][o.c].constructor.name == "dor" && !cpd);}
+    {    return (lvls[clv].map.arr[o.l][o.c].col || lvls[clv].map.arr[o.l][o.c].constructor.name == "dor" && !cpd);}
     
     CWL()
     {   this.mp1 = {c:parseInt((this.x)/32), l:parseInt((this.y)/32)};
@@ -81,29 +84,33 @@ class Pla extends Ent
     {   super(x,y,w,h)
         this.atC = 0;
         this.bal = [];
+        this.msp = 5;
     }
     sid()
     {   cha(this);
-            gaS(this,this.cnt);
+            //gaS(this,this.cnt);
+            hs1(this, this.cnt,'white');
             le1(this, this.cnt,'white');
             mov(this);
                 heS(this);
                 bdS(this, '#6F6F6F','#424242',0);
             res();
-            swo(this, this.x+this.w*2/4, this.cnt, this.atC);
-            hs2(this, this.cnt,'white', this.atC);
-            le2(this, this.cnt,'white');
+            swo(this, this.x+this.w*2/4, this.cnt, this.atC,'red');
+            hs2(this, this.cnt,'white', this.atC,0);
+            le2(this, this.cnt,'white',0);
         res();
     }
     bac()
-    {   swo(this, this.x, -this.cnt, this.atC);
-        han(this, -this.cnt, 0, this.atC, 'white');
-        gau(this, -this.cnt, this.w*3/4)
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), 'white');
+    {   swo(this, this.x, -this.cnt, this.atC,'red');
+        
+        han(this, -this.cnt, 0, this.atC, 'white',0);
+        han(this, this.cnt, this.w*3/4, 0, 'white',0);
+        //gau(this, -this.cnt, this.w*3/4)
+        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), 'white','white',0);
         
         mov(this);
             heB(this,'#424242');
-            bdB(this,'#6F6F6F','#424242');
+            bdB(this,'#6F6F6F','#424242', 1);
         res();
     }
     fro()
@@ -111,10 +118,12 @@ class Pla extends Ent
             heF(this);
             bdF(this);
         res();
-        han(this, this.cnt, this.w*3/4, this.atC, 'white');
-        swo(this, this.x+this.w*3/4, this.cnt, this.atC);
-        gau(this, this.cnt, 0);
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), 'white');
+        han(this, this.cnt, this.w*3/4, this.atC, 'white',0);
+        han(this, -this.cnt, this.w*0/4, 0, 'white',0);
+        // HAN(this, this.cnt, 'white', 0);
+        swo(this, this.x+this.w*3/4, this.cnt, this.atC,'red');
+        //gau(this, this.cnt, 0);
+        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), 'white','white',0);
     }
     ATK()
     {   var hit = {x:this.x + 40*this.d.x, y:this.y + 60*this.d.y-this.h/2, w:this.h, h:this.w*1.5};
@@ -126,11 +135,11 @@ class Pla extends Ent
 
         for(var i = 0; i<ENE.length; i++)
         {   if(ENE[i].cld([hit]))
-                ENE[i].lif-=50;
+                ENE[i].lif.c-=50;
         }
     }
     fir()
-    {   this.bal.push(new Ball(this.x, this.y, 16, 16, ang));}
+    {   this.bal.push(new Ball(this.x+this.w/2, this.y+this.h/2, 16, 16, ang));}
 
     move(o) 
     {   this.x += this.spd.x*abs(this.spd.x/this.len)*o, this.y += this.spd.y*abs(this.spd.y/this.len)*o;}
@@ -147,14 +156,23 @@ class Pla extends Ent
             if(this.atC<-90) this.atA = 1;
         }
 
+        
         this.len = this.spd.x||this.spd.y ? sqr(this.spd.x**2+this.spd.y**2) : 1;
         this.move(1);
-        if(this.CWL())this.move(-1);
+        if(this.CWL())this.move(-1), this.spd.mtp(0);
         for(var i=0; i<lvls[clv].boxes.length; i++)
             if(this.cld([lvls[clv].boxes[i].box])) lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.move(-1);
         
-        this.spd.x = 0;
-        this.spd.y = 0;
+        if(this.spd.x) this.spd.x += this.fri*Math.sign(this.spd.x)*-1;
+        if(this.spd.y) this.spd.y += this.fri*Math.sign(this.spd.y)*-1;
+
+        this.spd.x = Number(this.spd.x.toFixed(2))
+        this.spd.y = Number(this.spd.y.toFixed(2))
+
+
+        // let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
+        // console.log(lvls[clv].map.arr[mp.l][mp.c].constructor.name)
+
     }
 }
 class Ball extends Ent
@@ -173,13 +191,16 @@ class Ball extends Ent
 
         for(var i = 0; i<ENE.length; i++)
             if(ENE[i].cld([this]))
-            {   ENE[i].lif-=100;
+            {   ENE[i].lif.c-=100;
                 return true;
             }
     }
     upd()
     {   this.x += cos(this.a)*5;
         this.y += sin(this.a)*5;
+        let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
+        console.log(mp)
+        if(lvls[clv].map.arr[mp.l][mp.c].constructor.name == 'Ice')lvls[clv].map.arr[mp.l][mp.c] = new flr(mp.c*32,mp.l*32)
     }
 }
 class Box extends Ent 
@@ -189,18 +210,34 @@ class Box extends Ent
         this.spY = y;
     }
     psh(obj)
-    {   if(abs(obj.spd.x) != abs(obj.spd.y))    this.x += obj.spd.x, this.y += obj.spd.y;
-        if(this.CWL())                          this.x -= obj.spd.x, this.y -= obj.spd.y;
+    {   this.spd.x = obj.spd.x, this.spd.y = obj.spd.y;
     }
 
     drw()
     {   box(this);
     }
+
+    upd()
+    {   this.x += this.spd.x
+        this.y += this.spd.y
+
+        if(this.CWL())
+        {   this.x -= this.spd.x;
+            this.y -= this.spd.y    ;
+            this.spd.x = 0;
+            this.spd.y = 0;
+        }
+        if(this.spd.x != 0)this.spd.x += this.fri*Math.sign(this.spd.x)*-1;
+        if(this.spd.y != 0)this.spd.y += this.fri*Math.sign(this.spd.y)*-1;
+
+        this.spd.x = Number(this.spd.x.toFixed(2))
+        this.spd.y = Number(this.spd.y.toFixed(2))
+    }
+
 }
-class Min extends Ent
+class Ene extends Ent
 {   constructor(x,y,w,h)
     {   super(x,y,w,h);
-        this.lif = 100;
         this.anC = 0;
         this.gra = 0;
 
@@ -217,32 +254,6 @@ class Min extends Ent
         this.wH = 1;
         this.wHa = 1;
     }
-    sid()
-    {   cha(this);
-            le1(this, this.cnt, '#3A4A13');
-            mov(this);
-                bdS(this, '#5C0C0C', '#5C0C0C',1, this.anC);
-            res();
-            hs2(this, this.cnt, '#3A4A13', 0);
-            le2(this, this.cnt, '#3A4A13');
-        res();
-    }
-    bac()
-    {   HAN(this, this.cnt, '#3A4A13');
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), '#3A4A13');
-        
-        mov(this);
-            bdB(this, '#5C0C0C', '#5C0C0C');
-        res();
-    }
-    fro()
-    {   mov(this);
-            bdB(this, '#5C0C0C', '#5C0C0C');
-            ZhF(this, this.anC);
-        res();
-        HAN(this, this.cnt, '#3A4A13');
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), '#3A4A13');
-    }
     die()
     {  return this.dea;
     }
@@ -252,19 +263,6 @@ class Min extends Ent
     }
     upd()
     {   //animate functions
-        if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1;
-        if(this.lif<=0)
-        {   this.gra += 0.25;
-            this.anC += this.gra;
-            for (let i = 0; i < 5; i++) par.push(new Par(this, 'red'));
-            blo.push(new Blo(this));
-        }
-        else
-        {   r(this.x, this.y - this.h/4, this.w, this.h/8, 'white');
-            r(this.x, this.y - this.h/4, (this.w*this.lif)/100, this.h/8, 'red');
-        }
-        
-
         //vetor da soma entre todos os inimigos
         let sV = new Vec(0,0);
         //vetor entre o inimigo e o player
@@ -274,9 +272,9 @@ class Min extends Ent
 
         for (let oth of ENE) 
         {   //distancia entre os inimigos
-            let d = sqr(pow((this.x+this.w/2) - (oth.x+oth.w/2), 2) + pow((this.y+this.h/2) - (oth.y+oth.h/2), 2));
+            let d = sqr(((this.x+this.w/2) - (oth.x+oth.w/2))**2 + ((this.y+this.h/2) - (oth.y+oth.h/2))**2);
             //distancia entre o inimigo e o player
-            let dp = sqr(pow((this.x+this.w/2) - (pla.x+pla.w/2), 2) + pow((this.y+this.h/2) - (pla.y+pla.h/2), 2));
+            let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2);
             
             //persegue o player caso o player esteja dentro do seu raio de detecção
             if (dp <= this.raP) {
@@ -297,11 +295,11 @@ class Min extends Ent
             }
             
             if (cnt) sV.div(cnt);
-            let s1 = sqr(pow(sV.x, 2) + pow(sV.y, 2));
+            let s1 = sqr((sV.x)**2 + (sV.y)**2);
             if (s1) sV.div(s1);
             sV.mtp(this.spe*2);
             
-            let s2 = sqr(pow(tV.x, 2) + pow(tV.y, 2));
+            let s2 = sqr((tV.x)**2 + (tV.y)**2);
             if (s2) tV.div(s2);
             
             tV.mtp(this.spe*0.8);
@@ -321,6 +319,154 @@ class Min extends Ent
             if(this.cld([lvls[clv].boxes[i].box])) lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.wlk(-this.spV.x, -this.spV.y);
         
         this.acV.mtp(0);
-        this.spV.mtp(0);
+        if(this.spV.x)this.spV.x += this.fri*Math.sign(this.spV.x)*-1;
+        if(this.spV.y)this.spV.y += this.fri*Math.sign(this.spV.y)*-1;
+        this.spV.x = Number(this.spV.x.toFixed(2))
+        this.spV.y = Number(this.spV.y.toFixed(2))    
+    }
+}
+class Min extends Ene
+{   constructor(x,y,w,h)
+    {   super(x,y,w,h);
+        this.lif = {m:100,c:100};
+    }
+    sid()
+    {   cha(this);
+            le1(this, this.cnt, zC);
+            mov(this);
+                bdS(this, '#5C0C0C', '#5C0C0C',1, this.anC);
+            res();
+            hs2(this, this.cnt, zC, 0,0);
+            le2(this, this.cnt, zC,0);
+        res();
+    }
+    bac()
+    {   HAN(this, this.cnt, zC,0);
+        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), zC,zC,0);
+        
+        mov(this);
+            bdB(this, '#5C0C0C', '#5C0C0C',1);
+        res();
+    }
+    fro()
+    {   mov(this);
+            bdB(this, '#5C0C0C', '#5C0C0C',1);
+            ZhF(this, this.anC);
+        res();
+        HAN(this, this.cnt, zC,0);
+        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), zC,zC,0);
+    }
+    lfB()
+    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1;
+        if(this.lif.c<=0)
+        {   this.gra += 0.25;
+            this.anC += this.gra;
+            for (let i = 0; i < 5; i++) par.push(new Par(this, 'red'));
+            blo.push(new Blo(this));
+        }
+        else
+        {   r(this.x, this.y - this.h/4, this.w, this.h/8, 'white');
+            r(this.x, this.y - this.h/4, (this.w*this.lif.c)/this.lif.m, this.h/8, 'red');
+        } 
+    }
+}
+//currepted
+class Cur extends Ene
+{   constructor(x,y,w,h)
+    {   super(x,y,w,h);
+        this.lif = {m:200,c:200};
+        this.spd.x = 0;
+    }
+    sid()
+    {   cha(this);
+            le1(this, this.cnt, zC);
+            hs1(this, this.cnt, zC);
+            mov(this);
+                heS(this,1);
+                bdS(this, '#5C0C0C', '#B40F0F',0, this.anC);
+            res();
+            //swo(this, this.x+this.w*2/4, this.cnt, 0,'#4E4E50');
+            hs2(this, this.cnt, 'white', 0,1);
+            le2(this, this.cnt, 'white',1);
+        res();
+    }
+    bac()
+    {   //swo(this, this.x, -this.cnt, 0,'#4E4E50');
+        han(this, this.cnt, this.w*3/4,0,zC,0);
+        han(this,-this.cnt, 0,0,'white',1);
+        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), 'white',zC,0);
+
+        mov(this);
+            heB(this,1);
+            bdB(this, '#5C0C0C', '#B40F0F',0);
+        res();
+    }
+    fro()
+    {   mov(this);
+            bdB(this, '#5C0C0C', '#5C0C0C',1);
+            heF(this, this.anC);
+            cHe(this, this.anC);
+            siJ(this, '#B40F0F')
+        res();
+        // HAN(this, this.cnt, zC);
+        han(this, this.cnt, this.w*3/4,0,'white',1);
+        han(this,-this.cnt, 0,0,zC,0);
+        //swo(this, this.x+this.w*3/4, this.cnt, 0, '#4E4E50');    
+        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), zC,'white',1);
+    }
+    lfB()
+    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1;
+        if(this.lif.c<=0)
+        {   this.gra += 0.25;
+            this.anC += this.gra;
+            for (let i = 0; i < 5; i++) par.push(new Par(this, 'red'));
+            blo.push(new Blo(this));
+        }
+        else
+        {   r(this.x, this.y - this.h/1.25, this.w, this.h/8, 'white');
+            r(this.x, this.y - this.h/1.25, (this.w*this.lif.c)/this.lif.m, this.h/8, 'red');
+        } 
+    }
+}
+
+class Dre extends Ene
+{   constructor(x,y,w,h)
+    {   super(x,y,w,h);
+        this.lif = {m:200,c:200};
+        this.spd.x = 1;
+    }
+    sid()
+    {   cha(this);
+            gaS(this,this.cnt);
+            tra(0,this.cnt/8)    
+                Dbd(this, 1);
+                spk(this,0);
+                spk(this,this.w/3);
+                spk(this,this.w/1.6);
+            tra(0,-this.cnt/8)    
+            hs2(this, this.cnt,'black', 0,0);
+        res();
+        for (let i = 0; i < 10; i++) par.push(new Par(this, 'bla'));
+    }
+    fro()
+    {   tra(0,this.cnt/8);
+            DFb(this, this.cnt);
+            DFh(this, this.cnt);
+        tra(0,-this.cnt/8);
+        HAN(this, this.cnt, 'black',0);
+        gau(this, this.cnt, 0);
+        for (let i = 0; i < 10; i++) par.push(new Par(this, 'bla'));
+    }
+    bac()
+    {   HAN(this, this.cnt, 'black',0);
+        gau(this, -this.cnt, this.w*3/4);
+        tra(0,this.cnt/8)    
+            Dbd(this, 0, 1);
+            //Dhe(this);
+            spk(this,0);
+            spk(this,this.w/3);
+            spk(this,this.w/1.6);
+        tra(0,-this.cnt/8)    
+        for (let i = 0; i < 10; i++) par.push(new Par(this, 'bla'));
     }
 }

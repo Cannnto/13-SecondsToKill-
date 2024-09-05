@@ -126,3 +126,10 @@ function sB(n,c)
 {   ctx.shadowColor = c;
     ctx.shadowBlur = n;
 }
+
+class Atk {
+    constructor(nam, tim) {
+        this.nam = nam;
+        this.tmr = {c: 30*tim, m: 30*tim};
+    }
+}

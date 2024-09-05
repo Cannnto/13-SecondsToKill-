@@ -253,6 +253,11 @@ class Ene extends Ent
         this.rPM = 300;
         this.wH = 1;
         this.wHa = 1;
+        //////
+        //sum vector multiplier
+        this.sVM = 2;
+        //target vector multiplier
+        this.tVM = 0.8;
     }
     die()
     {  return this.dea;
@@ -297,12 +302,12 @@ class Ene extends Ent
             if (cnt) sV.div(cnt);
             let s1 = sqr((sV.x)**2 + (sV.y)**2);
             if (s1) sV.div(s1);
-            sV.mtp(this.spe*2);
+            sV.mtp(this.spe*this.sVM);
             
             let s2 = sqr((tV.x)**2 + (tV.y)**2);
             if (s2) tV.div(s2);
             
-            tV.mtp(this.spe*0.8);
+            tV.mtp(this.spe*this.tVM);
             this.acV.sum(sV);
             this.acV.sum(tV);
             this.spV.sum(this.acV);
@@ -434,6 +439,20 @@ class Dre extends Ene
     {   super(x,y,w,h);
         this.lif = {m:200,c:200};
         this.spd.x = 1;
+        //flee
+        this.fle = false;
+        //teleport tile
+        this.tpt = []
+        //teleport clock
+        this.tpc = {c:0, m:30*5};
+        this.tpc.c = this.tpc.m;
+        //attack stuff
+        this.ats = [new Atk("Frb", 0.5),
+                    new Atk("Wll", 8),
+                    new Atk("Ice", 5),
+                    new Atk("Mtr", 0.5),
+                    new Atk("Aur", 0.5)
+        ]; //Fireball, Wall, Ice, Meteor, Aura.
     }
     sid()
     {   cha(this);
@@ -468,5 +487,34 @@ class Dre extends Ene
             spk(this,this.w/1.6);
         tra(0,-this.cnt/8)    
         for (let i = 0; i < 10; i++) par.push(new Par(this, 'bla'));
+    }
+    lfB()
+    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1;
+        if(this.lif.c<=0)
+        {   this.gra += 0.25;
+            this.anC += this.gra;
+            for (let i = 0; i < 5; i++) par.push(new Par(this, 'red'));
+            blo.push(new Blo(this));
+        }
+        else
+        {   r(this.x, this.y - this.h/1.25, this.w, this.h/8, 'white');
+            r(this.x, this.y - this.h/1.25, (this.w*this.lif.c)/this.lif.m, this.h/8, 'red');
+        } 
+    }
+    tlp() {
+        this.tpt = [];
+        sgr("flr", lvls[clv].map.arr, this.tpt);
+        var chs = this.tpt[parseInt(Math.random()*(this.tpt.length-1))];
+        let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)
+        this.x = chs.x-this.w/2;
+        this.y = chs.y-this.h/2;
+        if (this.CWL() || chs.x == undefined || chs.y == undefined || dp < 250 || dp > 800) this.tlp();
+    }
+    upd() {
+        this.tpc.c > 0 ? this.tpc.c-- : (this.tpc.c = this.tpc.m, this.tlp());
+        //fleeing detector
+        this.fle ? ((this.sVM > 0 ? this.sVM *= -1 : null), (this.tVM > 0 ? this.tVM *= -1 : null)) : ((this.sVM < 0 ? this.sVM *= -1 : null), (this.tVM < 0 ? this.tVM *= -1 : null));   
+        super.upd();
+        console.log(this.spV)
     }
 }

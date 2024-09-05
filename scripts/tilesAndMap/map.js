@@ -8,8 +8,6 @@ class lvl
         this.boxT = [];
         //Math array
         this.maAr = [];
-        //Math answer
-        this.maAn = 0;
         sgr('Bxs', this.map.arr, this.boxes);
         sgr("Btn",this.map.arr, this.btns);
         sgr("BDT", this.map.arr, this.boxT);
@@ -260,10 +258,10 @@ class Ice extends Tle{
 class Mth extends Tle{
     constructor(x,y,typ,fix,num)
     {   super(x,y);
-        this.clr = "blue";
-        this.txC = "red";
+        this.clr = "grey";
         this.typ = typ; //Dgt, Add, Sub, Mul, Div, Res, Ans
         this.fix = fix;
+        this.fix ? this.txC = "black" : this.txC = "crimson";
         this.val = 0;
         switch (this.typ){
             case "Dgt":
@@ -286,7 +284,7 @@ class Mth extends Tle{
                 this.dgt = "=";
                 break;
             case "Ans":
-                this.dgt = 0;
+                this.dgt = 13;
                 break;       
         }
         this.str = this.val;

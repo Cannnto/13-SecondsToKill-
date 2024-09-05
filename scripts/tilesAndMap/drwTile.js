@@ -1,30 +1,29 @@
 function waF(e)
 {   i(e);
     r(x,y+h-1,w,1,'black');
-    r(x,y,w,1,'black');
-    ctx.fillStyle = 'black';
+    r(x,y,w,1);
     wLi(x, y);
     r(x,y+h*1/3,h,1);
     wLi(x+w*1/8, y+h*1/3);
     r(x,y+h*2/3,h,1);
     wLi(x+w*1/32, y+h*2/3);
+    // r(x,y,w,h,'rgba(255,0,0,0.1)');
 }
 function wLi(x,y)
 {   r(x,y,1,10.6);
     r(x+32*1/4,y,1,10.6);
     r(x+32*2/4,y,1,10.6);
     r(x+32*3/4,y,1,10.6);
-
-
 }
 function waS(e)
 {   i(e);
     r(x,y,32,32,'#20252E');
     r(x,y,1,32,'#6D798B');
     r(x+31,y,1,32);
-    
     // r(x,y+h-1,w,1,'#6D798B');
     // r(x,y,w,1,'#6D798B');
+    // r(x,y,w,h,'rgba(255,0,0,0.1)');
+
 }
 function nex(e,dx,dy)
 {   i(e);

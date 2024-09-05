@@ -44,6 +44,9 @@ class Par
         case 'blu': this.y=this.e.y+this.e.h;
           this.drw = function(){bal(this.x, this.y, this.r, `rgba(${10}, ${50+Math.random()*100}, ${200+Math.random()*30}, ${this.a})`)}
         break;
+        case 'gre': this.y=this.e.y+this.e.h;
+          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${0+Math.random()*50}, ${100+Math.random()*255}, ${0+Math.random()*50}, ${this.a})`)}
+        break;
       } 
       // SCL(this,0.5)
       // ctx.fillStyle = "rgba("+(260-(this.life*2))+","+((this.life*2)+50)+","+(this.life*2)+","+(((this.max-this.life)/this.max)*0.4)+")";

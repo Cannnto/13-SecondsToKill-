@@ -1,5 +1,13 @@
 var zC = '#3A4A13';
 function i(e){return x=e.x, y=e.y, w=e.w, h=e.h;}
+function Ddi(arr)
+{   let d = 0;
+    while(d<10)
+    {   let l = parseInt(rng()*22);
+        let c = parseInt(rng()*30);
+        if(arr[l][c] == 1) arr[l][c] = 11, d++;
+    }
+}
 
 function mov(e)
 {   sav();
@@ -282,10 +290,10 @@ function heZ(e,c)
     }
     function btn(e, cor)
     {   i(e);
-        eli(x+w/2, y+h/8, w/3, h/8, 0, cor);
+        eli(x+w/2, y+h/2, w/3, h/8, 0, cor);
         eli(x+w/2, y+h/1.2, w/2.5, h/5, 0, 'gray');
         eli(x+w/2, y+h/1.2, w/3, h/8, 0, cor);
-        r(x+w/6, y+h/8, w/1.5, h/1.5, cor);
+        r(x+w/6, y+h/2, w/1.5, h/3, cor);
     }
     function spw(e)
     {   //r(e.x,e.y,e.w,e.h,'red');
@@ -308,5 +316,20 @@ function heZ(e,c)
         ctx.font = `${w/2}px Arial`;
         ctx.textAlign = 'center';
         ctx.fillStyle = 'white';
-        ctx.fillText('[E]', x+w/2, y-h/4);
+        ctx.fillText('[E]', x+w/2, y-h);
+    }
+
+    function mor(e)
+    {   i(e);
+        r(x+w/2-w/1.5/2,y-h/3,w/1.5,h/2,'black');
+        ctx.font = `${w}px arial`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'white';
+        if(e.cp)ctx.fillText(e.tx, x+w/2, y-h/1.75/2)
+        else    ctx.fillText(e.tx, x+w/2, y-h/2)
+    }
+    function mat(e)
+    {   i(e);
+        r(x+1,y+1,w-2,h-2,'#30353D');
     }

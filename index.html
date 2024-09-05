@@ -32,6 +32,7 @@
         cnv.height = 768;
     </script>
     <script src="scripts/functions.js"></script>
+    <script src="scripts/hud.js"></script>
     <script src="scripts/graphics/particles.js"></script>
     <script src="scripts/graphics/functiondraw.js"></script>
     <script src="scripts/graphics/bossDraw.js"></script>
@@ -82,9 +83,9 @@
     ]
     
     var tBX = {t:0 , sTX: "", aTX: "", clr:"", cTM :0};
-    var ENE = [new Dre(100,cnv.height/2,128,128)];
-    
-    //new Cur(100,cnv.height/2,64,64) 
+    var ENE = [new Cur(100,cnv.height/2,64,64)];
+    //new Dre(100,cnv.height/2,128,128);
+    //new Cur(100,cnv.height/2,64,64) ;
     // var nec = new Dre(100,cnv.height/2,128,128);
     var par = [];
     var blo = [];
@@ -99,7 +100,7 @@
     var pla = new Pla(cnv.width/2, cnv.height/2, 64, 64);
     var All = [];
     var frictional = [];
-
+    var hud = new Hud();
     function loop()
     {   r(0,0,cnv.width,cnv.height,'black');
         frictional = ENE.concat(pla,adi("box",lvls[clv].boxes));
@@ -156,12 +157,14 @@
                 if(pla.spd.x > pla.msp)pla.spd.x = pla.msp;
 
         // console.log(pla.spd)
-        if(key[69]) adT("Fool!;You dare bring light into my lair?;You must die!;", "black", 100); //inicia diálogo
-        if(key[70]) adT("salve!;fml?;é os guri pae;", "red", 30); //inicia diálogo
-        (tBX.t != 0) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
+        // if(key[69]) adT("Fool!;You dare bring light into my lair?;You must die!;", "black", 100); //inicia diálogo
+        // if(key[70]) adT("salve!;fml?;é os guri pae;", "red", 30); //inicia diálogo
+        (tBX.t) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
                
         r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
-        // r(0,0,cnv.width*rev,cnv.height,'rgba(75,0,130,0.4)');
+        hud.drw();
+        if(pla.tim.c)pla.tim.c--;
+        // if(!pla.tim.c) while(true){console.log('SE FODEO KKKKKKKKKKKKKKKKKKKKKKKKKKK')}
     }
     </script></body>
 </html>

@@ -69,7 +69,7 @@ class Ent
     }
     
     u(o)
-    {    return (lvls[clv].map.arr[o.l][o.c].col || lvls[clv].map.arr[o.l][o.c].constructor.name == "dor" && !cpd);}
+    {    return (lvls[clv].map.arr[o.l][o.c].col || lvls[clv].map.arr[o.l][o.c].constructor.name == "dor");}
     
     CWL()
     {   this.mp1 = {c:parseInt((this.x)/32), l:parseInt((this.y)/32)};
@@ -85,6 +85,9 @@ class Pla extends Ent
         this.atC = 0;
         this.bal = [];
         this.msp = 5;
+        this.int = 0;
+        this.tim = {c:390, m:390};
+        this.amo = {c:0, m:60};
     }
     sid()
     {   cha(this);
@@ -139,13 +142,17 @@ class Pla extends Ent
         }
     }
     fir()
-    {   this.bal.push(new Ball(this.x+this.w/2, this.y+this.h/2, 16, 16, ang));}
+    {   if(!this.amo.c) this.bal.push(new Ball(this.x+this.w/2, this.y+this.h/2, 16, 16, ang)),this.amo.c++;
+    }
 
     move(o) 
     {   this.x += this.spd.x*abs(this.spd.x/this.len)*o, this.y += this.spd.y*abs(this.spd.y/this.len)*o;}
 
     upd()
-    {   //atack animation functions
+    {   if(this.amo.c) this.amo.c++;
+        if(this.amo.c == this.amo.m) this.amo.c = 0;
+        
+        //atack animation functions
         if(this.atA)
         {   this.atC+=20;
             this.atk = 0;
@@ -155,7 +162,8 @@ class Pla extends Ent
         {   this.atC-=10;
             if(this.atC<-90) this.atA = 1;
         }
-
+        if(this.int) int(this);
+        this.int = 0; 
         
         this.len = this.spd.x||this.spd.y ? sqr(this.spd.x**2+this.spd.y**2) : 1;
         this.move(1);
@@ -169,10 +177,7 @@ class Pla extends Ent
         this.spd.x = Number(this.spd.x.toFixed(2))
         this.spd.y = Number(this.spd.y.toFixed(2))
 
-
-        // let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
-        // console.log(lvls[clv].map.arr[mp.l][mp.c].constructor.name)
-
+        if(this.tim.c> this.tim.m) this.tim.c = this.tim.m; 
     }
 }
 class Ball extends Ent
@@ -196,11 +201,10 @@ class Ball extends Ent
             }
     }
     upd()
-    {   this.x += cos(this.a)*5;
-        this.y += sin(this.a)*5;
+    {   this.x += cos(this.a)*10;
+        this.y += sin(this.a)*10;
         let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
-        console.log(mp)
-        if(lvls[clv].map.arr[mp.l][mp.c].constructor.name == 'Ice')lvls[clv].map.arr[mp.l][mp.c] = new flr(mp.c*32,mp.l*32)
+        if(lvls[clv].map.arr[mp.l][mp.c].constructor.name == 'Ice')lvls[clv].map.arr[mp.l][mp.c] = new flr(mp.c*32,mp.l*32);
     }
 }
 class Box extends Ent 
@@ -297,12 +301,12 @@ class Ene extends Ent
             if (cnt) sV.div(cnt);
             let s1 = sqr((sV.x)**2 + (sV.y)**2);
             if (s1) sV.div(s1);
-            sV.mtp(this.spe*2);
+            sV.mtp(this.spe*-2);
             
             let s2 = sqr((tV.x)**2 + (tV.y)**2);
             if (s2) tV.div(s2);
             
-            tV.mtp(this.spe*0.8);
+            tV.mtp(this.spe*-0.8);
             this.acV.sum(sV);
             this.acV.sum(tV);
             this.spV.sum(this.acV);
@@ -329,6 +333,7 @@ class Min extends Ene
 {   constructor(x,y,w,h)
     {   super(x,y,w,h);
         this.lif = {m:100,c:100};
+        this.rec = 60;
     }
     sid()
     {   cha(this);
@@ -357,7 +362,7 @@ class Min extends Ene
         leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), zC,zC,0);
     }
     lfB()
-    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1;
+    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1, pla.tim.c+=this.rec;
         if(this.lif.c<=0)
         {   this.gra += 0.25;
             this.anC += this.gra;
@@ -376,6 +381,7 @@ class Cur extends Ene
     {   super(x,y,w,h);
         this.lif = {m:200,c:200};
         this.spd.x = 0;
+        this.rec = 90;
     }
     sid()
     {   cha(this);
@@ -415,7 +421,7 @@ class Cur extends Ene
         leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), zC,'white',1);
     }
     lfB()
-    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1;
+    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1, pla.tim.c+=this.rec;
         if(this.lif.c<=0)
         {   this.gra += 0.25;
             this.anC += this.gra;
@@ -428,7 +434,6 @@ class Cur extends Ene
         } 
     }
 }
-
 class Dre extends Ene
 {   constructor(x,y,w,h)
     {   super(x,y,w,h);

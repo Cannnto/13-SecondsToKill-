@@ -90,7 +90,7 @@
     var blo = [];
     var clv = 0;
 
-    var cpd = true;
+    var cpd = false;
     var nxt = 0;
     var bli = 0;
     var dis = 200;
@@ -156,8 +156,7 @@
                 if(pla.spd.x > pla.msp)pla.spd.x = pla.msp;
 
         // console.log(pla.spd)
-        if(key[69]) adT("Fool!;You dare bring light into my lair?;You must die!;", "black", 100); //inicia diálogo
-        if(key[70]) adT("salve!;fml?;é os guri pae;", "red", 30); //inicia diálogo
+        if(key[70]) adT("Fool!;You dare bring light into my lair?;You must die!;", "purple", 100); //inicia diálogo
         (tBX.t != 0) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
                
         r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');

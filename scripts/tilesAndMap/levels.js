@@ -20,6 +20,16 @@ function cma(arr)
                 case 11: arr[lne][col] = new Gdi(col*32,lne*32);break;
                 //ice
                 case 12: arr[lne][col] = new Ice(col*32,lne*32);break;
+                //math tiles
+                //you CANNOT start with an operation tile
+                //you NEED to end with the answer tile that is preceded by the result tile;there can't be more than one of either as well
+                case 13: arr[lne][col] = new Mth(col*32,lne*32,"Dgt", false);break; //random digit tile, mutable
+                case 14: arr[lne][col] = new Mth(col*32,lne*32,"Add", true);break;
+                case 15: arr[lne][col] = new Mth(col*32,lne*32,"Sub", true);break;
+                case 16: arr[lne][col] = new Mth(col*32,lne*32,"Mul", true);break;
+                case 17: arr[lne][col] = new Mth(col*32,lne*32,"Div", true);break;
+                case 18: arr[lne][col] = new Mth(col*32,lne*32,"Res", true);break; //result tile holds the result of the equation
+                case 19: arr[lne][col] = new Mth(col*32,lne*32,"Ans", true);break; //answer is always 13
             }
         }
     }
@@ -79,6 +89,13 @@ function lv1(arr)
     }
     arr[2][23] = arr[2][24] = arr[1][24] = arr[1][25] = 9;
     arr[2][25] = arr[1][22] = arr[1][23] = arr[1][26] = 10;
+    //Math organization
+    //                                     fixed, digit
+    arr[4][10] = new Mth(10*32,4*32,"Dgt", true, 3); //must use this method to create fixed digit tiles
+    arr[4][11] = 14;
+    arr[4][12] = 13;
+    arr[4][13] = 18;
+    arr[4][14] = 19;
     // arr[5][30] = arr[22][8] = arr[8][3] = arr[10][20] = 11;
     // for(var y=7;y<17;y++)
     //     for(var x=10;x<32;x++) arr[y][x] = 12;

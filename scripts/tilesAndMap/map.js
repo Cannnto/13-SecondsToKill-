@@ -1,20 +1,28 @@
 class lvl 
-{   constructor(map)
+{   constructor(map,b,r,s)
     {   this.map = map;
         cma(this.map.arr);
         this.boxes = [];
         this.btns=[];
         //boxtile
+        this.b = b;
+        this.r = r;
         this.boxT = []
         this.maAr = [];
-        this.swi = []
-        sgr("Swi", this.map.arr, this.swi);
+        this.mor = [];
+        this.spw = [];
+        sgr("Spw", this.map.arr, this.spw);
+        sgr("Mor", this.map.arr, this.mor);
         sgr('Bxs', this.map.arr, this.boxes);
         sgr("Btn", this.map.arr, this.btns);
         sgr("BDT", this.map.arr, this.boxT);
         sgr("Mth", this.map.arr, this.maAr);
         shf(this.btns);
-        this.swi.sort((a,b) => a.x - b.x);
+        this.mor.sort((a,b) => a.x - b.x);
+        for(let i=0;i<this.spw.length;i++)
+            this.spw[i].spT = s.t*30, this.spw[i].enL = s.l;
+        
+        this.txt = ".____...__";
         //box target. target number.        current number 
         // for(var lne = 0;lne < this.map.arr.length; lne++) 
         //     for(var col = 0; col < this.map.arr[lne].length; col++)
@@ -23,23 +31,15 @@ class lvl
 
     drw()
     {   this.map.drw();
-        for(let i=0; i<this.boxes.length;i++)
-            if(d(this.boxes[i].box, 32, 32))this.boxes[i].box.drw();
-        
+
+        bli = this.b;
+        rev = this.r;
         //boxcurrentmatch sla n pensei no nome
         //do jeito que tá, o método de passar tá hardcoded, tem que mudar isso ainda
         var bCM = 0;
-        for(let i=0; i<this.boxT.length;i++) {
-            if (this.boxT[i].act) {
-                bCM++;
-            }
-        }
-        var txt = ""
-        //Checar os switchs para ver se pode passar de level
-        for(var i = 0; i<this.swi.length; i++)  txt += this.swi[i].tx;
-        
-        // if(txt == ".____...__") cpd = true;
-        
+        for(let i=0; i<this.boxT.length;i++) 
+            if (this.boxT[i].act) bCM++;
+    
         // //se não tiver caixas ele não passa imediatamente        
         // //bCM == this.boxT.length && bCM != 0?cpd = true:cpd = true;
 
@@ -56,6 +56,21 @@ class lvl
         //         };
         //     }
         // }
+        var tr = 0
+        //Checar os switchs para ver se pode passar de level
+        for(var i = 0; i<this.mor.length; i++)
+        {   if(this.mor[i].val[this.mor[i].i%this.mor[i].val.length] == this.txt[i])  tr++;
+            
+            if(tr == this.mor.length)
+            {   for(var j = 0; j<this.mor.length; j++)
+                    this.mor[j].clr = "green";
+                    cpd = 1;
+            }
+            else{
+                for(var j = 0; j<this.mor.length; j++)
+                    this.mor[j].clr = "red";
+            }
+        }
     }
 }
 class Map
@@ -115,16 +130,27 @@ class Wal extends Tle
 class flr extends Tle
 {   constructor(x,y)
     {   super(x,y);
+        this.uFr = true
+        this.i = 0
     }
 
-    drw()
-        {ground(this);}
     upd()
-    {   for(var i = 0; i<frictional.length; i++){
-            if(this.collide(frictional[i]))  frictional[i].fri = 1, frictional[i].acel = 5;
+    {   if(this.uFr)
+        {   for(var i = 0; i<frictional.length; i++)
+                if(this.collide(frictional[i]))  frictional[i].fri = 0, frictional[i].acel = 5;  
+            this.drw = function(){ground(this)}
         }
-        // console.log()
-
+        else
+        {   for(var i = 0; i<frictional.length; i++)
+                if(this.collide(frictional[i]))  frictional[i].fri = 0.99, frictional[i].acel = 0.1;  
+            this.clr = "lightblue"
+            this.drw = function(){ctx.fillStyle = this.clr,ctx.fillRect(this.x,this.y,32,32);}
+            this.i++
+        }
+        if(this.i > 240 && !this.uFr)
+        {   this.uFr = true
+            this.i = 0
+        }
     }
 }
 class dor extends Tle
@@ -148,18 +174,19 @@ class dor extends Tle
     }
 }
 class Spw extends Tle
-{   constructor(x,y,t) 
+{   constructor(x,y) 
     {   super(x,y);
-        this.enA = 0;
-        this.spT = 30*3;
+        this.enL = 0;
+        this.spT = 0;
         this.cuT = 0;
+        this.c = 0;
     }
 
     arT() 
     {   if(this.cuT == this.spT) 
         {   ENE.push(new Min(this.x,this.y,64,64,this));
-            this.enA++;
             this.cuT = 0;
+            this.c++;
         } 
         this.cuT++;
     }
@@ -168,7 +195,7 @@ class Spw extends Tle
         spw(this);
     }
     upd() 
-    {   if (ENE.length < 10) this.arT();
+    {   if (this.enL >= ENE.length) this.arT();
     }
 }
 class Btn extends Tle
@@ -201,32 +228,27 @@ class Btn extends Tle
         btn(this, this.clr);
     }
 }
-class Swi extends Tle{
-    constructor(x,y,cp)
+class Mor extends Tle{
+    constructor(x,y,val,i)
     {   super(x,y);
         this.clr = "red";
-        this.cld = false;
-        this.cp = cp;
-        this.tx = ".";
+        this.cld = 0;
+        this.val = val;
+        this.i = i;
     }
 
     drw()
     {   ground(this);
         btn(this, this.clr);
-        mor(this)
+        mor(this);
     }
 
     upd()
     {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50)
         {   pla.int = 1;
             if(key[69])
-            {   this.cp = !this.cp;
-                key[69] = !key[69];
-            };
+               this.i++, key[69] = !key[69];
         }
-
-        this.tx = "_";
-        if(this.cp) this.tx = ".";
     }
 }
 class Bxs extends Tle {
@@ -284,11 +306,28 @@ class Ice extends Tle{
     constructor(x,y)
     {   super(x,y);
         this.clr = "lightblue";
+        this.uFr = 0;
+        this.i = 0;
     }
 
     upd()
-    {   for(var i = 0; i<frictional.length; i++)
-            if(this.collide(frictional[i]))  frictional[i].fri = 0.02, frictional[i].acel = 0.1;    
+    {   if(!this.uFr)
+        {   for(var i = 0; i<frictional.length; i++)
+                if(this.collide(frictional[i]))  frictional[i].fri = 0.99, frictional[i].acel = 0.1;    
+
+            this.clr = "lightblue"
+            this.drw = function(){ctx.fillStyle = this.clr,ctx.fillRect(this.x,this.y,32,32);}
+        }else{
+            for(var i = 0; i<frictional.length; i++)
+                if(this.collide(frictional[i]))  frictional[i].fri = 0, frictional[i].acel = 5;   
+            
+            this.drw = function(){ground(this)};
+            this.i++;
+        }
+        if(this.i > 30*8 && this.uFr)
+        {   this.uFr = 0;
+            this.i = 0;
+        }
     }
 }
 class Mth extends Tle{
@@ -335,13 +374,12 @@ class Mth extends Tle{
 
     drw()
     {   mat(this);
-
-    }
-    upd(){
         ctx.fillStyle = this.txC;
         ctx.font = `${this.w/1.5}px Arial`; //fonte a mudar
         ctx.textAlign = "center";
         ctx.fillText(this.dgt, this.x+this.w/2, this.y+this.h/2);
+    }
+    upd(){
         if((sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50) && !this.fix){
             pla.int = 1;
             if(key[69])

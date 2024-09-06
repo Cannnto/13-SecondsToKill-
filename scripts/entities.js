@@ -175,8 +175,6 @@ class Pla extends Ent
 
 
 
-
-
         if(this.int) int(this);
         this.int = 0; 
         

@@ -351,6 +351,13 @@ class Ene extends Ent
         this.spV.y *= this.fri;
         if(this.spV.x<0.1) this.spV.x = 0;
         if(this.spV.y<0.1) this.spV.y = 0;
+
+        console.log(this.lif.c)
+        if(this.cld([pla]) && this.lif.c)
+        {   pla.tim.c-=30;
+            this.lif.c = 0;
+
+        }
     }
 }
 class Min extends Ene

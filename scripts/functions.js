@@ -128,8 +128,9 @@ function sB(n,c)
 }
 
 class Atk {
-    constructor(nam, tim) {
+    constructor(nam, tim, act) {
         this.nam = nam;
         this.tmr = {c: 30*tim, m: 30*tim};
+        this.act = act;
     }
 }

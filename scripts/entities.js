@@ -437,22 +437,24 @@ class Cur extends Ene
 class Dre extends Ene
 {   constructor(x,y,w,h)
     {   super(x,y,w,h);
-        this.lif = {m:200,c:200};
+        this.lif = {m:5000,c:5000};
         this.spd.x = 1;
         //flee
-        this.fle = false;
+        this.fle = true;
         //teleport tile
         this.tpt = []
         //teleport clock
         this.tpc = {c:0, m:30*5};
         this.tpc.c = this.tpc.m;
         //attack stuff
-        this.ats = [new Atk("Frb", 0.5),
-                    new Atk("Wll", 8),
-                    new Atk("Ice", 5),
-                    new Atk("Mtr", 0.5),
-                    new Atk("Aur", 0.5)
+        this.ats = [new Atk("Frb", 0.5, false),
+                    new Atk("Wll", 8, false),
+                    new Atk("Ice", 5, false),
+                    new Atk("Mtr", 0.5, false),
+                    new Atk("Aur", 7, false)
         ]; //Fireball, Wall, Ice, Meteor, Aura.
+        //aura radius
+        this.auR = 30;
     }
     sid()
     {   cha(this);
@@ -504,17 +506,42 @@ class Dre extends Ene
     tlp() {
         this.tpt = [];
         sgr("flr", lvls[clv].map.arr, this.tpt);
-        var chs = this.tpt[parseInt(Math.random()*(this.tpt.length-1))];
-        let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)
+        var chs = this.tpt[parseInt(Math.random()*(this.tpt.length))];
         this.x = chs.x-this.w/2;
         this.y = chs.y-this.h/2;
-        if (this.CWL() || chs.x == undefined || chs.y == undefined || dp < 250 || dp > 800) this.tlp();
+        let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)
+        !this.ats[4].act ? ((this.CWL() || chs.x == undefined || chs.y == undefined || (dp < 250 || dp > 800)) ? this.tlp() : null) : ((this.CWL() || chs.x == undefined || chs.y == undefined || dp > 100) ? this.tlp() : null)
+        console.log(dp);
+    }
+    raG() {
+        let slA = Math.floor(Math.random()*(this.ats.length));
+        switch (this.ats[slA].nam) {
+            case "Frb":
+                break;
+            case "Wll":
+                break;
+            case "Ice":
+                break;        
+            case "Mtr":
+                break;
+            case "Aur":
+                this.ats[4].act = true;
+                adT("Burn, insect!;", "purple", 100);
+                break;    
+        }
+    }
+    sAu() {
+        let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2);
+        bal(this.x+this.w/2,this.y+this.h/2,this.auR,"red");
+        //if (dp<this.auR) do stuff
+        this.ats[4].tmr.c--;
+        if (this.ats[4].tmr.c == 0) (this.ats[4].tmr.c = this.ats[4].tmr.m, this.ats[4].act = false, this.fle = true);
     }
     upd() {
-        this.tpc.c > 0 ? this.tpc.c-- : (this.tpc.c = this.tpc.m, this.tlp());
+        this.tpc.c > 0 ? this.tpc.c-- : (this.tpc.c = this.tpc.m, this.raG(), this.tlp());
         //fleeing detector
         this.fle ? ((this.sVM > 0 ? this.sVM *= -1 : null), (this.tVM > 0 ? this.tVM *= -1 : null)) : ((this.sVM < 0 ? this.sVM *= -1 : null), (this.tVM < 0 ? this.tVM *= -1 : null));   
         super.upd();
-        console.log(this.spV)
+        if (this.ats[4].act) (this.fle = false, this.sAu());
     }
 }

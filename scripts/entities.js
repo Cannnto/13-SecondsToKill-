@@ -453,6 +453,8 @@ class Dre extends Ene
                     new Atk("Mtr", 0.5, false),
                     new Atk("Aur", 7, false)
         ]; //Fireball, Wall, Ice, Meteor, Aura.
+        //fireball array
+        this.bal = [];
         //aura radius
         this.auR = 30;
     }
@@ -521,6 +523,7 @@ class Dre extends Ene
             case "Wll":
                 break;
             case "Ice":
+                adT("Freeze, insect!;", "blue", 100);
                 break;        
             case "Mtr":
                 break;
@@ -530,6 +533,7 @@ class Dre extends Ene
                 break;    
         }
     }
+    //set aura
     sAu() {
         let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2);
         bal(this.x+this.w/2,this.y+this.h/2,this.auR,"red");
@@ -537,11 +541,17 @@ class Dre extends Ene
         this.ats[4].tmr.c--;
         if (this.ats[4].tmr.c == 0) (this.ats[4].tmr.c = this.ats[4].tmr.m, this.ats[4].act = false, this.fle = true);
     }
+    //set ice
+    sIc() {
+        this.ats[2].tmr.c--;
+        if (this.ats[2].tmr.c == 0) (this.ats[2].tmr.c = this.ats[2].tmr.m, this.ats[2].act = false); //pla.ice = false
+    }
     upd() {
         this.tpc.c > 0 ? this.tpc.c-- : (this.tpc.c = this.tpc.m, this.raG(), this.tlp());
         //fleeing detector
         this.fle ? ((this.sVM > 0 ? this.sVM *= -1 : null), (this.tVM > 0 ? this.tVM *= -1 : null)) : ((this.sVM < 0 ? this.sVM *= -1 : null), (this.tVM < 0 ? this.tVM *= -1 : null));   
         super.upd();
         if (this.ats[4].act) (this.fle = false, this.sAu());
+        if (this.ats[2].act) this.sIc(); //place.ice = true;
     }
 }

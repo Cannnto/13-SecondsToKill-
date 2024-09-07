@@ -12,7 +12,7 @@ var ang = 0
 
 function mU(event)
 {   if(event.button == 0)pla.atk = 1;
-    if(event.button == 2)pla.fir();
+    if(event.button == 2 && !pla.amo.c) pla.fAk = 1;
 }
 
 function mM(event)
@@ -46,8 +46,13 @@ function eli(x,y,rw,rh,an,c)
 function d(e, w, h)
 {   return sqr(((e.x+w/2) - (pla.x+pla.w/2))**2 + ((e.y+h/2) - (pla.y+pla.h/2))**2)*bli < dis;}
 
-function RNG()
-{   return  rng()*(rng()<0.5?1:-1) *rev}
+function drug()
+{   let tx = (rng()<0.5?1:-1) *rev;
+    let ty = (rng()<0.5?1:-1) *rev;
+    teste.x+=tx, teste.y+=ty, tra(tx,ty);
+    if(abs(teste.x)>2 || abs(teste.y)>2)
+        teste.x-=tx, teste.y-=ty, tra(-tx,-ty);
+}
 function sgr(name,arr,rcv)
 {   for(var i = 0;i<arr.length;i++)
         for(var j = 0; j<arr[i].length;j++)

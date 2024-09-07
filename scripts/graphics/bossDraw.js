@@ -20,7 +20,6 @@ function DFb(e)
     spk(e,0);
     spk(e,w/1.6);
 }
-
 function DFh(e)
 {   i(e);
 
@@ -47,7 +46,6 @@ function DFh(e)
     r(x+w/2-w/8/2,y-h/4+h/32,w/32,h/32,'#670816');
     r(x+w/2-w/8/2,y-h/4-h/32,w/32,h/32,'#670816');
 }
-
 function Dbd(e,s,b)
 {   i(e);
     
@@ -89,7 +87,6 @@ function Dbd(e,s,b)
     lT(x+w*0.8/5, y+h/6);
     cP();
 }
-
 //details
 function de1(x1)
 {   mT(x1+x+w*1.5/5, y, 'black');

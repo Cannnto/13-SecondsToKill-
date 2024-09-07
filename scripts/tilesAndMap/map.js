@@ -1,18 +1,28 @@
 class lvl 
-{   constructor(map)
+{   constructor(map,b,r,s)
     {   this.map = map;
         cma(this.map.arr);
         this.boxes = [];
         this.btns=[];
         //boxtile
-        this.boxT = [];
-        //Math array
+        this.b = b;
+        this.r = r;
+        this.boxT = []
         this.maAr = [];
+        this.mor = [];
+        this.spw = [];
+        sgr("Spw", this.map.arr, this.spw);
+        sgr("Mor", this.map.arr, this.mor);
         sgr('Bxs', this.map.arr, this.boxes);
-        sgr("Btn",this.map.arr, this.btns);
+        sgr("Btn", this.map.arr, this.btns);
         sgr("BDT", this.map.arr, this.boxT);
         sgr("Mth", this.map.arr, this.maAr);
         shf(this.btns);
+        this.mor.sort((a,b) => a.x - b.x);
+        for(let i=0;i<this.spw.length;i++)
+            this.spw[i].spT = s.t*30, this.spw[i].enL = s.l;
+        
+        this.txt = ".____...__";
         //box target. target number.        current number 
         // for(var lne = 0;lne < this.map.arr.length; lne++) 
         //     for(var col = 0; col < this.map.arr[lne].length; col++)
@@ -21,34 +31,48 @@ class lvl
 
     drw()
     {   this.map.drw();
-        for(let i=0; i<this.boxes.length;i++)
-            if(d(this.boxes[i].box, 32, 32))this.boxes[i].box.drw();
-        
+
+        bli = this.b;
+        rev = this.r;
         //boxcurrentmatch sla n pensei no nome
         //do jeito que tá, o método de passar tá hardcoded, tem que mudar isso ainda
         var bCM = 0;
-        for(let i=0; i<this.boxT.length;i++) {
-            if (this.boxT[i].act) {
-                bCM++;
+        for(let i=0; i<this.boxT.length;i++) 
+            if (this.boxT[i].act) bCM++;
+    
+        // //se não tiver caixas ele não passa imediatamente        
+        // //bCM == this.boxT.length && bCM != 0?cpd = true:cpd = true;
+
+        // if (this.maAr.length)
+        // {   for (let i = 1; i < this.maAr.length; i++) 
+        //         this.maAr[i].opr(this.maAr[i-1], this.maAr[i+1]);
+            
+        //     for (let i=0; i<this.maAr.length; i++) 
+        //     {   !this.maAr[i].fix ? this.maAr[i].txC = "crimson" : this.maAr[i].txC = "black";
+        //         cpd = 0;
+        //         if (this.maAr[this.maAr.length-2].str == 13)
+        //         {   this.maAr[i].txC = "green";
+        //             cpd = 1;
+        //         };
+        //     }
+        // }
+        var tr = 0
+        //Checar os switchs para ver se pode passar de level
+        for(var i = 0; i<this.mor.length; i++)
+        {   if(this.mor[i].val[this.mor[i].i%this.mor[i].val.length] == this.txt[i])  tr++;
+            
+            if(tr == this.mor.length)
+            {   for(var j = 0; j<this.mor.length; j++)
+                    this.mor[j].clr = "green";
+                    cpd = 1;
+            }
+            else{
+                for(var j = 0; j<this.mor.length; j++)
+                    this.mor[j].clr = "red";
             }
         }
-        //se não tiver caixas ele não passa imediatamente        
-        bCM == this.boxT.length && bCM != 0 ? cpd = true: cpd = false;
 
-        if (this.maAr.length != 0) {
-                for (let i = 1; i < this.maAr.length; i++) {
-                    this.maAr[i].opr(this.maAr[i-1], this.maAr[i+1]);
-                }
-
-                if (this.maAr[this.maAr.length-2].str == 13) {
-                    for (let i=0; i<this.maAr.length; i++) {
-                        this.maAr[i].txC = "green";
-                        this.maAr[i].fix = true;
-                    };
-                    cpd = true;
-                }
-            }
-        }
+    }
 }
 class Map
 {   constructor(arr)
@@ -91,10 +115,6 @@ class Wal extends Tle
 {   constructor(x,y)
     {   super(x,y);
         this.col = true;
-        // this.clr = "#d97018";
-        // this.drw = function(){waS(this)};
-        // if(nex(this,1)&&nex(this,-1)) this.drw = function(){waF(this)};
-        // console.log(nex(this.x,this.y,1)&&nex(this.x,this.y,-1))
     }
     drw()
     {   if(nex(this,1,0) && nex(this,-1,0)) this.drw = function(){ground(this),waF(this)};
@@ -111,16 +131,27 @@ class Wal extends Tle
 class flr extends Tle
 {   constructor(x,y)
     {   super(x,y);
+        this.uFr = true
+        this.i = 0
     }
 
-    drw()
-        {ground(this);}
     upd()
-    {   for(var i = 0; i<frictional.length; i++){
-            if(this.collide(frictional[i]))  frictional[i].fri = 1, frictional[i].acel = 5;
+    {   if(this.uFr)
+        {   for(var i = 0; i<frictional.length; i++)
+                if(this.collide(frictional[i]))  frictional[i].fri = 0, frictional[i].acel = 5;  
+            this.drw = function(){ground(this)}
         }
-        // console.log()
-
+        else
+        {   for(var i = 0; i<frictional.length; i++)
+                if(this.collide(frictional[i]))  frictional[i].fri = 0.99, frictional[i].acel = 0.1;  
+            this.clr = "lightblue"
+            this.drw = function(){ctx.fillStyle = this.clr,ctx.fillRect(this.x,this.y,32,32);}
+            this.i++
+        }
+        if(this.i > 240 && !this.uFr)
+        {   this.uFr = true
+            this.i = 0
+        }
     }
 }
 class dor extends Tle
@@ -130,7 +161,9 @@ class dor extends Tle
     }
 
     upd()
-    {   if(this.collide(pla) && cpd)
+    {   let pbx = {x:pla.x-5,y:pla.y-5,w:pla.w+10,h:pla.h+10};
+        //player checker hitbox
+        if(this.collide(pbx) && cpd)
         {   clv++;
             pla.x = levels[clv].spwPoint.x;
             pla.y = levels[clv].spwPoint.y;
@@ -138,23 +171,23 @@ class dor extends Tle
             blo = [];
             par = [];
             pla.bal = [];
-            cpd = false; 
         }
     }
 }
 class Spw extends Tle
-{   constructor(x,y,t) 
+{   constructor(x,y) 
     {   super(x,y);
-        this.enA = 0;
-        this.spT = 30*3;
+        this.enL = 0;
+        this.spT = 0;
         this.cuT = 0;
+        this.c = 0;
     }
 
     arT() 
     {   if(this.cuT == this.spT) 
         {   ENE.push(new Min(this.x,this.y,64,64,this));
-            this.enA++;
             this.cuT = 0;
+            this.c++;
         } 
         this.cuT++;
     }
@@ -163,7 +196,7 @@ class Spw extends Tle
         spw(this);
     }
     upd() 
-    {   if (this.enA < 30) this.arT();
+    {   if (this.enL >= ENE.length) this.arT();
     }
 }
 class Btn extends Tle
@@ -194,6 +227,29 @@ class Btn extends Tle
     drw()
     {   ground(this);
         btn(this, this.clr);
+    }
+}
+class Mor extends Tle{
+    constructor(x,y,val,i)
+    {   super(x,y);
+        this.clr = "red";
+        this.cld = 0;
+        this.val = val;
+        this.i = i;
+    }
+
+    drw()
+    {   ground(this);
+        btn(this, this.clr);
+        mor(this);
+    }
+
+    upd()
+    {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50)
+        {   pla.int = 1;
+            if(key[69])
+               this.i++, key[69] = !key[69];
+        }
     }
 }
 class Bxs extends Tle {
@@ -230,87 +286,85 @@ class BDT extends Tle {
 }
 //placa Sign
 class Sgn extends Tle
-{   constructor(x,y)
+{   constructor(x,y,txt)
     {   super(x,y);
         this.clr = '#7C653C';
         this.col = true;
+        this.txt = txt
     }
     drw()
     {   ground(this);
         sgn(this);
     }
     upd()
-    {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50) int(this);
+    {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50)
+        {   if(key[69]) adT(this.txt, "black", 100);
+            pla.int = 1;
+        }
     }
 }
 class Ice extends Tle{
     constructor(x,y)
     {   super(x,y);
         this.clr = "lightblue";
+        this.uFr = 0;
+        this.i = 0;
     }
 
     upd()
-    {   for(var i = 0; i<frictional.length; i++)
-            if(this.collide(frictional[i]))  frictional[i].fri = 0.02, frictional[i].acel = 0.1;    
+    {   if(!this.uFr)
+        {   for(var i = 0; i<frictional.length; i++)
+                if(this.collide(frictional[i]))  frictional[i].fri = 0.99, frictional[i].acel = 0.1;    
+
+            this.clr = "lightblue"
+            this.drw = function(){ctx.fillStyle = this.clr,ctx.fillRect(this.x,this.y,32,32);}
+        }else{
+            for(var i = 0; i<frictional.length; i++)
+                if(this.collide(frictional[i]))  frictional[i].fri = 0, frictional[i].acel = 5;   
+            
+            this.drw = function(){ground(this)};
+            this.i++;
+        }
+        if(this.i > 30*8 && this.uFr)
+        {   this.uFr = 0;
+            this.i = 0;
+        }
     }
 }
-
 class Mth extends Tle{
     constructor(x,y,typ,fix,num)
     {   super(x,y);
-        this.clr = "grey";
+        // this.txC = "red";
         this.typ = typ; //Dgt, Add, Sub, Mul, Div, Res, Ans
         this.fix = fix;
         this.fix ? this.txC = "black" : this.txC = "crimson";
         this.val = 0;
-        switch (this.typ){
-            case "Dgt":
+        switch (this.typ)
+        {   case "Dgt":
                 !this.fix ? this.val = Math.floor(Math.random()*21) : this.val = num%21;
                 this.dgt = this.val;
-                break;
-            case "Add":
-                this.dgt = "+";
-                break;
-            case "Sub":
-                this.dgt = "-";
-                break;
-            case "Mul":
-                this.dgt = "*";
-                break;
-            case "Div":
-                this.dgt = "/";
-                break;
-            case "Res":
-                this.dgt = "=";
-                break;
-            case "Ans":
-                this.dgt = 13;
-                break;       
+            break;
+            case "Add":this.dgt = "+";break;
+            case "Sub":this.dgt = "-";break;
+            case "Mul":this.dgt = "*";break;
+            case "Div":this.dgt = "/";break;
+            case "Res":this.dgt = "=";break;
+            case "Ans":this.dgt = 13;break;       
         }
         this.str = this.val;
     }
 
     opr(pre,nxt){
-        switch (this.typ){
-            case "Add":
-                nxt.str = pre.str + nxt.val;
-                break;
-            case "Sub":
-                nxt.str = pre.str - nxt.val;
-                break;
-            case "Mul":
-                nxt.str = pre.str * nxt.val;
-                break;
-            case "Div":
-                nxt.str = pre.str / nxt.val;
-                break;
+        switch (this.typ)
+        {   case "Add":nxt.str = pre.str + nxt.val;break;
+            case "Sub":nxt.str = pre.str - nxt.val;break;
+            case "Mul":nxt.str = pre.str * nxt.val;break;
+            case "Div":nxt.str = pre.str / nxt.val;break;
             case "Res":
                 this.str = pre.str;
                 nxt.str = pre.str;
-                break;
-            case "Ans":
-                this.str = this.dgt = this.val = 13;
-                break;          
+            break;
+            case "Ans":this.str = this.dgt = this.val = 13;break;          
         }
         return;
     }
@@ -319,23 +373,26 @@ class Mth extends Tle{
         return(num);
     }
 
-    upd() {
+    drw()
+    {   mat(this);
         ctx.fillStyle = this.txC;
-        ctx.font = "30px Arial"; //fonte a mudar
+        ctx.font = `${this.w/1.5}px Arial`; //fonte a mudar
         ctx.textAlign = "center";
         ctx.fillText(this.dgt, this.x+this.w/2, this.y+this.h/2);
-        if((sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50) && !this.fix) {
-            if(key[69]){
-                this.val++;
-                this.val %= 21;
+    }
+    upd(){
+        if((sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50) && !this.fix){
+            pla.int = 1;
+            if(key[69])
+            {   this.val++;
+                this.val %= 20;
                 this.dgt = this.val;
                 this.str = this.val;
+                key[69] = false;
             }
         }
     }
-
 }
-
 //graphics
 class Gbx extends Tle
 {   constructor(x,y)

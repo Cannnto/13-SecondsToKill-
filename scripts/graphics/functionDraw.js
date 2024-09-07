@@ -1,5 +1,12 @@
 var zC = '#3A4A13';
 function i(e){return x=e.x, y=e.y, w=e.w, h=e.h;}
+function Ddi(arr)
+{   for(let i=0;i<10;i++)
+    {   let l = parseInt(rng()*22);
+        let c = parseInt(rng()*30);
+        if(arr[l][c] == 1) arr[l][c] = 11;
+    }
+}
 
 function mov(e)
 {   sav();
@@ -31,7 +38,7 @@ function SCL(e,s)
         tra(-(e.x+e.w/2), -(e.y+e.h/2));
 }
 
-function hed(e){r(e.x + e.w/4, e.y - e.h/2, e.w/2, e.h/2, 'white')};
+function hed(e,a){r(e.x + e.w/4, e.y - e.h/2, e.w/2, e.h/2, `rgba(255,255,255,${a||1})`)};
 function pnt(e, color){r(e.x + e.w*0.5/4, e.y+e.h*2.5/4, e.w*3/4, e.h/4, '#055769')};
 function shr(e, color){r(e.x + e.w*0.5/4, e.y, e.w*3/4, e.h*1.25/2, color)}
 function eye(e, xa, ya, c, color){r(e.x + e.w*xa, e.y - e.h*ya+c, e.w/8, e.h*1.3/8, color)};
@@ -128,12 +135,12 @@ function heZ(e,c)
     }
 //--------------Front-------------------
     //head
-    function heF(e)
+    function heF(e,a)
     {   i(e);
-        hed(e);
-        eye(e, 2.75/8, 2.35/8, 0,'black');
-        eye(e, 4.25/8, 2.35/8, 0,'black');
-        r(x + w*2/8, y - h*4/8, w*4/8, h*0.75/8, '#D9D9D9');
+        hed(e,a);
+        eye(e, 2.75/8, 2.35/8, 0,`rgba(0,0,0,${a||1})`);
+        eye(e, 4.25/8, 2.35/8, 0,`rgba(0,0,0,${a||1})`);
+        r(x + w*2/8, y - h*4/8, w*4/8, h*0.75/8, `rgba(217,217,217,${a||1})`);
         r(x + w*5/8, y - h*3.25/8, w/8, h/16);
         r(x + w*2/8, y - h*3.25/8, w/8, h/16);
     }
@@ -215,7 +222,7 @@ function heZ(e,c)
         res();
     };
 //----sword draw----
-    function swo(e,x1,c,at,cor)
+    function swo(e,x1,c,at,cor,f)
     {   i(e);
         let b = {x:x + w*2/4, y:y + h*0.5/4, w:-(w/4)*2, h:-(h/4)*2};
         var s = 0;
@@ -233,15 +240,15 @@ function heZ(e,c)
         var a = (c*-0*Math.PI/180)
         if(e.a==e.sid)   res(), a = ((c*-10+at)*Math.PI/180);
         
-        let bl1 = {x:(x1+w/24),y:(y-h/2 - c)+20*sin(a),w:w/6,h:h*9/16};
+        let bl1 = {x:(x1+w/24),y:(y-h/2 - c+s)+20*sin(a),w:w/6,h:h*9/16};
         let bl2 = {x:(x1+w/24)-h*5.1/8,y:(y-h/2 - c)+5*sin(a),w:bl1.h, h:bl1.w}; 
-        if(e.c) bl1.x-=15, bl2.x+=bl2.w+5;
+        if(e.c) bl1.x-=w/4, bl2.x+=bl2.w;
         let bl = bl1;
         if(a*180/Math.PI<-45)   bl = bl2;
 
         // r(bl1.x,bl1.y,bl1.w,bl1.h, 'purple')
         // r(bl2.x,bl2.y,bl2.w,bl2.h,'purple')
-        //for (let i = 0; i < 5; i++) par.push(new Par(bl, 'ora'));
+        if(f) for (let i = 0; i < 5; i++) par.push(new Par(bl, 'ora'));
     }
     function sla(e)
     {   i(e);
@@ -282,10 +289,10 @@ function heZ(e,c)
     }
     function btn(e, cor)
     {   i(e);
-        eli(x+w/2, y+h/8, w/3, h/8, 0, cor);
+        eli(x+w/2, y+h/2, w/3, h/8, 0, cor);
         eli(x+w/2, y+h/1.2, w/2.5, h/5, 0, 'gray');
         eli(x+w/2, y+h/1.2, w/3, h/8, 0, cor);
-        r(x+w/6, y+h/8, w/1.5, h/1.5, cor);
+        r(x+w/6, y+h/2, w/1.5, h/3, cor);
     }
     function spw(e)
     {   //r(e.x,e.y,e.w,e.h,'red');
@@ -308,5 +315,33 @@ function heZ(e,c)
         ctx.font = `${w/2}px Arial`;
         ctx.textAlign = 'center';
         ctx.fillStyle = 'white';
-        ctx.fillText('[E]', x+w/2, y-h/4);
+        ctx.fillText('[E]', x+w/2, y-h);
     }
+    function lB(e,c,p,w1,d,l)
+    {   i(e)
+        let ww = (e.lif.c/e.lif.m)*l || 1;
+        sB(3,'black');
+        mT(x,y-p-d, c);              //b
+        lT(x+w*ww,y-p-d);        //b
+        lT(x-w1+(w+w1*2)*ww,y-p);//a
+        lT(x+w*ww,y-p+d);         //after
+        lT(x,y-p+d);              //after
+        lT(x-w1,y-p);         //a
+        cP();
+        sB(0,'black');
+    }
+
+    function mor(e)
+    {   i(e);
+        r(x+w/2-w/1.5/2,y-h/3,w/1.5,h/2,'black');
+        ctx.font = `${w}px arial`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'white';
+        ctx.fillText(e.val[e.i%e.val.length], x+w/2, y-h/3);
+    }
+    function mat(e)
+    {   i(e);
+        r(x+1,y+1,w-2,h-2,'#30353D');
+    }
+

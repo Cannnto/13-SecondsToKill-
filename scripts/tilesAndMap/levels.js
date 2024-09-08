@@ -91,7 +91,7 @@ function lv1(arr)
 {   //add Walls
     sqlv(arr);
     arr[0][16] = arr[0][15] = 3;
-    arr[1][1] = arr[22][30] = 4;
+    // arr[1][1] = arr[22][30] = 4;
     // arr[9][9] = arr[9][15] = 5;
     // arr[4][5] = arr[6][5] = arr[4][7] = arr[6][7] = 6;
     // arr[12][9] = arr[12][15] = 7;
@@ -163,6 +163,31 @@ function lv6(arr)
     Llvl(arr);
     arr[0][26] = arr[0][25] = 3;
     arr[8][9] = arr[3][20] = 4;
+
     Ddi(arr);
+    return arr;
+}
+function lv7(arr)
+{   Tlvl(arr);
+    arr[0][16] = arr[0][15] = 3;
+
+    
+    arr[4][22] = 14;
+    arr[4][23] = 17;
+    arr[4][24] = new Mth(24*32,4*32,"Dgt", true, 3); //must use this method to create fixed digit tiles
+    arr[4][25] = 15;
+    arr[4][26] = 14;
+    arr[4][27] = 19;
+    arr[4][28] = 20;
+
+
+    Ddi(arr);
+    return arr;
+}
+function lv8(arr)
+{   Hlvl(arr);
+    arr[0][6] = arr[0][5] = 3;
+    arr[1][1] = arr[22][30] = 4;
+    
     return arr;
 }

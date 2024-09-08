@@ -1,17 +1,18 @@
 var zC = '#3A4A13';
 function i(e){return x=e.x, y=e.y, w=e.w, h=e.h;}
 function Ddi(arr)
-{   for(let i=0;i<10;i++)
+{   let d = 0;
+    while(d<10)
     {   let l = parseInt(rng()*22);
         let c = parseInt(rng()*30);
-        if(arr[l][c] == 1) arr[l][c] = 11;
+        if(arr[l][c] == 1) arr[l][c] = 11, d++;
     }
 }
 
 function mov(e)
 {   sav();
     tra(e.x+e.w/2, e.y+e.h/2);
-    rtt(e.cnt*Math.PI/180);
+    rtt(e.cnt*pi()/180);
     tra(-(e.x+e.w/2), -(e.y+e.h/2));
 }
 //change direction
@@ -27,7 +28,7 @@ function cha(e)
 function RTT(e,c)
 {   sav();
         tra(e.x+e.w/2, e.y+e.h/2);
-        rtt(c*Math.PI/180);
+        rtt(c*pi()/180);
         tra(-(e.x+e.w/2), -(e.y+e.h/2));
 }
 //scale
@@ -237,23 +238,24 @@ function heZ(e,c)
             cP();
             r(x1+w/24, y-h/2-c+s, w/6, h*9/16, cor);
 
-        var a = (c*-0*Math.PI/180)
-        if(e.a==e.sid)   res(), a = ((c*-10+at)*Math.PI/180);
+        var a = (c*-0*pi()/180)
+        if(e.a==e.sid)   res(), a = ((c*-10+at)*pi()/180);
         
         let bl1 = {x:(x1+w/24),y:(y-h/2 - c+s)+20*sin(a),w:w/6,h:h*9/16};
         let bl2 = {x:(x1+w/24)-h*5.1/8,y:(y-h/2 - c)+5*sin(a),w:bl1.h, h:bl1.w}; 
         if(e.c) bl1.x-=w/4, bl2.x+=bl2.w;
         let bl = bl1;
-        if(a*180/Math.PI<-45)   bl = bl2;
+        if(a*180/pi()<-45)   bl = bl2;
 
         // r(bl1.x,bl1.y,bl1.w,bl1.h, 'purple')
         // r(bl2.x,bl2.y,bl2.w,bl2.h,'purple')
-        if(f) for (let i = 0; i < 5; i++) par.push(new Par(bl, 'ora'));
+        if(e.dea)   for (let i = 0; i < 5; i++) par.push(new Par(bl, 'red', {x:bl1.x+bl1.w/2, y:bl1.y+bl1.h/2}));
+        if(f || bli) for (let i = 0; i < 5; i++) par.push(new Par(bl, 'ora'));
     }
     function sla(e)
     {   i(e);
         ctx.fillStyle = 'red';
-        RTT(e, ang*180/Math.PI);
+        RTT(e, ang*180/pi());
             bP();
                 mT(x, y);
                 lT(x + w/2, y + h/6);

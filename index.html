@@ -50,6 +50,8 @@
         new lvl(new Map(lv4(fill(1))),0,0,{t:3,l:50}),
         new lvl(new Map(lv5(fill(1))),0,0,{t:1,l:50}),
         new lvl(new Map(lv6(fill(1))),0,1,{t:1,l:50}),
+        new lvl(new Map(lv7(fill(1))),0,0,{t:1,l:50}),
+        new lvl(new Map(lv8(fill(12))),0,0,{t:1,l:50}),
     ]
         
     function ground(obj)
@@ -87,10 +89,18 @@
         spwPoint:{x:26*32.5,y:21*32},
         backPoint:{x:16*32.5,y:1*32}
     },
+    {
+        spwPoint:{x:16*31.2,y:21*32},
+        backPoint:{x:16*32.5,y:1*32}
+    },
+    {
+        spwPoint:{x:26*31.5,y:21*32},
+        backPoint:{x:8*32.5,y:1*32}
+    },
     ]
     
     var tBX = {t:0 , sTX: "", aTX: "", clr:"", cTM :0};
-    var ENE = [new Cur(100,cnv.height/2,64,64), new Dre(100,cnv.height/2,128,128)];
+    var ENE = [new Dre(100,cnv.height/2,128,128)];
     //new Dre(100,cnv.height/2,128,128);
     //new Cur(100,cnv.height/2,64,64);
     // var nec = new Dre(100,cnv.height/2,128,128);
@@ -98,20 +108,24 @@
     var blo = [];
     var clv = 0;
 
+    var fr = {c:[],a:[],p:[]};
+
+
     var cpd = true;
     var nxt = 0;
     var dis = 200;
     var rev = 0;
     var tim = setInterval(loop,1000/30);
-    var pla = new Pla(cnv.width/2, cnv.height/2 , 64, 64);
+    var pla = new Pla(cnv.width/2, cnv.height/4 , 64, 64);
     var All = [];
-    var frictional = [];
+    var fric = [];
     var hud = new Hud();
-    var teste = {x:0,y:0}
+    var t = new Vec(0,0);
     function loop()
     {   r(0,0,cnv.width,cnv.height,'black');
-        frictional = ENE.concat(pla,adi("box",lvls[clv].boxes));
+        fric = ENE.concat(pla,adi("box",lvls[clv].boxes));
         lvls[clv].drw();
+
         for(let i = 0; i<blo.length; i++)
            if(d(blo[i],0,0))blo[i].drw();
         
@@ -130,13 +144,16 @@
         upT(pla.bal);
         upT(ENE);
         upT(par);
-        // nec.upd();
 
+        // console.log(fro.a)
         pla.upd();
-        ang = Math.atan2(mou.y - (pla.y), mou.x - (pla.x+pla.w/2)) + Math.PI*rev;
+
+        frozen();
+
+        // console.log(fro)
+        ang = Math.atan2(mou.y - (pla.y), mou.x - (pla.x+pla.w/2)) + pi()*rev||pi()/2;
         pla.d.x = cos(ang);
         pla.d.y = sin(ang);
-        
 
         if(key[87-rev*4])
             if(pla.spd.y > -pla.msp)
@@ -155,17 +172,17 @@
                 pla.spd.x += pla.acel;
                 if(pla.spd.x > pla.msp)pla.spd.x = pla.msp;
 
-                // if(key[69]) adT("Fool!;You dare bring light into my lair?;You must die!;", "black", 100); //inicia diálogo
-                // if(key[70]) adT("salve!;fml?;é os guri pae;", "red", 30); //inicia diálogo
+        // if(key[69]) adT("Fool!;You dare bring light into my lair?;You must die!;", "black", 100); //inicia diálogo
+        // if(key[70]) adT("salve!;fml?;é os guri pae;", "red", 30); //inicia diálogo
         (tBX.t) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
         
-        // console.log(teste)
         hud.drw();
         if(pla.tim.c)pla.tim.c--;
 
         r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
         drug();
-        // tra(-RNG(),-RNG());
+
+
         // if(!pla.tim.c) while(true){console.log('SE FODEO KKKKKKKKKKKKKKKKKKKKKKKKKKK')}
     }
     </script></body>

@@ -54,7 +54,7 @@ function Dbd(e,s,b)
     
     ctx.fillStyle = '#450462';
     bP();
-    ctx.ellipse(x+w/2, y-h/12, w/2.25*s,h/4.5*s,0,Math.PI-(60*Math.PI/180), Math.PI*2-(30*Math.PI/180));
+    ctx.ellipse(x+w/2, y-h/12, w/2.25*s,h/4.5*s,0,pi()-(60*pi()/180), pi()*2-(30*pi()/180));
     ctx.fill();
     
     //capuz
@@ -113,4 +113,30 @@ function spk(e,x1)
     lT(x1+x+w*4/16, y+h/1.08)
     lT(x1+x+w*6/16, y+h/1)
     cP();
+}
+function stf(e,c,b)
+{   i(e);
+    e.c = b;
+    let x1=0;
+    let a = {x:x + w*2/4, y:y + h*0.5/4-c, w:-(w/4)*2, h:-(h/4)*2};
+    if(e.a==e.sid) RTT(a, c*-10),x1 = 15;
+        cha(e);
+            sB(5,'red');
+            mT(x+w*3/4-x1, y+h/1.05-c, '#880D41');
+            lT(x+w*3.4/4-x1, y+h/5-c);
+            lT(x+w*3.5/4-x1, y-h/4-c);
+            lT(x+w*4.5/4-x1, y-h/3.5-c);
+            lT(x+w*4.75/4-x1, y-h/2-c);
+            lT(x+w*5/4-x1, y-h/2-c);
+            lT(x+w*4/4-x1, y-h/5-c);
+            lT(x+w*3.75/4-x1, y+h/5-c);
+            lT(x+w*3.4/4-x1, y+h/1.05-c);
+            cP();
+            sB(0)
+            sB(10,'red')
+            bal(x+w*3.75/4-x1, y-h/2-c, w/8, 'white');
+            sB(0);
+        res();
+    if(e.a==e.sid)res();
+    e.c = 0;
 }

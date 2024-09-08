@@ -92,7 +92,9 @@ class Tle
     {   this.x = x;
         this.y = y;
         this.w = this.h = 32;
+        this.add = 0;
         //this.clr = "black"; // Color
+        this.tim = {c:0,m:30*3}
     }
 
     drw() // Draw
@@ -109,6 +111,14 @@ class Tle
         }
         return false;
     }
+    uFr()
+    {   this.tim.c++;
+        if(this.tim.c>this.tim.m)
+        {   this.tim.c = 0;
+            return 1;
+        }
+    }
+
 }
 class Wal extends Tle
 {   constructor(x,y)
@@ -130,28 +140,15 @@ class Wal extends Tle
 class flr extends Tle
 {   constructor(x,y)
     {   super(x,y);
-        this.uFr = true
-        this.i = 0
+        this.f = 1;
+        this.fre = 0;
     }
 
     upd()
-    {   if(this.uFr)
-        {   for(var i = 0; i<frictional.length; i++)
-                if(this.collide(frictional[i]))  frictional[i].fri = 0, frictional[i].acel = 5;  
-            this.drw = function(){ground(this)}
-        }
-        else
-        {   for(var i = 0; i<frictional.length; i++)
-                if(this.collide(frictional[i]))  frictional[i].fri = 0.99, frictional[i].acel = 0.1;  
-            this.clr = "lightblue"
-            this.drw = function(){ctx.fillStyle = this.clr,ctx.fillRect(this.x,this.y,32,32);}
-            this.i++
-        }
-        if(this.i > 240 && !this.uFr)
-        {   this.uFr = true
-            this.i = 0
-        }
+    {   for(var i = 0; i<fric.length; i++)
+                if(this.collide(fric[i]))  fric[i].fri = 0, fric[i].acel = 5;  
     }
+    drw(){ground(this)}
 }
 class dor extends Tle
 {   constructor(x,y)
@@ -305,29 +302,16 @@ class Sgn extends Tle
 class Ice extends Tle{
     constructor(x,y)
     {   super(x,y);
-        this.clr = "lightblue";
-        this.uFr = 0;
-        this.i = 0;
+        this.f = 1;
+        this.fre = 1;
     }
 
     upd()
-    {   if(!this.uFr)
-        {   for(var i = 0; i<frictional.length; i++)
-                if(this.collide(frictional[i]))  frictional[i].fri = 0.99, frictional[i].acel = 0.1;    
-
-            this.clr = "lightblue"
-            this.drw = function(){ctx.fillStyle = this.clr,ctx.fillRect(this.x,this.y,32,32);}
-        }else{
-            for(var i = 0; i<frictional.length; i++)
-                if(this.collide(frictional[i]))  frictional[i].fri = 0, frictional[i].acel = 5;   
-            
-            this.drw = function(){ground(this)};
-            this.i++;
-        }
-        if(this.i > 30*8 && this.uFr)
-        {   this.uFr = 0;
-            this.i = 0;
-        }
+    {   for(var i = 0; i<fric.length; i++)
+            if(this.collide(fric[i]))  fric[i].fri = 0.99, fric[i].acel = 0.1;    
+    }
+    drw()
+    {   r(this.x,this.y,32,32,"lightblue");
     }
 }
 class Mth extends Tle{
@@ -420,6 +404,8 @@ class Gdi extends Tle
 {   constructor(x,y)
     {   super(x,y);
         this.r = (90*parseInt(rng()*4));
+        this.f = 1;
+        this.fre = 0;
     }
     drw()
     {   ground(this);

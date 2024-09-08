@@ -196,7 +196,8 @@ class Spw extends Tle
         spw(this);
     }
     upd() 
-    {   if (this.enL >= ENE.length) this.arT();
+    {   //if (this.enL >= ENE.length) this.arT();
+        if (this.enL < 1) this.arT();
     }
 }
 class Btn extends Tle

@@ -102,10 +102,10 @@ function lv1(arr)
     //Math organization
     //                                     fixed, digit
     arr[4][10] = new Mth(10*32,4*32,"Dgt", true, 3); //must use this method to create fixed digit tiles
-    arr[4][11] = 14;
-    arr[4][12] = 13;
-    arr[4][13] = 18;
-    arr[4][14] = 19;
+    arr[4][11] = 15;
+    arr[4][12] = 14;
+    arr[4][13] = 19;
+    arr[4][14] = 20;
     // arr[5][30] = arr[22][8] = arr[8][3] = arr[10][20] = 11;
 
     

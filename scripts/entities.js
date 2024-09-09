@@ -174,14 +174,23 @@ class Pla extends Ent
         }
         //dead checker, ta comentado rogerão mete bala meu velho!
         //se quiser tirar as particulas pra teste ou whatever ta la no functionDrwa swo, 
-        // if(this.dea) 
-        // {   this.deC++;
-        //     if(this.deC > 90)
-        //     {   this.fro = function(){}, this.bac = function(){}, this.sid = function(){};
-        //         swo(this, this.x+this.w/2, -this.cnt, this.atC,'red', this.fsw);
-        //     }
-        //     if(this.deC > 120)  clearInterval(tim);
-        // }
+         if(this.dea) 
+         {  key = [];
+            this.ataA = 1
+            this.atk = 0;
+            this.atC = 0;
+            this.spd.x = 0;
+            this.spd.y = 0; 
+            this.deC++;
+             if(this.deC > 90)
+             {   //this.fro = function(){}, this.bac = function(){}, this.sid = function(){};
+                 //swo(this, this.x+this.w/2+rng()*1, -this.cnt, this.atC,'red', this.fsw);
+             }
+             if(this.deC > 120) {
+                clearInterval(tim);
+                tim = setInterval(dead,1000/30);
+             }
+        }
 
 
         if(this.int) int(this);

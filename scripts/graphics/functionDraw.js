@@ -263,7 +263,7 @@ function heZ(e,c)
         // r(bl2.x,bl2.y,bl2.w,bl2.h,'purple')
 
         //particula de morte aq em baixo, é só a primeira a outra é o fogo
-        if(e.dea)   for (let i = 0; i < 5; i++) par.push(new Par(bl, 'red', {x:bl1.x+bl1.w/2, y:bl1.y+bl1.h/2}));
+        if(e.dea && e.deC < 200) for (let i = 0; i < 3; i++) par.push(new Par(bl, 'red', {x:bl1.x+bl1.w/2, y:bl1.y+bl1.h/2}));
         if(f || bli) for (let i = 0; i < 5; i++) par.push(new Par(bl, 'ora'));
     }
     function sla(e)

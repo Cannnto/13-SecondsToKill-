@@ -29,6 +29,8 @@ function cma(arr)
                 case 18: arr[lne][col] = new Mth(col*32,lne*32,"Div", true);break;
                 case 19: arr[lne][col] = new Mth(col*32,lne*32,"Res", true);break; //result tile holds the result of the equation
                 case 20: arr[lne][col] = new Mth(col*32,lne*32,"Ans", true);break;
+                
+                case 21: arr[lne][col] = new Cnt(col*32,lne*32);break;
             }
         }
     }
@@ -91,21 +93,19 @@ function lv1(arr)
 {   //add Walls
     sqlv(arr);
     arr[0][16] = arr[0][15] = 3;
-    arr[1][1] = arr[22][30] = 4;
+    arr[5][5] = arr[17][25] = 4;
     // arr[9][9] = arr[9][15] = 5;
     // arr[4][5] = arr[6][5] = arr[4][7] = arr[6][7] = 6;
     // arr[12][9] = arr[12][15] = 7;
-    arr[12][28] = 8;
+    var txt = "Well met, T’reze!;You hast reached the Tower of Dreizehn!;May the number thirteen bless your journey...;"
+    var txt2 = "The sword you wield in your hand holds great power T’reze.;but everything has a price... If you dont feed the sword with souls...; In thirteen seconds she will feed on your own soul!;"
+
+    arr[2][12] = new Sgn(12*32,2*32,txt);    
+    arr[2][19] = new Sgn(19*32,2*32,txt2);    
+    arr[0][23] = 21;    
+    
     // let i =0;
-    arr[2][23] = arr[2][24] = arr[1][24] = arr[1][25] = 9;
-    arr[2][25] = arr[1][22] = arr[1][23] = arr[1][26] = 10;
-    //Math organization
-    //                                     fixed, digit
-    arr[4][10] = new Mth(10*32,4*32,"Dgt", true, 3); //must use this method to create fixed digit tiles
-    arr[4][11] = 15;
-    arr[4][12] = 14;
-    arr[4][13] = 19;
-    arr[4][14] = 20;
+
     // arr[5][30] = arr[22][8] = arr[8][3] = arr[10][20] = 11;
 
     
@@ -123,11 +123,13 @@ function lv2(arr)
 {   //add Walls
     Llvl(arr);
     arr[0][16] = arr[0][15] = 3;
-    arr[1][1] = arr[22][30] = 4;
+    arr[2][22] = arr[1][1] = arr[22][30] = 4;
     arr[3][5] = arr[6][28] = arr[9][9] = arr[9][15] = 5;
-
     arr[7][1] = arr[16][30] = arr[2][17] = arr[2][14] = 7;
 
+    arr[9][1] = arr[10][2] = arr[10][1] = arr[2][23] = arr[2][24] = arr[1][24] = arr[1][25] = arr[16][24] = arr[16][23] = arr[15][23] = 9;
+    arr[10][3] = arr[9][2] = arr[8][1] = arr[2][25] = arr[1][22] = arr[1][23] = arr[1][26] = arr[13][23] = arr[14][24] = arr[15][24] = arr[14][23] = 10;
+    
     Ddi(arr);
     return arr;
 }
@@ -135,8 +137,11 @@ function lv3(arr)
 {   //add Walls
     Tlvl(arr);
     arr[0][16] = arr[0][15] = 3;
-    // arr[4][5] = arr[6][5] = arr[4][7] = arr[6][7] = 6;
+    arr[5][5] = arr[5][25] = 4;
 
+    // arr[4][5] = arr[6][5] = arr[4][7] = arr[6][7] = 6;
+    arr[0][23] = 21;    
+    
     Ddi(arr);
     return arr;
 }
@@ -144,13 +149,13 @@ function lv4(arr)
 {   //add Walls
     Hlvl(arr);
 
-    var txt = "1: .----;3: ...--;"
-    arr[5][5] = new Sgn(5*32,5*32,txt);
+    var txt = ".-- .-. .. - . / - .... . / -. ..- -- -... . .-. / --- ..-. / - .... . / -.-. ..- .-. ... .;- .... .- - / -.. --- - .... / - .- .. -. - / -.-- --- ..- .-. / .-.. .. ..-. . .-.-.- .-.-.- .-.-.-;"
+    arr[4][26] = new Sgn(26*32,4*32,txt);
     arr[10][10 ] = arr[10][11] = arr[10][12] = arr[10][13] = arr[10][14]  = arr[10][17] = arr[10][18] = arr[10][19] = arr[10][20] = arr[10][21] = 13
 
 
     arr[0][6] = arr[0][5] = 3;
-    arr[1][1] = arr[22][30] = 4;
+    arr[12][3] = arr[2][23] = arr[1][1] = arr[22][30] = 4;
     
     Ddi(arr);
     return arr;
@@ -170,6 +175,32 @@ function lv6(arr)
     Llvl(arr);
     arr[0][26] = arr[0][25] = 3;
     arr[8][9] = arr[3][20] = 4;
+
+    arr[0][20] = 21;    
+    
     Ddi(arr);
     return arr;
 }
+function lv7(arr)
+{   Tlvl(arr);
+    arr[0][16] = arr[0][15] = 3;
+    arr[4][22] = 14;
+    arr[4][23] = 17;
+    arr[4][24] = new Mth(24*32,4*32,"Dgt", true, 3); //must use this method to create fixed digit tiles
+    arr[4][25] = 15;
+    arr[4][26] = 14;
+    arr[4][27] = 19;
+    arr[4][28] = 20;
+
+    
+    Ddi(arr);
+    return arr;
+}
+function lv8(arr)
+{   Hlvl(arr);
+    arr[0][6] = arr[0][5] = 3;
+    arr[1][1] = arr[22][30] = 4;
+
+    arr[0][26] = 21;    
+    return arr;
+}   

@@ -34,7 +34,7 @@ class Hud
             lT(104,48);
         cP();
         sB(0);
-        heF({x:8, y:80, w:128, h:128},1*pla.tim.c/pla.tim.m);
+        heF({x:8, y:80, w:128, h:128},1*pla.tim.c/pla.tim.m||0.001);
         
     }
 }

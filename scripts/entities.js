@@ -98,24 +98,24 @@ class Pla extends Ent
     sid()
     {   cha(this);
             //gaS(this,this.cnt);
-            hs1(this, this.cnt,'white');
-            le1(this, this.cnt,'white');
+            hs1(this, this.cnt,wh);
+            le1(this, this.cnt,wh);
             mov(this);
                 heS(this);
                 bdS(this, '#6F6F6F','#424242',0);
             res();
             swo(this, this.x+this.w*2/4, this.cnt, this.atC,'red', this.fsw);
-            hs2(this, this.cnt,'white', this.atC,0);
-            le2(this, this.cnt,'white',0);
+            hs2(this, this.cnt,wh, this.atC,0);
+            le2(this, this.cnt,wh,0);
         res();
     }
     bac()
     {   swo(this, this.x, -this.cnt, this.atC,'red', this.fsw);
         
-        han(this, -this.cnt, 0, this.atC, 'white',0);
-        han(this, this.cnt, this.w*3/4, 0, 'white',0);
+        han(this, -this.cnt, 0, this.atC, wh,0);
+        han(this, this.cnt, this.w*3/4, 0, wh,0);
         //gau(this, -this.cnt, this.w*3/4)
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), 'white','white',0);
+        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), wh,wh,0);
         
         mov(this);
             heB(this,'#424242');
@@ -127,12 +127,12 @@ class Pla extends Ent
             heF(this);
             bdF(this);
         res();
-        han(this, this.cnt, this.w*3/4, this.atC, 'white',0);
-        han(this, -this.cnt, this.w*0/4, 0, 'white',0);
-        // HAN(this, this.cnt, 'white', 0);
+        han(this, this.cnt, this.w*3/4, this.atC, wh,0);
+        han(this, -this.cnt, this.w*0/4, 0, wh,0);
+        // HAN(this, this.cnt, wh, 0);
         swo(this, this.x+this.w*3/4, this.cnt, this.atC,'red', this.fsw);
         //gau(this, this.cnt, 0);
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), 'white','white',0);
+        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), wh,wh,0);
     }
     ATK()
     {   var hit = {x:this.x + 40*this.d.x, y:this.y + 60*this.d.y-this.h/2, w:this.h, h:this.w*1.5};
@@ -172,7 +172,8 @@ class Pla extends Ent
             this.fsw = 1;
             if(this.fAC > 30) this.fsw = 0, this.fAC = 0,this.fAk = 0, this.fir();
         }
-        //dead checker
+        //dead checker, ta comentado rogerão mete bala meu velho!
+        //se quiser tirar as particulas pra teste ou whatever ta la no functionDrwa swo, 
         // if(this.dea) 
         // {   this.deC++;
         //     if(this.deC > 90)
@@ -382,11 +383,6 @@ class Ene extends Ent
         this.spV.y *= this.fri;
         if(this.spV.x<0.1) this.spV.x = 0;
         if(this.spV.y<0.1) this.spV.y = 0;
-
-        // if(this.cld([pla]) && this.lif.c)
-        // {   pla.tim.c-=30;
-        //     this.lif.c = 0;
-        // }
     }
 }
 class Min extends Ene
@@ -422,7 +418,7 @@ class Min extends Ene
         leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), zC,zC,0);
     }
     lfB()
-    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1, pla.tim.c+=this.rec;
+    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1, pla.tim.c+=this.rec, enC++;
         if(this.lif.c<=0)
         {   this.gra += 0.25;
             this.anC += this.gra;
@@ -430,7 +426,7 @@ class Min extends Ene
             blo.push(new Blo(this));
         }
         else
-        {   lB(this, 'white',this.h/4,3,3,0);
+        {   lB(this, wh,this.h/4,3,3,0);
             lB(this, 'red',this.h/4,3,3,1);
         } 
     }
@@ -452,15 +448,15 @@ class Cur extends Ene
                 bdS(this, '#5C0C0C', '#B40F0F',0, this.anC);
             res();
             //swo(this, this.x+this.w*2/4, this.cnt, 0,'#4E4E50');
-            hs2(this, this.cnt, 'white', 0,1);
-            le2(this, this.cnt, 'white',1);
+            hs2(this, this.cnt, wh, 0,1);
+            le2(this, this.cnt, wh,1);
         res();
     }
     bac()
     {   //swo(this, this.x, -this.cnt, 0,'#4E4E50');
         han(this, this.cnt, this.w*3/4,0,zC,0);
-        han(this,-this.cnt, 0,0,'white',1);
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), 'white',zC,0);
+        han(this,-this.cnt, 0,0,wh,1);
+        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), wh,zC,0);
 
         mov(this);
             heB(this,1);
@@ -475,10 +471,10 @@ class Cur extends Ene
             siJ(this, '#B40F0F')
         res();
         // HAN(this, this.cnt, zC);
-        han(this, this.cnt, this.w*3/4,0,'white',1);
+        han(this, this.cnt, this.w*3/4,0,wh,1);
         han(this,-this.cnt, 0,0,zC,0);
         //swo(this, this.x+this.w*3/4, this.cnt, 0, '#4E4E50');    
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), zC,'white',1);
+        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), zC,wh,1);
     }
     lfB()
     {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1, pla.tim.c+=this.rec;
@@ -489,7 +485,7 @@ class Cur extends Ene
             blo.push(new Blo(this));
         }
         else
-        {   lB(this, 'white',this.h/1.3,5,3,0);
+        {   lB(this, wh,this.h/1.3,5,3,0);
             lB(this, 'red',this.h/1.3,5,3,1);
         } 
     }
@@ -534,7 +530,7 @@ class Dre extends Ene
                 spk(this,this.w/1.6);
             tra(0,-this.cnt/8)    
             stf(this, this.cnt/5);
-            hs2(this, this.cnt/5,'black', 0,0);
+            hs2(this, this.cnt/5,blk, 0,0);
         res();
         sB(0);
         for (let i = 0; i < 10; i++) par.push(new Par(this, 'bla'));
@@ -545,7 +541,7 @@ class Dre extends Ene
             DFb(this, this.cnt);
             DFh(this, this.cnt);
         tra(0,-this.cnt/8);
-        HAN(this, this.cnt, 'black',0);
+        HAN(this, this.cnt, blk,0);
         stf(this, this.cnt);
         gau(this, this.cnt, 0);
         sB(0);
@@ -554,7 +550,7 @@ class Dre extends Ene
     bac()
     {   sB(15*!this.fle,'red');
         stf(this, -this.cnt,1);
-        HAN(this, this.cnt, 'black',0);
+        HAN(this, this.cnt, blk,0);
         gau(this, -this.cnt, this.w*3/4);
         tra(0,this.cnt/8)    
             Dbd(this, 0, 1);
@@ -574,7 +570,7 @@ class Dre extends Ene
             blo.push(new Blo(this));
         }
         else {
-            lB(this, 'white',this.h/1.5,5,4,0);
+            lB(this, wh,this.h/1.5,5,4,0);
             lB(this, 'purple',this.h/1.5,5,4,1);
         } 
     }

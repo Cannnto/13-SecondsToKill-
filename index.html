@@ -54,17 +54,6 @@
         new lvl(new Map(lv8(fill(12))),0,0,{t:1,l:50}),
     ]
         
-    function ground(obj)
-    {   //r(obj.x,obj.y,32,1,"rgba(10,10,10,0.1)");
-        //r(obj.x,obj.y,1,32,"rgba(10,10,10,0.1)");
-
-        // r(obj.x+1,obj.y+1,15,15,"#1e2636")
-        // r(obj.x+17,obj.y+17,15,15,"#1e2636")
-        // r(obj.x+1,obj.y+17,15,15,"#1e2636")
-        // r(obj.x+17,obj.y+1,15,15,"#1e2636")
-        r(obj.x,obj.y,32,32,"#24282E")
-    }
-
     var levels = [
     {
         backPoint:{x:16*32,y:1*32},
@@ -107,7 +96,7 @@
     var par = [];
     var blo = [];
     var clv = 0;
-
+    var enC = 0;
     var fr = {c:[],a:[],p:[]};
 
 
@@ -115,12 +104,40 @@
     var nxt = 0;
     var dis = 200;
     var rev = 0;
-    var tim = setInterval(loop,1000/30);
-    var pla = new Pla(cnv.width/2, cnv.height/4 , 64, 64);
+    var tim = setInterval(menu,1000/30);
+    var plM = new Pla(cnv.width/2-100, cnv.height/2+100, 400, 400);
+    var pla = new Pla(cnv.width/2, cnv.height/2 , 64, 64);
     var All = [];
     var fric = [];
     var hud = new Hud();
     var t = new Vec(0,0);
+    let a = {x:-127.5, y:500,w:cnv.width*1.25,h:cnv.width*1.25}
+    let b = {x:cnv.width/2 - cnv.width/3/2, y:650, w:cnv.width/3, lif:{c:0,m:0}};
+    let c = {x:0, y:0,w:cnv.width,h:cnv.height}
+    function menu()
+    {   r(0,0,cnv.width,cnv.height,'black');
+        for(let i = 0; i<par.length; i++)   if(d(par[i],0,0))par[i].drw();
+        for (let i = 0; i < 20; i++) par.push(new Par(c, 'pur',0,1));
+        upT(par);
+    
+        sB(15,'purple')
+        DFb(a);
+        DFh(a);
+        sB(0,'purple')
+        sB(10,'purple');
+        txt(cnv.width/2, cnv.height/8, '13-Seconds-To-Kill', cnv.width/10, 'purple');
+        sB(0);
+        plM.drw();        
+        sB(10, 'red');
+        lB(b, 'purple',75,105,30,0);
+        lB(b, wh,75,100,25,0);
+        txt(cnv.width/2, cnv.height/1.34, 'press space to play', 40, blk);
+        sB(0);
+        if(key[32])
+        {   clearInterval(tim);
+            tim = setInterval(loop,1000/30);
+        }
+    }
     function loop()
     {   r(0,0,cnv.width,cnv.height,'black');
         fric = ENE.concat(pla,adi("box",lvls[clv].boxes));
@@ -137,53 +154,37 @@
         for(let i = 0; i<par.length; i++)
            if(d(par[i],0,0))par[i].drw();
 
-        // upT()
         for(var i = 0;i<adi("box",lvls[clv].boxes).length;i++)
             adi("box",lvls[clv].boxes)[i].upd();
            
         upT(pla.bal);
         upT(ENE);
         upT(par);
-
-        // console.log(fro.a)
         pla.upd();
 
         frozen();
-
-        // console.log(fro)
+        
         ang = Math.atan2(mou.y - (pla.y), mou.x - (pla.x+pla.w/2)) + pi()*rev||pi()/2;
         pla.d.x = cos(ang);
         pla.d.y = sin(ang);
-
         if(key[87-rev*4])
             if(pla.spd.y > -pla.msp)
                 pla.spd.y -= pla.acel;
-                if(pla.spd.y < -pla.msp)pla.spd.y = -pla.msp;
         if(key[83+rev*4])
             if(pla.spd.y < pla.msp)
                 pla.spd.y += pla.acel;
-                if(pla.spd.y > pla.msp)pla.spd.y = pla.msp;
         if(key[65+rev*3])
             if(pla.spd.x > -pla.msp)
                 pla.spd.x -= pla.acel;
-                if(pla.spd.x < -pla.msp)pla.spd.x = -pla.msp;
         if(key[68-rev*3])
             if(pla.spd.x < pla.msp)
                 pla.spd.x += pla.acel;
-                if(pla.spd.x > pla.msp)pla.spd.x = pla.msp;
 
-        // if(key[69]) adT("Fool!;You dare bring light into my lair?;You must die!;", "black", 100); //inicia diálogo
-        // if(key[70]) adT("salve!;fml?;é os guri pae;", "red", 30); //inicia diálogo
-        (tBX.t) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
-        
         hud.drw();
-        if(pla.tim.c)pla.tim.c--;
-
+        pla.tim.c--;
         r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
         drug();
-
-
-        // if(!pla.tim.c) while(true){console.log('SE FODEO KKKKKKKKKKKKKKKKKKKKKKKKKKK')}
+        (tBX.t) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
     }
     </script></body>
 </html>

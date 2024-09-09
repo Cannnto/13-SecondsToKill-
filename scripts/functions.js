@@ -83,11 +83,7 @@ function adi(name,arr1)
 function dlg(str, clr) {
     r(0, cnv.height-100, cnv.width, 100, "rgba(255,255,255,0.5)");
     r(10, cnv.height-90, cnv.width-20, 80, "rgba(0,0,0,0.5)");
-    ctx.fillStyle = clr;
-    var tSZ = 20;
-    ctx.font = tSZ + "px Arial"; //fonte a mudar
-    ctx.textAlign = "center";
-    ctx.fillText(str, cnv.width / 2, cnv.height - 45);
+    txt( cnv.width/2, cnv.height-50, str,20, clr);
 }
 
 function adT(str, clr, tim) {

@@ -32,32 +32,28 @@
         cnv.height = 768;
     </script>
     <script src="scripts/functions.js"></script>
+    <script src="scripts/hud.js"></script>
     <script src="scripts/graphics/particles.js"></script>
     <script src="scripts/graphics/functiondraw.js"></script>
+    <script src="scripts/graphics/bossDraw.js"></script>
     <script src="scripts/tilesAndMap/drwTile.js"></script>
     <script src="scripts/entities.js"></script>
     <script src="scripts/tilesAndMap/levels.js"></script>
     <script src="scripts/tilesAndMap/map.js"></script>
     <script>
+    var bli = 0;
+
     var lvls = [
-        new lvl(new Map(lv1(empty()))),
-        new lvl(new Map(lv2(empty()))),
-        new lvl(new Map(lv3(empty()))),
-        new lvl(new Map(lv4(empty()))),
-        new lvl(new Map(lv5(empty()))),
+        new lvl(new Map(lv1(fill(1))),0,0,{t:3,l:50}),
+        new lvl(new Map(lv2(fill(1))),0,0,{t:3,l:50}),
+        new lvl(new Map(lv3(fill(1))),1,0,{t:3,l:50}),
+        new lvl(new Map(lv4(fill(1))),0,0,{t:3,l:50}),
+        new lvl(new Map(lv5(fill(1))),0,0,{t:1,l:50}),
+        new lvl(new Map(lv6(fill(1))),0,1,{t:1,l:50}),
+        new lvl(new Map(lv7(fill(1))),0,0,{t:1,l:50}),
+        new lvl(new Map(lv8(fill(12))),0,0,{t:1,l:50}),
     ]
         
-    function ground(obj)
-    {   
-        // r(obj.x,obj.y,32,1,"rgba(10,10,10,0.1)");
-        // r(obj.x,obj.y,1,32,"rgba(10,10,10,0.1)");
-
-        // r(obj.x+1,obj.y+1,15,15,"#1e2636")
-        // r(obj.x+17,obj.y+17,15,15,"#1e2636")
-        // r(obj.x+1,obj.y+17,15,15,"#1e2636")
-        // r(obj.x+17,obj.y+1,15,15,"#1e2636")
-    }
-
     var levels = [
     {
         backPoint:{x:16*32,y:1*32},
@@ -77,50 +73,118 @@
     {
         spwPoint:{x:26*32.5,y:21*32},
         backPoint:{x:16*32.5,y:1*32}
-    }
+    },
+    {
+        spwPoint:{x:26*32.5,y:21*32},
+        backPoint:{x:16*32.5,y:1*32}
+    },
+    {
+        spwPoint:{x:16*31.2,y:21*32},
+        backPoint:{x:16*32.5,y:1*32}
+    },
+    {
+        spwPoint:{x:26*31.5,y:21*32},
+        backPoint:{x:8*32.5,y:1*32}
+    },
     ]
     
-    var ENE = [new Cur(100,cnv.height/2,64,64)]; 
+    var tBX = {t:0 , sTX: "", aTX: "", clr:"", cTM :0};
+    var ENE = [new Dre(100,cnv.height/2,128,128)];
+    //new Dre(100,cnv.height/2,128,128);
+    //new Cur(100,cnv.height/2,64,64);
+    // var nec = new Dre(100,cnv.height/2,128,128);
     var par = [];
     var blo = [];
-    var clv = 0;
+    var clv = 2;
+    var enC = 0;
+    var fr = {c:[],a:[],p:[]};
 
-    var cpd = true;
+
+    var cpd = 0;
     var nxt = 0;
-    var bli = 0;
-    var dis = 100;
+    var dis = 200;
     var rev = 0;
-    var tim = setInterval(loop,1000/30);
-    var pla = new Pla(cnv.width/2, cnv.height/2, 64, 64);
+    var tim = setInterval(menu,1000/30);
+    var plM = new Pla(cnv.width/2-100, cnv.height/2+100, 400, 400);
+    var pla = new Pla(cnv.width/2, cnv.height/2 , 64, 64);
     var All = [];
-
+    var fric = [];
+    var hud = new Hud();
+    var t = new Vec(0,0);
+    let a = {x:-127.5, y:500,w:cnv.width*1.25,h:cnv.width*1.25}
+    let b = {x:cnv.width/2 - cnv.width/3/2, y:650, w:cnv.width/3, lif:{c:0,m:0}};
+    let c = {x:0, y:0,w:cnv.width,h:cnv.height}
+    function menu()
+    {   r(0,0,cnv.width,cnv.height,'black');
+        for(let i = 0; i<par.length; i++)   if(d(par[i],0,0))par[i].drw();
+        for (let i = 0; i < 20; i++) par.push(new Par(c, 'pur',0,1));
+        upT(par);
+    
+        sB(15,'purple')
+        DFb(a);
+        DFh(a);
+        sB(0,'purple')
+        sB(10,'purple');
+        txt(cnv.width/2, cnv.height/8, '13-Seconds-To-Kill', cnv.width/10, 'purple');
+        sB(0);
+        plM.drw();        
+        sB(10, 'red');
+        lB(b, 'purple',75,105,30,0);
+        lB(b, wh,75,100,25,0);
+        txt(cnv.width/2, cnv.height/1.34, 'press space to play', 40, blk);
+        sB(0);
+        if(key[32])
+        {   clearInterval(tim);
+            tim = setInterval(loop,1000/30);
+        }
+    }
     function loop()
-    {   r(0,0,cnv.width,cnv.height,'#1e2636');
+    {   r(0,0,cnv.width,cnv.height,'black');
+        fric = ENE.concat(pla,adi("box",lvls[clv].boxes));
         lvls[clv].drw();
-        
+
         for(let i = 0; i<blo.length; i++)
            if(d(blo[i],0,0))blo[i].drw();
         
-        All = ENE.concat(pla, pla.bal, par);
+        All = ENE.concat(pla, pla.bal,adi("box",lvls[clv].boxes));
         All.sort((a,b) => a.y - b.y);
         for(let i = 0; i<All.length; i++)
             if(d(All[i], All[i].w, All[i].h))    All[i].drw();
 
+        for(let i = 0; i<par.length; i++)
+           if(d(par[i],0,0))par[i].drw();
+
+        for(var i = 0;i<adi("box",lvls[clv].boxes).length;i++)
+            adi("box",lvls[clv].boxes)[i].upd();
+           
         upT(pla.bal);
         upT(ENE);
         upT(par);
         pla.upd();
-        ang = Math.atan2(mou.y - (pla.y+pla.h/2), mou.x - (pla.x+pla.w/2)) + Math.PI*rev;
+
+        frozen();
+        
+        ang = Math.atan2(mou.y - (pla.y), mou.x - (pla.x+pla.w/2)) + pi()*rev||pi()/2;
         pla.d.x = cos(ang);
         pla.d.y = sin(ang);
-        ctx.translate(RNG(),RNG());
-        if(key[87-rev*4]) pla.spd.y = -5;
-        if(key[83+rev*4]) pla.spd.y = +5;
-        if(key[65+rev*3]) pla.spd.x = -5;
-        if(key[68-rev*3]) pla.spd.x = +5;
-        // if(!key[69]) pla.atC = 0;
+        if(key[87-rev*4])
+            if(pla.spd.y > -pla.msp)
+                pla.spd.y -= pla.acel;
+        if(key[83+rev*4])
+            if(pla.spd.y < pla.msp)
+                pla.spd.y += pla.acel;
+        if(key[65+rev*3])
+            if(pla.spd.x > -pla.msp)
+                pla.spd.x -= pla.acel;
+        if(key[68-rev*3])
+            if(pla.spd.x < pla.msp)
+                pla.spd.x += pla.acel;
+
+        hud.drw();
+        pla.tim.c--;
         r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
-        // r(0,0,cnv.width*rev,cnv.height,'rgba(75,0,130,0.4)');
+        drug();
+        (tBX.t) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
     }
     </script></body>
 </html>

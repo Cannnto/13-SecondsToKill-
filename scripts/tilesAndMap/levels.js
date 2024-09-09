@@ -1,5 +1,5 @@
-function empty()
-{   return Array.from({length:24},(i) => Array.from({length:32}, (r)=>2));
+function fill(num)
+{   return Array.from({length:24},(i) => Array.from({length:32}, (r)=>num));
 }
 function cma(arr)
 {   for(var lne = 0;lne < arr.length; lne++) // Linhas
@@ -11,96 +11,196 @@ function cma(arr)
                 case 3: arr[lne][col] = new dor(col*32,lne*32);break;
                 case 4: arr[lne][col] = new Spw(col*32,lne*32);break;
                 case 5: arr[lne][col] = new Bxs(col*32,lne*32);break;
-                case 6: arr[lne][col] = new Btn(col*32,lne*32);break;
+                case 6: arr[lne][col] = new Btn(col*32,lne*32,[false,true]);break; 
                 case 7: arr[lne][col] = new BDT(col*32,lne*32);break;
                 case 8: arr[lne][col] = new Sgn(col*32,lne*32);break;
                 //graphics
                 case 9: arr[lne][col] = new Gbx(col*32,lne*32);break;
                 case 10: arr[lne][col] = new Gbo(col*32,lne*32);break;
                 case 11: arr[lne][col] = new Gdi(col*32,lne*32);break;
+                //
+                case 12: arr[lne][col] = new Ice(col*32,lne*32);break;
+                case 13: arr[lne][col] = new Mor(col*32,lne*32,[".","_"], Math.round(rng()));break;
+                //mat
+                case 14: arr[lne][col] = new Mth(col*32,lne*32,"Dgt", false);break; //random digit tile, mutable
+                case 15: arr[lne][col] = new Mth(col*32,lne*32,"Add", true);break;
+                case 16: arr[lne][col] = new Mth(col*32,lne*32,"Sub", true);break;
+                case 17: arr[lne][col] = new Mth(col*32,lne*32,"Mul", true);break;
+                case 18: arr[lne][col] = new Mth(col*32,lne*32,"Div", true);break;
+                case 19: arr[lne][col] = new Mth(col*32,lne*32,"Res", true);break; //result tile holds the result of the equation
+                case 20: arr[lne][col] = new Mth(col*32,lne*32,"Ans", true);break;
+                
+                case 21: arr[lne][col] = new Cnt(col*32,lne*32);break;
             }
         }
     }
 }
 
 function sqlv(arr)
-{   for(var y=1;y<cnv.height/32-1;y++)
-        for(var x=1;x<cnv.width/32-1;x++)   arr[y][x] = arr[y][x] = 1;
+{   for(var y=0;y<cnv.height/32;y++)   arr[y][0] = arr[y][31] = 2;
+    for(var x=1;x<cnv.width/32-1;x++)   arr[0][x] = arr[23][x] = 2;
 }
 
 function Llvl(arr)
-{   for(var y=1;y<11;y++)
-        for(var x=1;x<cnv.width/32-1;x++)   arr[y][x] = 1;
+{   sqlv(arr)
+    for(var x=0;x<23;x++) arr[11][x] = 2;
+    for(var y = 12; y<24;y++) arr[y][22] = 2;
+    for(var x=0;x<22;x++)
+        for(var y=12;y<24;y++) arr[y][x] = 0;
 
-    for(var y=11;y<23;y++)
-        for(var x=22;x<cnv.width/32-1;x++)  arr[y][x] = 1;
+}
+// function Llvl(arr)
+// {   sqlv(arr)
+//     for(var x=0;x<23;x++) arr[11][x] = 2;
+//     for(var y = 24; y<12;y++) arr[y][22] = 2;
+//     for(var x=0;x<22;x++)
+//         for(var y=24;y<12;y++) arr[y][x] = 0;
+
+// }
+function Llvl2(arr)
+{   sqlv(arr)
+    for(var x=0;x<23;x++) arr[11][x] = 2;
+    for(var y = 12; y<24;y++) arr[y][22] = 2;
+    for(var x=0;x<22;x++)
+        for(var y=12;y<24;y++) arr[y][x] = 0;
 }
 
 function Tlvl(arr)
-{   for(var y=1;y<cnv.height/32-1;y++)
-        for(var x=1;x<cnv.width/32-1;x++) arr[y][x] = 1;
-    for(var y=1;y<15;y++)
-        for(var x=1;x<12;x++)  arr[y+8][x+19] = arr[y+8][x] = 0;
+{   sqlv(arr)
+    for(var y=1;y<16;y++)
+        for(var x=0;x<13;x++)  arr[y+8][x+19] = arr[y+8][x] = 0;
+    for(var x=0;x<13;x++) arr[9][x+19] = arr[9][x] = 2;
+    for(var y=10;y<24;y++) arr[y][12] = arr[y][19] = 2;
 }
 
 function Hlvl(arr)
-{   for(var y=1;y<cnv.height/32-1;y++)
-        for(var x=1;x<cnv.width/32/3;x++) arr[y][x+20] = arr[y][x] = 1;
-    for(var y=8;y<15;y++)
-        for(var x=1;x<11;x++) arr[y][x+10] = 1;
+{   sqlv(arr)
+    for(var y=0;y<8;y++)
+        for(var x=11;x<21;x++) arr[y][x] = arr[y+16][x] = 0;
+    for(var x=11;x<21;x++) arr[16][x] = arr[7][x] = 2;
+    for(var y=0;y<7;y++) arr[y][11] = arr[y][20] = arr[y+17][11] = arr[y+17][20] = 2;
 }
 
 function Clvl(arr)
-{   for(var y=1;y<cnv.height/32/3-1;y++)
-        for(var x=1;x<cnv.width/32-1;x++) arr[y+16][x] = arr[y][x] = 1;
-    for(var y=1;y<cnv.height/32/2-1;y++)
-        for(var x=1;x<cnv.width/32/3-1;x++) arr[y+6][x] = arr[y][x] = 1;
+{   sqlv(arr)
+    for(var y=7;y<17;y++)
+        for(var x=10;x<32;x++) arr[y][x] = 0;
+    for(var x=10;x<32;x++) arr[16][x] = arr[7][x] = 2;
+    for(var y=8;y<16;y++) arr[y][10] = 2;
 }
 
 function lv1(arr)
 {   //add Walls
     sqlv(arr);
     arr[0][16] = arr[0][15] = 3;
-    arr[1][1] = arr[22][30] = 4;
+    arr[5][5] = arr[17][25] = 4;
     // arr[9][9] = arr[9][15] = 5;
     // arr[4][5] = arr[6][5] = arr[4][7] = arr[6][7] = 6;
     // arr[12][9] = arr[12][15] = 7;
-    arr[12][28] = 8;
-    let i =0;
-    while(i<10)
-    {   let l = parseInt(rng()*22);
-        let c = parseInt(rng()*30);
-        if(arr[l][c] == 1) arr[l][c] = 11, i++;
-    }
-    arr[2][23] = arr[2][24] = arr[1][24] = arr[1][25] = 9;
-    arr[2][25] = arr[1][22] = arr[1][23] = arr[1][26] = 10;
+    var txt = "Well met, T’reze!;You hast reached the Tower of Dreizehn!;May the number thirteen bless your journey...;"
+    var txt2 = "The sword you wield in your hand holds great power T’reze.;but everything has a price... If you dont feed the sword with souls...; In thirteen seconds she will feed on your own soul!;"
+
+    arr[2][12] = new Sgn(12*32,2*32,txt);    
+    arr[2][19] = new Sgn(19*32,2*32,txt2);    
+    arr[0][23] = 21;    
+    
+    // let i =0;
+
     // arr[5][30] = arr[22][8] = arr[8][3] = arr[10][20] = 11;
+
+    
+    
+    // arr[4][10] = new Mth(10*32,4*32,"Dgt", true, 3); //must use this method to create fixed digit tiles
+    // arr[4][11] = 15;
+    // arr[4][12] = 14;
+    // arr[4][13] = 19;
+    // arr[4][14] = 20;
+    
+    Ddi(arr);
     return arr;
 }
 function lv2(arr)
 {   //add Walls
     Llvl(arr);
     arr[0][16] = arr[0][15] = 3;
-    arr[1][1] = arr[22][30] = 4;
-    arr[9][9] = arr[9][15] = 5;
+    arr[2][22] = arr[1][1] = arr[22][30] = 4;
+    arr[3][5] = arr[6][28] = arr[9][9] = arr[9][15] = 5;
+    arr[7][1] = arr[16][30] = arr[2][17] = arr[2][14] = 7;
+
+    arr[9][1] = arr[10][2] = arr[10][1] = arr[2][23] = arr[2][24] = arr[1][24] = arr[1][25] = arr[16][24] = arr[16][23] = arr[15][23] = 9;
+    arr[10][3] = arr[9][2] = arr[8][1] = arr[2][25] = arr[1][22] = arr[1][23] = arr[1][26] = arr[13][23] = arr[14][24] = arr[15][24] = arr[14][23] = 10;
+    
+    Ddi(arr);
     return arr;
 }
 function lv3(arr)
 {   //add Walls
     Tlvl(arr);
     arr[0][16] = arr[0][15] = 3;
-    arr[4][5] = arr[6][5] = arr[4][7] = arr[6][7] = 6;
+    arr[5][5] = arr[5][25] = 4;
+
+    // arr[4][5] = arr[6][5] = arr[4][7] = arr[6][7] = 6;
+    arr[0][23] = 21;    
+    
+    Ddi(arr);
     return arr;
 }
 function lv4(arr)
 {   //add Walls
     Hlvl(arr);
+
+    var txt = ".-- .-. .. - . / - .... . / -. ..- -- -... . .-. / --- ..-. / - .... . / -.-. ..- .-. ... .;- .... .- - / -.. --- - .... / - .- .. -. - / -.-- --- ..- .-. / .-.. .. ..-. . .-.-.- .-.-.- .-.-.-;"
+    arr[4][26] = new Sgn(26*32,4*32,txt);
+    arr[10][10 ] = arr[10][11] = arr[10][12] = arr[10][13] = arr[10][14]  = arr[10][17] = arr[10][18] = arr[10][19] = arr[10][20] = arr[10][21] = 13
+
+
     arr[0][6] = arr[0][5] = 3;
+    arr[12][3] = arr[2][23] = arr[1][1] = arr[22][30] = 4;
+    
+    Ddi(arr);
     return arr;
 }
 function lv5(arr)
 {   //add Walls
     Clvl(arr);
     arr[0][26] = arr[0][25] = 3;
+    arr[12][8] = arr[6][3] = arr[18][28] = arr[4][29] = 6;
+    arr[4][9] = arr[16][2] = arr[17][30] = arr[6][30] = 4;
+
+    Ddi(arr);
     return arr;
 }
+function lv6(arr)
+{   //add Walls
+    Llvl(arr);
+    arr[0][26] = arr[0][25] = 3;
+    arr[8][9] = arr[3][20] = 4;
+
+    arr[0][20] = 21;    
+    
+    Ddi(arr);
+    return arr;
+}
+function lv7(arr)
+{   Tlvl(arr);
+    arr[0][16] = arr[0][15] = 3;
+    arr[4][22] = 14;
+    arr[4][23] = 17;
+    arr[4][24] = new Mth(24*32,4*32,"Dgt", true, 3); //must use this method to create fixed digit tiles
+    arr[4][25] = 15;
+    arr[4][26] = 14;
+    arr[4][27] = 19;
+    arr[4][28] = 20;
+
+    
+    Ddi(arr);
+    return arr;
+}
+function lv8(arr)
+{   Hlvl(arr);
+    arr[0][6] = arr[0][5] = 3;
+    arr[1][1] = arr[22][30] = 4;
+
+    arr[0][26] = 21;    
+    return arr;
+}   

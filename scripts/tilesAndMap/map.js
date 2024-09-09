@@ -1,16 +1,29 @@
 class lvl 
-{   constructor(map)
+{   constructor(map,b,r,s)
     {   this.map = map;
         cma(this.map.arr);
         this.boxes = [];
         this.btns=[];
         //boxtile
+        this.b = b;
+        this.r = r;
         this.boxT = []
+        this.maAr = [];
+        this.mor = [];
+        this.spw = [];
+        sgr("Spw", this.map.arr, this.spw);
+        sgr("Mor", this.map.arr, this.mor);
         sgr('Bxs', this.map.arr, this.boxes);
-        sgr("Btn",this.map.arr, this.btns);
+        sgr("Btn", this.map.arr, this.btns);
         sgr("BDT", this.map.arr, this.boxT);
+        sgr("Mth", this.map.arr, this.maAr);
         shf(this.btns);
-        //box target. target number.        current number 
+        this.mor.sort((a,b) => a.x - b.x);
+        for(let i=0;i<this.spw.length;i++)
+            this.spw[i].spT = s.t*30, this.spw[i].enL = s.l;
+        
+        this.txt = ".____...__";
+        // box target. target number.        current number 
         // for(var lne = 0;lne < this.map.arr.length; lne++) 
         //     for(var col = 0; col < this.map.arr[lne].length; col++)
         //         if(this.map.arr[lne][col].constructor.name == "Bxs") this.boxes.push(this.map.arr[lne][col].box);
@@ -18,19 +31,48 @@ class lvl
 
     drw()
     {   this.map.drw();
-        for(let i=0; i<this.boxes.length;i++)
-            if(d(this.boxes[i].box, 32, 32))this.boxes[i].box.drw();
-        
+
+        bli = this.b;
+        rev = this.r;
         //boxcurrentmatch sla n pensei no nome
         //do jeito que tá, o método de passar tá hardcoded, tem que mudar isso ainda
         var bCM = 0;
-        for(let i=0; i<this.boxT.length;i++) {
-            if (this.boxT[i].act) {
-                bCM++;
+        for(let i=0; i<this.boxT.length;i++) 
+            if (this.boxT[i].act) bCM++;
+    
+        if(enC>=13) cpd = 1;
+
+        // //se não tiver caixas ele não passa imediatamente        
+        // //bCM == this.boxT.length && bCM != 0?cpd = true:cpd = true;
+
+        // if (this.maAr.length)
+        // {   for (let i = 1; i < this.maAr.length; i++) 
+        //         this.maAr[i].opr(this.maAr[i-1], this.maAr[i+1]);
+            
+        //     for (let i=0; i<this.maAr.length; i++) 
+        //     {   !this.maAr[i].fix ? this.maAr[i].txC = "crimson" : this.maAr[i].txC = "black";
+        //         cpd = 0;
+        //         if (this.maAr[this.maAr.length-2].str == 13)
+        //         {   this.maAr[i].txC = "green";
+        //             cpd = 1;
+        //         };
+        //     }
+        // }
+        var tr = 0
+        //Checar os switchs para ver se pode passar de level
+        for(var i = 0; i<this.mor.length; i++)
+        {   if(this.mor[i].val[this.mor[i].i%this.mor[i].val.length] == this.txt[i])  tr++;
+            
+            if(tr == this.mor.length)
+            {   for(var j = 0; j<this.mor.length; j++)
+                    this.mor[j].clr = "green";
+                    cpd = 1;
+            }
+            else{
+                for(var j = 0; j<this.mor.length; j++)
+                    this.mor[j].clr = "red";
             }
         }
-        //se não tiver caixas ele não passa imediatamente        
-        bCM == this.boxT.length && bCM != 0?cpd = true:cpd = true;
     }
 }
 class Map
@@ -52,7 +94,9 @@ class Tle
     {   this.x = x;
         this.y = y;
         this.w = this.h = 32;
+        this.add = 0;
         //this.clr = "black"; // Color
+        this.tim = {c:0,m:30*3}
     }
 
     drw() // Draw
@@ -60,81 +104,101 @@ class Tle
         ctx.fillRect(this.x,this.y,32,32);
     }
     upd(){}
-    collide()
-    {   if (this.x + 32 >= pla.x &&    
-            this.x <= pla.x + pla.w &&      
-            this.y + 32 >= pla.y &&      
-            this.y <= pla.y + pla.h) {      
+    collide(other)
+    {   if (this.x + 32 >= other.x &&
+            this.x <= other.x + other.w &&
+            this.y + 32 >= other.y &&
+            this.y <= other.y + other.h) {
             return true;
         }
         return false;
     }
+    uFr()
+    {   this.tim.c++;
+        if(this.tim.c>this.tim.m)
+        {   this.tim.c = 0;
+            return 1;
+        }
+    }
+
 }
 class Wal extends Tle
 {   constructor(x,y)
     {   super(x,y);
         this.col = true;
-        // this.clr = "#d97018";
-        // this.drw = function(){waS(this)};
-        // if(nex(this,1)&&nex(this,-1)) this.drw = function(){waF(this)};
-        // console.log(nex(this.x,this.y,1)&&nex(this.x,this.y,-1))
     }
     drw()
-    {   if(nex(this,1) && nex(this,-1)) this.drw = function(){waF(this)};
-        else                            this.drw = function(){waS(this)};
+    {   if(nex(this,1,0) && nex(this,-1,0)) this.drw = function(){gr(this),waF(this)};
+        else
+        {   if(nex(this,0,-1) && nex(this,0,1)) this.drw = function(){waS(this)}; 
+            else
+            {   if(!nex(this,0,-1) && !nex(this,0,1))this.drw = function(){waS(this),r(this.x,this.y+this.h-1,this.w,1,'#6D798B'),r(this.x,this.y,this.w,1,'#6D798B')};
+                if(nex(this,0,-1))  this.drw = function(){waS(this),r(this.x,this.y+this.h-1,this.w,1,'#6D798B')};
+                if(nex(this,0,+1))  this.drw = function(){waS(this),r(this.x,this.y,this.w,1,'#6D798B')};
+            }      
+        }
     }
 }
 class flr extends Tle
 {   constructor(x,y)
     {   super(x,y);
+        this.f = 1;
+        this.fre = 0;
     }
 
-    drw()
-        {ground(this);}
     upd()
-        {if(this.collide())  pla.fri = 0.2;}
+    {   for(var i = 0; i<fric.length; i++)
+                if(this.collide(fric[i]))  fric[i].fri = 0, fric[i].acel = 5;  
+    }
+    drw(){gr(this)}
 }
 class dor extends Tle
 {   constructor(x,y)
     {   super(x,y);
         this.clr = "#6b5421";
     }
-
+    drw(){
+        super.drw();
+        if(cpd) gr(this);
+    }
     upd()
-    {   if(this.collide() && cpd)
+    {   let pbx = {x:pla.x-5,y:pla.y-5,w:pla.w+10,h:pla.h+10};
+        //player checker hitbox
+        if(this.collide(pbx) && cpd)
         {   clv++;
+            enC = 0;
             pla.x = levels[clv].spwPoint.x;
             pla.y = levels[clv].spwPoint.y;
             ENE = [];
             blo = [];
             par = [];
             pla.bal = [];
-            cpd = false; 
         }
     }
 }
 class Spw extends Tle
-{   constructor(x,y,t) 
+{   constructor(x,y) 
     {   super(x,y);
-        this.enA = 0;
-        this.spT = 30*3;
+        this.enL = 0;
+        this.spT = 0;
         this.cuT = 0;
+        this.c = 0;
     }
 
     arT() 
     {   if(this.cuT == this.spT) 
         {   ENE.push(new Min(this.x,this.y,64,64,this));
-            this.enA++;
             this.cuT = 0;
+            this.c++;
         } 
         this.cuT++;
     }
     drw()
-    {   ground(this);
+    {   gr(this);
         spw(this);
     }
     upd() 
-    {   if (this.enA < 30) this.arT();
+    {   if (this.enL >= ENE.length) this.arT();
     }
 }
 class Btn extends Tle
@@ -145,7 +209,7 @@ class Btn extends Tle
     }
 
     upd()
-    {   if(this.collide())
+    {   if(this.collide(pla))
         {   if(lvls[clv].btns[nxt] == this && !this.cld)
             {   this.clr = "green";
                 nxt++;
@@ -163,8 +227,31 @@ class Btn extends Tle
             this.cld = false;
     }
     drw()
-    {   ground(this);
+    {   gr(this);
         btn(this, this.clr);
+    }
+}
+class Mor extends Tle{
+    constructor(x,y,val,i)
+    {   super(x,y);
+        this.clr = "red";
+        this.cld = 0;
+        this.val = val;
+        this.i = i;
+    }
+
+    drw()
+    {   gr(this);
+        btn(this, this.clr);
+        mor(this);
+    }
+
+    upd()
+    {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50)
+        {   pla.int = 1;
+            if(key[69])
+               this.i++, key[69] = !key[69];
+        }
     }
 }
 class Bxs extends Tle {
@@ -178,7 +265,7 @@ class Bxs extends Tle {
 class BDT extends Tle {
     constructor (x,y)
     {   super(x,y);
-        this.act = false;
+        this.act = 0;
         this.clr = "purple";
     }
     //box collide
@@ -189,28 +276,110 @@ class BDT extends Tle {
                 this.x <= lvls[clv].boxes[i].box.x + lvls[clv].boxes[i].box.w &&      
                 this.y + 32 >= lvls[clv].boxes[i].box.y &&      
                 this.y <= lvls[clv].boxes[i].box.y + lvls[clv].boxes[i].box.h) {
-                return true;
+                return 1;
             }
         }
-        return false;
     }
-    upd() {
-        this.act = this.bCD();
-        this.bCD()?this.clr = "green":this.clr = "purple";
+    upd() 
+    {   this.act = this.bCD();
+        this.bCD()?this.clr = "green":this.clr = "red";
+    }
+    drw()
+    {   gr(this);
+        bdt(this,this.clr);
     }
 }
 //placa Sign
 class Sgn extends Tle
-{   constructor(x,y)
+{   constructor(x,y,txt)
     {   super(x,y);
         this.clr = '#7C653C';
+        this.col = 1;
+        this.txt = txt
     }
     drw()
-    {   ground(this);
+    {   gr(this);
         sgn(this);
     }
     upd()
-    {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50) int(this);
+    {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50)
+        {   if(key[69]) adT(this.txt, "black", 100);
+            pla.int = 1;
+        }
+    }
+}
+class Ice extends Tle{
+    constructor(x,y)
+    {   super(x,y);
+        this.f = 1;
+        this.fre = 1;
+    }
+
+    upd()
+    {   for(var i = 0; i<fric.length; i++)
+            if(this.collide(fric[i]))  fric[i].fri = 0.99, fric[i].acel = 0.1;    
+    }
+    drw()
+    {   r(this.x,this.y,32,32,"lightblue");
+    }
+}
+class Mth extends Tle{
+    constructor(x,y,typ,fix,num)
+    {   super(x,y);
+        // this.txC = "red";
+        this.typ = typ; //Dgt, Add, Sub, Mul, Div, Res, Ans
+        this.fix = fix;
+        this.fix ? this.txC = "black" : this.txC = "crimson";
+        this.val = 0;
+        switch (this.typ)
+        {   case "Dgt":
+                !this.fix ? this.val = Math.floor(Math.random()*21) : this.val = num%21;
+                this.dgt = this.val;
+            break;
+            case "Add":this.dgt = "+";break;
+            case "Sub":this.dgt = "-";break;
+            case "Mul":this.dgt = "*";break;
+            case "Div":this.dgt = "/";break;
+            case "Res":this.dgt = "=";break;
+            case "Ans":this.dgt = 13;break;       
+        }
+        this.str = this.val;
+    }
+
+    opr(pre,nxt){
+        switch (this.typ)
+        {   case "Add":nxt.str = pre.str + nxt.val;break;
+            case "Sub":nxt.str = pre.str - nxt.val;break;
+            case "Mul":nxt.str = pre.str * nxt.val;break;
+            case "Div":nxt.str = pre.str / nxt.val;break;
+            case "Res":
+                this.str = pre.str;
+                nxt.str = pre.str;
+            break;
+            case "Ans":this.str = this.dgt = this.val = 13;break;          
+        }
+        return;
+    }
+
+    chg(num) {
+        return(num);
+    }
+
+    drw()
+    {   mat(this);
+        txt(this.x+this.w/2, this.y+this.h/2, this.dgt, this.w/1.5, this.txC);
+    }
+    upd(){
+        if((sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50) && !this.fix){
+            pla.int = 1;
+            if(key[69])
+            {   this.val++;
+                this.val %= 20;
+                this.dgt = this.val;
+                this.str = this.val;
+                key[69] = false;
+            }
+        }
     }
 }
 //graphics
@@ -237,9 +406,28 @@ class Gdi extends Tle
 {   constructor(x,y)
     {   super(x,y);
         this.r = (90*parseInt(rng()*4));
+        this.f = 1;
+        this.fre = 0;
     }
     drw()
-    {   ground(this);
+    {   gr(this);
+        
+        sB(3,'black');
         dir(this,this.r);
+        sB(0);
     };
+}
+class Cnt extends Tle
+{   constructor(x,y)
+    {   super(x,y);
+        this.c = 'white';
+        this.cnt = 0;
+        this.col = 1;
+    }
+    drw()
+    {   waS(this);
+        if(enC<=13) this.cnt=enC;
+        if(this.cnt == 13)this.c = 'green';
+        cnt(this,this.cnt,this.c);
+    }
 }

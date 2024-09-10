@@ -108,6 +108,7 @@
     var tim = setInterval(menu,1000/30);
     var plM = new Pla(cnv.width/2-100, cnv.height/2+100, 400, 400);
     var pla = new Pla(cnv.width/2, cnv.height/2 , 64, 64);
+    pla.tim.c = 0;
     var All = [];
     var fric = [];
     var hud = new Hud();
@@ -182,7 +183,6 @@
                 pla.spd.x += pla.acel;
 
         hud.drw();
-        pla.tim.c--;
         r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
         drug();
         (tBX.t) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);

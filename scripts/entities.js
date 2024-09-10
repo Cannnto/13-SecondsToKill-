@@ -218,7 +218,8 @@ class Pla extends Ent
         }
 
         if(this.tim.c <= 0) this.dea=1; 
-        if(this.tim.c > this.tim.m) this.tim.c = this.tim.m; 
+        if(this.tim.c > this.tim.m) this.tim.c = this.tim.m;
+        this.tim.c > 0 ? this.tim.c-- : null; 
     }
 }
 class Ball extends Ent

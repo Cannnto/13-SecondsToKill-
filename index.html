@@ -33,6 +33,7 @@
     </script>
     <script src="scripts/functions.js"></script>
     <script src="scripts/hud.js"></script>
+    <script src="scripts/sound/Zzfx.js"></script>
     <script src="scripts/graphics/particles.js"></script>
     <script src="scripts/graphics/functiondraw.js"></script>
     <script src="scripts/graphics/bossDraw.js"></script>
@@ -52,6 +53,7 @@
         new lvl(new Map(lv6(fill(1))),0,1,{t:1,l:50}),
         new lvl(new Map(lv7(fill(1))),0,0,{t:1,l:50}),
         new lvl(new Map(lv8(fill(12))),0,0,{t:1,l:50}),
+        new lvl(new Map(lv13(fill(1))),0,0,{t:1,l:50}),
     ]
         
     var levels = [
@@ -89,7 +91,7 @@
     ]
     
     var tBX = {t:0 , sTX: "", aTX: "", clr:"", cTM :0};
-    var ENE = [new Dre(100,cnv.height/2,128,128)];
+    var ENE = [];
     //new Dre(100,cnv.height/2,128,128);
     //new Cur(100,cnv.height/2,64,64);
     // var nec = new Dre(100,cnv.height/2,128,128);
@@ -98,28 +100,160 @@
     var clv = 0;
     var enC = 0;
     var fr = {c:[],a:[],p:[]};
+    var c13 = 'green';
 
-
-    var cpd = true;
+    var cpd = 0;
     var nxt = 0;
     var dis = 200;
     var rev = 0;
     var tim = setInterval(menu,1000/30);
     var plM = new Pla(cnv.width/2-100, cnv.height/2+100, 400, 400);
-    var pla = new Pla(cnv.width/2, cnv.height/2 , 64, 64);
+    var pla = new Pla(cnv.width/2, cnv.height/3 , 64, 64);
     var All = [];
     var fric = [];
     var hud = new Hud();
     var t = new Vec(0,0);
     let a = {x:-127.5, y:500,w:cnv.width*1.25,h:cnv.width*1.25}
     let b = {x:cnv.width/2 - cnv.width/3/2, y:650, w:cnv.width/3, lif:{c:0,m:0}};
-    let c = {x:0, y:0,w:cnv.width,h:cnv.height}
+    let p = {x:0, y:0,w:cnv.width,h:cnv.height}
+
+    // const buffer = zzfxM(...[
+    // [
+    //     [1.5, 0, 8000, , , , , , , , , 0.1, , 0.1, 2.5],  // Alaúde
+    //     [2, 0, 1000, , , , , 0.6, , , , , , 2.8, 0.1],    // Flauta
+    //     [1.2, 0, 600, , 0.3, , 2, , , , , , , 1.5],       // Tambor
+    //     [2, 0, 500, , , , 2.5, , , , 0.3, , 0.5, 2.2],    // Percussão
+    //     [1.8, 0, 900, , , , 3, , , , , 0.2, , 1.7]        // Gaita
+    // ],
+    // [
+    //     [[, -1, 4, , , , , , , 4, , , 4, , , 4, , , , , , 4, , , 4], [1, -1, 16, 8, 8, 16, 8, , 8, , 16, 8, 8, 16, 8]], // Flauta
+    //     [[, 1, 32, 22, 22, 32, 32, 22, 32, 27, 32, 22, 22, 32, 32, 22]],              // Alaúde
+    //     [[1, -1, 4, , , , , , , 4, , , 4, , , 4, , , , , , 4, , , 4], [1, 0, 8, , 8, , 8]],  // Percussão
+    //     [[3, -1, , , , 32, , , , , , , 32, , , , , , , 32]],  // Tambor
+    //     [[, -1, 8, , , , , , , 8, , , 8, , , 8, , , , , , 8], [2, -1, , 16, 8, 8, 16, 8]] // Gaita
+    // ]
+    // ])
+
+
+        const buffer1 = zzfxM(...[
+        [
+                [,,10,.06,,.16,,3.4,,3,464,.02,,,,,.04,.96,.07,.27,-1495],  // Bass suave com corpo
+                [,,86,.04,.17,.68,4,1.8,3,,,,.05,.4,.8,.4,,.44,.18,.36,342],  // Lead mais suave e limpo
+                [.7,,110,.01,.02,.2,,1.7,-5,-14,,,,,,.2,,.74,.12,,-1265],   // Melodia harmônica
+                [,,218,.04,.06,.16,1,2.3,,54,,,,,,,,.54,.06],  // Baixo ressonante e denso
+                [1.2,,320,.01,.03,.02,2,.1,,,,,.04,,,,.26,.65,.01,.15,-1271],   // Harmônico leve para ambientação
+                [2.1,,42,.01,.02,.21,,.1,,10,,,.08,1.7,,,.16,.51,.08,.32] // Instrumento 4
+            ],
+        [                                     // Patterns
+            [
+                [0, , , 1, , , 2, , 0, , 1, 2],   // Canal 1: Bass suave + Lead
+                [5, , , , 5, , , 5, , , 5]         // Canal 2: Percussão leve
+            ],
+
+            // Padrão 1 - Variação rítmica
+            [
+            [1, , , 2, , 1, , 2, , 1, 2],    // Canal 1: Lead e harmonia mais intensas
+            [5, , , , 5, , , 5, , 5, 5]      // Canal 2: Percussão moderada
+            ],
+
+            // Padrão 2 - Seção melódica
+            [
+            [3, , 3, , 2, 3, , 1, 2, 3],     // Canal 1: Melodia com variações de harmonia
+            [5, , , , 5, , , 5, , 5]         // Canal 2: Percussão consistente
+            ],
+
+            // Padrão 3 - Crescendo
+            [
+            [1, 2, , 3, , 3, 1, 2, , 0],     // Canal 1: Crescendo com foco na melodia
+            [5, , , 5, , , 5, , 5, 5]        // Canal 2: Percussão crescente
+            ],
+
+            // Padrão 4 - Finalização com ênfase
+            [
+            [0, 3, 1, , 3, 2, 1, 0],         // Canal 1: Baixo e Lead em harmonia final
+            [5, , , , 5, , 5, 5]             // Canal 2: Percussão final mais acentuada
+            ]
+        ],
+        [0, 1, 2, 3, 2, 4, 1, 3, 0, 4],
+        110, 
+        ]);
+//         [
+//     [, , 480, 0.05, 0.05, 0.6, 2, 0.7, , 4, , , , , 0.1, , 0.6, , 0.05, 0.05], // Instrumento 0: percussão profunda com wave mais suave
+//     [, , 220, 0.03, 0.25, 0.15, 0, 2, -0.6, 4.8, 0.02, 0.01, , , 0.07, , 0.3, , 0.15], // Instrumento 1: cordas mais fluídas com leve distorção
+//     [, , 880, 0.03, 0.05, 0.2, 1, 0.7, -0.3, 2, , , , , , , 0.4, , 0.1],     // Instrumento 2: percussão curta, mas com liberação suave
+//     [, , 540, 0.04, 0.15, 0.25, 2, 0.6, -0.1, 1, 0.02, , , , 0.05, , 0.3, 0.03, 0.07], // Instrumento 3: flauta grave com sustain maior
+//   ],
+//   // Patterns (same as before with added smoothness)
+//   [
+//     [[1, , , 0], [2, , , 1], [3, , , 0], [0, , , 1]], // Padrão 0
+//     [[0, , , 2], [1, , , 3], [2, , , 1], [3, , , 0]], // Padrão 1
+//     [[2, , , 1], [0, , , 3], [1, , , 2], [3, , , 0]], // Padrão 2
+//     [[3, , , 0], [2, , , 1], [1, , , 2], [0, , , 3]], // Padrão 3: variação com ênfase no grave
+//     [[0, , , 1], [3, , , 2], [2, , , 0], [1, , , 3]], // Padrão 4: mais agressivo e sincopado
+//     [[1, , , 3], [0, , , 2], [3, , , 1], [2, , , 0]], // Padrão 5: transição mais suave
+//     [[1, 0, 2, 3], [2, 3, 1, 0], [3, 1, 2, 0], [0, 2, 3, 1]], // Padrão 6: Refrão com todos os instrumentos tocando juntos
+//     [[0, , , 1], [3, , , 2], [1, , , 0], [2, , , 3]], // Padrão 7: Parte mais leve para preparar o loop
+//   ],
+//   // Sequence (same looping structure)
+//   [0, 1, 2, 3, 4, 6, 5, 6, 7, 0],
+//   // Speed (BPM)
+//   125
+// ]);
+        // [
+        //         [1, 0, 300, 0.1, 0.3, 0.5, 0, 0.4, 0, 0.01, 0.05, 0.15, 0, 0, 0, 0],  // Bass suave com corpo
+        //         [2, 0, 440, 0.02, 0.25, 0.2, 0, 0.35, 0, 0.02, 0.08, 0.12, 0, 0, 0, 0],  // Lead mais suave e limpo
+        //         [3, 0, 660, 0.05, 0.2, 0.3, 0, 0.45, 0, 0.01, 0.07, 0.1, 0, 0, 0, 0],   // Melodia harmônica
+        //         [1, 0, 120, 0.1, 0.15, 0.25, 0, 0.3, 0, 0.02, 0.05, 0.08, 0, 0, 0, 0],  // Baixo ressonante e denso
+        //         [2, 0, 900, 0.02, 0.1, 0.2, 0, 0.15, 0, 0.02, 0.05, 0.1, 0, 0, 0, 0],   // Harmônico leve para ambientação
+        //         [1, 0, 240, 0.03, 0.2, 0.3, 0, 0.35, 0, 0.02, 0.1, 0.12, 0, 0, 0, 0] // Instrumento 4
+        //     ],
+        // [                                     // Patterns
+        //     [
+        //         [0, , , 1, , , 2, , 0, , 1, 2],   // Canal 1: Bass suave + Lead
+        //         [5, , , , 5, , , 5, , , 5]         // Canal 2: Percussão leve
+        //     ],
+
+        //     // Padrão 1 - Variação rítmica
+        //     [
+        //     [1, , , 2, , 1, , 2, , 1, 2],    // Canal 1: Lead e harmonia mais intensas
+        //     [5, , , , 5, , , 5, , 5, 5]      // Canal 2: Percussão moderada
+        //     ],
+
+        //     // Padrão 2 - Seção melódica
+        //     [
+        //     [3, , 3, , 2, 3, , 1, 2, 3],     // Canal 1: Melodia com variações de harmonia
+        //     [5, , , , 5, , , 5, , 5]         // Canal 2: Percussão consistente
+        //     ],
+
+        //     // Padrão 3 - Crescendo
+        //     [
+        //     [1, 2, , 3, , 3, 1, 2, , 0],     // Canal 1: Crescendo com foco na melodia
+        //     [5, , , 5, , , 5, , 5, 5]        // Canal 2: Percussão crescente
+        //     ],
+
+        //     // Padrão 4 - Finalização com ênfase
+        //     [
+        //     [0, 3, 1, , 3, 2, 1, 0],         // Canal 1: Baixo e Lead em harmonia final
+        //     [5, , , , 5, , 5, 5]             // Canal 2: Percussão final mais acentuada
+        //     ]
+        // ],
+        // [0, 1, 2, 3, 2, 4, 1, 3, 0, 4],
+
+        // 110, 
+        // ]);
+
+
+        buffer1.loop = 1;
+    let mus = zzfxP(...buffer1);
+    mus.loop = 1;
+
+
     function menu()
     {   r(0,0,cnv.width,cnv.height,'black');
-        for(let i = 0; i<par.length; i++)   if(d(par[i],0,0))par[i].drw();
-        for (let i = 0; i < 20; i++) par.push(new Par(c, 'pur',0,1));
+        for (let i = 0; i < 20; i++) par.push(new Par(p, 'pur',0,1));
+        for(let i = 0; i<par.length; i++)   d(par[i],0,0) && par[i].drw();
         upT(par);
-    
+        
         sB(15,'purple')
         DFb(a);
         DFh(a);
@@ -127,7 +261,7 @@
         sB(10,'purple');
         txt(cnv.width/2, cnv.height/8, '13-Seconds-To-Kill', cnv.width/10, 'purple');
         sB(0);
-        plM.drw();        
+        plM.drw();
         sB(10, 'red');
         lB(b, 'purple',75,105,30,0);
         lB(b, wh,75,100,25,0);
@@ -144,15 +278,16 @@
         lvls[clv].drw();
 
         for(let i = 0; i<blo.length; i++)
-           if(d(blo[i],0,0))blo[i].drw();
+           d(blo[i],0,0) && blo[i].drw();
         
         All = ENE.concat(pla, pla.bal,adi("box",lvls[clv].boxes));
         All.sort((a,b) => a.y - b.y);
+
         for(let i = 0; i<All.length; i++)
-            if(d(All[i], All[i].w, All[i].h))    All[i].drw();
+            d(All[i], All[i].w, All[i].h) && All[i].drw();
 
         for(let i = 0; i<par.length; i++)
-           if(d(par[i],0,0))par[i].drw();
+           d(par[i],0,0) && par[i].drw();
 
         for(var i = 0;i<adi("box",lvls[clv].boxes).length;i++)
             adi("box",lvls[clv].boxes)[i].upd();
@@ -164,27 +299,85 @@
 
         frozen();
         
-        ang = Math.atan2(mou.y - (pla.y), mou.x - (pla.x+pla.w/2)) + pi()*rev||pi()/2;
+        !pla.dea && (ang = Math.atan2(mou.y - (pla.y), mou.x - (pla.x+pla.w/2)) + pi()*rev||pi()/2);
         pla.d.x = cos(ang);
         pla.d.y = sin(ang);
         if(key[87-rev*4])
-            if(pla.spd.y > -pla.msp)
-                pla.spd.y -= pla.acel;
+            pla.spd.y > -pla.msp && (pla.spd.y -= pla.acel);
         if(key[83+rev*4])
-            if(pla.spd.y < pla.msp)
-                pla.spd.y += pla.acel;
+            pla.spd.y < pla.msp && (pla.spd.y += pla.acel);
         if(key[65+rev*3])
-            if(pla.spd.x > -pla.msp)
-                pla.spd.x -= pla.acel;
+            pla.spd.x > -pla.msp && (pla.spd.x -= pla.acel);
         if(key[68-rev*3])
-            if(pla.spd.x < pla.msp)
-                pla.spd.x += pla.acel;
+            pla.spd.x < pla.msp && (pla.spd.x += pla.acel);
+
+        // console.log(c)
+        if(key[32])
+        {   //zzfx(...[,,925,.04,.3,.6,1,.3,,6.27,-184,.09,.17]);
+            ;
+            
+            // play('16e2 16d2', c(40, 800, 100));
+            // console.log(play)
+            // key[32] = 0;
+        }
 
         hud.drw();
-        pla.tim.c--;
+        // pla.tim.c--;
         r(0,0,cnv.width*rev,cnv.height*rev,'rgba(75,0,130,0.4)');
         drug();
         (tBX.t) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
+    }
+    var dBg = 0;
+    var dSb = 100;
+    var dt1 = 0;
+    var dt2 = 0;
+    var dSw = {x:cnv.width/2, y:cnv.height/2, w:200, h:200};
+    function dead(){
+        if (dBg < 100) {
+            dBg++;
+            r(0,0,cnv.width,cnv.height,'black');
+            lvls[clv].drw();
+            for(let i = 0; i<blo.length; i++)
+                d(blo[i],0,0) && blo[i].drw();
+            
+            All = ENE.concat(pla, pla.bal,adi("box",lvls[clv].boxes));
+            All.sort((a,b) => a.y - b.y);
+
+            for(let i = 0; i<All.length; i++)
+                d(All[i], All[i].w, All[i].h) && All[i].drw();
+
+            for(let i = 0; i<par.length; i++)
+                d(par[i],0,0) && par[i].drw();
+
+            for(var i = 0;i<adi("box",lvls[clv].boxes).length;i++)
+                adi("box",lvls[clv].boxes)[i].upd();
+            
+            upT(pla.bal);
+            upT(ENE);
+            pla.upd();
+            upT(par);
+            (dBg == 99) && (par = []);
+        } 
+        else dt1 < 100 ? dt1++ : (dt2 < 100 ? dt2+=5 : null);
+        
+        r(0,0,cnv.width,cnv.height,'rgba(0,0,0,'+dBg/100+')');
+        if (dt1 > 50) {
+            dSb -= 2;
+            swo(dSw, dSw.x-25, 0, 0,'red', 1);
+            for(let i = 0; i<par.length; i++)
+                d(par[i],0,0) && par[i].drw();
+            upT(par);
+            r(0,0,cnv.width,cnv.height,'rgba(0,0,0,'+dSb/100+')');
+        }
+        sB(10,'purple');
+        txt(cnv.width/2, cnv.height-100, 'You are dead.', cnv.width/30, 'rgba(255,0,0,'+dt1/100+')');
+        txt(cnv.width/2, cnv.height-50, 'The sword lays claim to your soul.', cnv.width/30, 'rgba(255,0,0,'+dt1/100+')');
+        txt(cnv.width/2, 150, 'Press space to restart.', cnv.width/30, 'rgba(255,0,0,'+dt2/100+')');
+        sB(0,'purple');
+
+        if (dt2 == 100) (key[32]) && window.location.reload();
+        
+        frozen();
     }
     </script></body>
 </html>

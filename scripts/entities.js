@@ -138,13 +138,13 @@ class Pla extends Ent
     {   var hit = {x:this.x + 40*this.d.x, y:this.y + 60*this.d.y-this.h/2, w:this.h, h:this.w*1.5};
         //r(this.x + 40*this.d.x, this.y + 60*this.d.y-this.h/2, this.h, this.w*1.5,"red");
         sla(hit);
+        zzfxP(hitS);
 
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            if(lvls[clv].boxes[i].box.cld([hit])) lvls[clv].boxes[i].box.x = lvls[clv].boxes[i].box.spX, lvls[clv].boxes[i].box.y = lvls[clv].boxes[i].box.spY;
+            lvls[clv].boxes[i].box.cld([hit]) && (lvls[clv].boxes[i].box.x = lvls[clv].boxes[i].box.spX, lvls[clv].boxes[i].box.y = lvls[clv].boxes[i].box.spY);
 
         for(var i = 0; i<ENE.length; i++)
-        {   if(ENE[i].cld([hit]))
-                ENE[i].lif.c-=50;
+        {   ENE[i].cld([hit]) && (ENE[i].lif.c-=50);
         }
     }
     fir()
@@ -155,13 +155,13 @@ class Pla extends Ent
     {   this.x += this.spd.x*abs(this.spd.x/this.len)*o, this.y += this.spd.y*abs(this.spd.y/this.len)*o;}
 
     upd()
-    {   if(this.amo.c) this.amo.c++;
+    {   this.amo.c && this.amo.c++;
         if(this.amo.c == this.amo.m) this.amo.c = 0;
         //atack animation functions
         if(this.atA)
         {   this.atC+=20;
             this.atk = 0;
-            if(!this.atC) this.ATK(), this.atA = 0;
+            !this.atC && (this.ATK(), this.atA = 0);
         }        
         if(this.atk)
         {   this.atC-=10;
@@ -174,24 +174,25 @@ class Pla extends Ent
         }
         //dead checker, ta comentado rogerão mete bala meu velho!
         //se quiser tirar as particulas pra teste ou whatever ta la no functionDrwa swo, 
-        // if(this.dea) 
-        // {   this.deC++;
-        //     if(this.deC > 90)
-        //     {   this.fro = function(){}, this.bac = function(){}, this.sid = function(){};
-        //         swo(this, this.x+this.w/2, -this.cnt, this.atC,'red', this.fsw);
-        //     }
-        //     if(this.deC > 120)  clearInterval(tim);
-        // }
+         if(this.dea) 
+         {  key = [];
+            this.spd.mtp(0);
+            ang = pi()/2;
+            this.deC++;
+             if(this.deC > 120) {
+                clearInterval(tim);
+                tim = setInterval(dead,1000/30);
+             }
+        }
 
-
-        if(this.int) int(this);
+        this.int && int(this);
         this.int = 0; 
         
         this.len = this.spd.x||this.spd.y ? sqr(this.spd.x**2+this.spd.y**2) : 1;
         this.move(1);
-        if(this.CWL())this.move(-1), this.spd.mtp(0);
+        this.CWL() && (this.move(-1), this.spd.mtp(0));
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            if(this.cld([lvls[clv].boxes[i].box])) lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.move(-1);
+            this.cld([lvls[clv].boxes[i].box]) && (lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.move(-1));
         
         this.spd.x *= this.fri;
         this.spd.y *= this.fri;
@@ -200,7 +201,7 @@ class Pla extends Ent
 
         
         let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
-        if(this.ice) setFro(mp, new Ice());
+        this.ice && setFro(mp, new Ice());
         
         //temporário
         if(key[84])
@@ -208,8 +209,9 @@ class Pla extends Ent
             key[84] = !key[84];
         }
 
-        if(this.tim.c <= 0) this.dea=1; 
-        if(this.tim.c > this.tim.m) this.tim.c = this.tim.m; 
+        this.tim.c <= 0 && (this.dea=1); 
+        this.tim.c > this.tim.m && (this.tim.c = this.tim.m);
+        this.tim.c > 0 && this.tim.c--;
     }
 }
 class Ball extends Ent
@@ -222,7 +224,7 @@ class Ball extends Ent
         for (let i = 0; i < 5; i++) par.push(new Par(this, 'ora'));
     }
     die()
-    {   if(this.CWL())      return 1;
+    {   if(this.CWL())  return 1;
         for(var i=0; i<lvls[clv].boxes.length; i++)
             if(this.cld([lvls[clv].boxes[i].box])) return 1;
 
@@ -238,8 +240,31 @@ class Ball extends Ent
 
         let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
         // console.log(lvls[clv].map.arr[mp.l][mp.c].fre)
-        if(lvls[clv].map.arr[mp.l][mp.c].fre)   setFro(mp, new flr());
+        lvls[clv].map.arr[mp.l][mp.c].fre && setFro(mp, new flr());
 
+    }
+}
+class DBal extends Ball 
+{   constructor(x,y,w,h,a)
+    {   super(x,y,w,h,a);
+        this.x += this.w/2;
+    }
+    die()
+    {   if(this.CWL())      return 1;
+        for(var i=0; i<lvls[clv].boxes.length; i++)
+            if(this.cld([lvls[clv].boxes[i].box])) return 1;
+
+        if (pla.cld([this])) {
+            pla.tim.c -= 30;
+            return 1
+        }    
+    }
+    upd()
+    {   super.drw();
+        this.x += cos(this.a)*15;
+        this.y += sin(this.a)*15;
+        let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
+        !lvls[clv].map.arr[mp.l][mp.c].uFr && (lvls[clv].map.arr[mp.l][mp.c].uFr = 1);
     }
 }
 class Met{
@@ -279,17 +304,12 @@ class Box extends Ent
     {   this.x += this.spd.x
         this.y += this.spd.y
 
-        if(this.CWL())
-        {   this.x -= this.spd.x;
-            this.y -= this.spd.y;
-            this.spd.x = 0;
-            this.spd.y = 0;
-        }
-
+        this.CWL() && (this.x -= this.spd.x,this.y -= this.spd.y,this.spd.x = 0,this.spd.y = 0);
+        
         this.spd.x *= this.fri;
         this.spd.y *= this.fri;
-        if(abs(this.spd.x)<0.05) this.spd.x = 0;
-        if(abs(this.spd.y)<0.05) this.spd.y = 0;
+        abs(this.spd.x)<0.05 && (this.spd.x = 0);
+        abs(this.spd.y)<0.05 && (this.spd.y = 0);
     }
 
 }
@@ -308,9 +328,9 @@ class Ene extends Ent
         //enemy radius
         this.raE = 50;
         //player radius
-        this.raP = 300;
+        this.raP = 400;
         //player max radius
-        this.rPM = 500;
+        this.rPM = 600;
         this.wH = 1;
         this.wHa = 1;
     }
@@ -354,13 +374,13 @@ class Ene extends Ent
                 sV.sum(v);
             }
             
-            if (cnt) sV.div(cnt);
+            cnt && sV.div(cnt);
             let s1 = sqr((sV.x)**2 + (sV.y)**2);
-            if (s1) sV.div(s1);
+            s1 && sV.div(s1);
             sV.mtp(this.spe*this.sVM);
             
             let s2 = sqr((tV.x)**2 + (tV.y)**2);
-            if (s2) tV.div(s2);
+            s2 && tV.div(s2);
             
             tV.mtp(this.spe*this.tVM);
             this.acV.sum(sV);
@@ -368,21 +388,21 @@ class Ene extends Ent
             this.spV.sum(this.acV);
             this.spV.lim(this.spe);
 
-            if(this.anC) this.spV.mtp(0), tV.mtp(0);
+            this.anC && (this.spV.mtp(0), tV.mtp(0));
             this.d = tV;
             this.spd = tV;
         }
 
         this.wlk(this.spV.x,this.spV.y);
-        if(this.CWL()) this.wlk(-this.spV.x, -this.spV.y);   
+        this.CWL() && (this.wlk(-this.spV.x, -this.spV.y));   
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            if(this.cld([lvls[clv].boxes[i].box])) lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.wlk(-this.spV.x, -this.spV.y);
+            this.cld([lvls[clv].boxes[i].box]) && (lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.wlk(-this.spV.x, -this.spV.y));
         this.acV.mtp(0);
 
         this.spV.x *= this.fri;
         this.spV.y *= this.fri;
-        if(this.spV.x<0.1) this.spV.x = 0;
-        if(this.spV.y<0.1) this.spV.y = 0;
+        this.spV.x<0.1 && (this.spV.x = 0);
+        this.spV.y<0.1 && (this.spV.y = 0);
     }
 }
 class Min extends Ene
@@ -424,6 +444,7 @@ class Min extends Ene
             this.anC += this.gra;
             for (let i = 0; i < 5; i++) par.push(new Par(this, 'red'));
             blo.push(new Blo(this));
+            zzfx(...[,,31,.04,.1,.71,4,.1,5,6,,,,1.1,,1,,.35,.25,.19])
         }
         else
         {   lB(this, wh,this.h/4,3,3,0);
@@ -500,13 +521,12 @@ class Dre extends Ene
         //teleport tile
         this.tpt = []
         //teleport clock
-        this.tpc = {c:0, m:30*100};
+        this.tpc = {c:0, m:30*2};
         this.tpc.c = this.tpc.m;
         //attack stuff
-        this.ats = [new Atk("Frb", 0.5, false),
-                    new Atk("Wll", 8, false),
+        this.ats = [new Atk("Frb", 2, false, 0.5),
                     new Atk("Ice", 10, false),
-                    new Atk("Mtr", 6, false, 0.5),
+                    new Atk("Mtr", 5, false, 0.5),
                     new Atk("Aur", 7, false)
         ]; //Fireball, Wall, Ice, Meteor, Aura.
         //fireball array
@@ -581,66 +601,77 @@ class Dre extends Ene
         this.x = chs.x-this.w/2;
         this.y = chs.y-this.h/2;
         let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)
-        !this.ats[4].act ? ((this.CWL() || chs.x == undefined || chs.y == undefined || (dp < 250 || dp > 800)) ? this.tlp() : null) : ((this.CWL() || chs.x == undefined || chs.y == undefined || dp > 100) ? this.tlp() : null)
+        !this.ats[3].act ? ((this.CWL() || chs.x == undefined || chs.y == undefined || (dp < 250 || dp > 800)) ? this.tlp() : null) : ((this.CWL() || chs.x == undefined || chs.y == undefined || dp > 100) ? this.tlp() : null)
     }
     raG() {
         let slA = Math.floor(Math.random()*(this.ats.length));
         switch (this.ats[slA].nam) {
             case "Frb":
-                break;
-            case "Wll":
+                this.ats[0].act = true;
+                this.ats[0].tmr.c = this.ats[0].tmr.m;
+                this.ats[0].atm.c = this.ats[0].atm.m;
+                adT("Die!;", "purple", 100);
                 break;
             case "Ice":
-                this.ats[2].act = true;
-                this.ats[2].tmr.c = this.ats[2].tmr.m;
+                this.ats[1].act = true;
+                this.ats[1].tmr.c = this.ats[1].tmr.m;
                 adT("Freeze, insect!;", "purple", 100);
                 break;        
             case "Mtr":
-                this.ats[3].act = true;
-                this.ats[3].tmr.c = this.ats[3].tmr.m;
-                this.ats[3].atm.c = this.ats[3].atm.m;
+                this.ats[2].act = true;
+                this.ats[2].tmr.c = this.ats[2].tmr.m;
+                this.ats[2].atm.c = this.ats[2].atm.m;
                 sgr("flr", lvls[clv].map.arr, this.mtT);
                 adT("Behold the heaven's wrath!;", "purple", 100);
                 break;
             case "Aur":
-                this.ats[4].act = true;
-                this.ats[4].tmr.c = this.ats[4].tmr.m;
+                this.ats[3].act = true;
+                this.ats[3].tmr.c = this.ats[3].tmr.m;
                 adT("Burn, insect!;", "purple", 100);
                 break;    
         }
     }
-    //set aura
-    sAu() {
-        let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2);
-        //bal(this.x+this.w/2,this.y+this.h/2,this.auR,"red");
-        if (dp<this.auR) pla.tim.c--;
-        this.ats[4].tmr.c--;
-        if (this.ats[4].tmr.c == 0) (this.ats[4].act = false, this.fle = true);
+    //set fireball
+    sFb() {
+        this.ats[0].tmr.c--;
+        this.ats[0].atm.c--;
+        var ang = Math.atan2(pla.y - (this.y), pla.x - (this.x+this.w/2))
+        !this.ats[0].atm.c && (this.bal.push(new DBal(this.x, this.y, 40, 40, ang)), this.ats[0].atm.c = this.ats[0].atm.m);
+        !this.ats[0].tmr.c && (this.ats[0].act = false);
     }
     //set ice
     sIc() {
-        this.ats[2].tmr.c--;
-        if (this.ats[2].tmr.c == 0) (this.ats[2].act = false, pla.ice = 0);
+        this.ats[1].tmr.c--;
+        !this.ats[1].tmr.c && (this.ats[1].act = false, pla.ice = 0);
     }
     //set meteor
     sMt() {
-        this.ats[3].tmr.c--;
-        this.ats[3].atm.c--
+        this.ats[2].tmr.c--;
+        this.ats[2].atm.c--;
         var chs = this.mtT[parseInt(Math.random()*(this.mtT.length))];
-        if (this.ats[3].atm.c == 0) this.mtr.push(new Met(chs.x, chs.y, 40, 40, 135*Math.PI/180));
-        if (this.ats[3].tmr.c == 0) (this.ats[3].act = false, this.mtT = []);
+        !this.ats[2].atm.c && (this.mtr.push(new Met(chs.x, chs.y, 40, 40, 135*Math.PI/180)), this.ats[2].atm.c = this.ats[2].atm.m);
+        !this.ats[2].tmr.c && (this.ats[2].act = false, this.mtT = []);
+    }
+    //set aura
+    sAu() {
+        let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2);
+        dp<this.auR && pla.tim.c--;
+        this.ats[3].tmr.c--;
+        !this.ats[3].tmr.c && (this.ats[3].act = false, this.fle = true);
     }
     upd() {
         this.tpc.c > 0 ? this.tpc.c-- : (this.tpc.c = this.tpc.m, this.raG(), this.tlp());
         //fleeing detector
         this.fle ? ((this.sVM > 0 ? this.sVM *= -1 : null), (this.tVM > 0 ? this.tVM *= -1 : null)) : ((this.sVM < 0 ? this.sVM *= -1 : null), (this.tVM < 0 ? this.tVM *= -1 : null));   
         super.upd();
-        if (this.ats[2].act) (pla.ice = 1, this.sIc());
-        if (this.ats[3].act) (this.sMt());
-        if (this.ats[4].act) (this.fle = false, this.sAu());
+        this.ats[0].act && (this.sFb());
+        this.ats[1].act && (pla.ice = 1, this.sIc());
+        this.ats[2].act && (this.sMt());
+        this.ats[3].act && (this.fle = false, this.sAu());
         for (let i = 0; i < this.mtr.length; i++) {
             this.mtr[i].upd();
             if (this.mtr[i].y+this.mtr[i].h/2 >= this.mtr[i].dty || this.mtr.x <= this.mtr[i].dtx) this.mtr.splice(i,1), i--;
         }
+        upT(this.bal)
     }
 }

@@ -12,7 +12,7 @@ class Hud
             lT(104,64);
         cP();
             let c = pla.amo.c/pla.amo.m;
-            if(!c) c = 1;
+            !c && (c = 1);
             mT(104,48, 'orange');
             lT(104+55*c,48);
             lT(104+65*c,48);

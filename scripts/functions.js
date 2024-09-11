@@ -11,8 +11,8 @@ var mou ={
 var ang = 0
 
 function mU(event)
-{   if(event.button == 0)pla.atk = 1;
-    if(event.button == 2 && !pla.amo.c) pla.fAk = 1;
+{   if(event.button == 0 && !pla.dea)pla.atk = 1;
+    if(event.button == 2 && !pla.amo.c && !pla.dea) pla.fAk = 1;
 }
 
 function mM(event)
@@ -51,7 +51,7 @@ function drug()
     let ty = rng()*(rng()<0.5?1:-1) *rev;
     t.x+=tx, t.y+=ty, tra(tx,ty);
 
-    if(!tx) tra(-t.x, -t.y),t.mtp(0);    
+    !tx && (tra(-t.x, -t.y),t.mtp(0));    
     if(abs(t.x)>2 || abs(t.y)>2)    t.x-=tx, t.y-=ty, tra(-tx,-ty);
 }
 function sgr(name,arr,rcv)
@@ -72,12 +72,10 @@ function shf(arr)
 }
 
 function adi(name,arr1)
-{   var arr2 = []
+{   var arr2 = [];
     for(var i = 0; i<arr1.length;i++)
-    {   if(arr1[i])
-        {arr2[i] = arr1[i][name]}
-    }
-    return arr2
+       arr1[i] && (arr2[i] = arr1[i][name]);
+    return arr2;
 }
 
 function dlg(str, clr) {
@@ -172,8 +170,7 @@ function setFro(mp,tla)
             let cmp = lvls[clv].map.arr[mp.l+l][mp.c+c];
             if(fr.p[(mp.c+c)*32+(mp.l+l)]!=tla.fre && cmp.f)
             {   let p = porra(mp,c,l);
-                if(p)
-                    fr.c.splice(p,1), fr.a.splice(p,1);
+                p && fr.c.splice(p,1), fr.a.splice(p,1);
 
                 fr.c.push({x:mp.c+c, y:mp.l+l, cnt:0});      
                 fr.a.push(tla);

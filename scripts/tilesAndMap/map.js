@@ -23,7 +23,7 @@ class lvl
             this.spw[i].spT = s.t*30, this.spw[i].enL = s.l;
         
         this.txt = ".____...__";
-        //box target. target number.        current number 
+        // box target. target number.        current number 
         // for(var lne = 0;lne < this.map.arr.length; lne++) 
         //     for(var col = 0; col < this.map.arr[lne].length; col++)
         //         if(this.map.arr[lne][col].constructor.name == "Bxs") this.boxes.push(this.map.arr[lne][col].box);
@@ -38,8 +38,10 @@ class lvl
         //do jeito que tá, o método de passar tá hardcoded, tem que mudar isso ainda
         var bCM = 0;
         for(let i=0; i<this.boxT.length;i++) 
-            if (this.boxT[i].act) bCM++;
+            this.boxT[i].act && bCM++;
     
+        if(enC>=13) cpd = 1;
+
         // //se não tiver caixas ele não passa imediatamente        
         // //bCM == this.boxT.length && bCM != 0?cpd = true:cpd = true;
 
@@ -83,7 +85,7 @@ class Map
             for(var col = 0; col < this.arr[lne].length; col++)
             {   if(this.arr[lne][col] && d(this.arr[lne][col], 32, 32)) this.arr[lne][col].drw();
                 
-                if(this.arr[lne][col]) this.arr[lne][col].upd(); // Draw each tile 
+                this.arr[lne][col] && this.arr[lne][col].upd(); // Draw each tile 
             }
     }
 }
@@ -131,8 +133,8 @@ class Wal extends Tle
         {   if(nex(this,0,-1) && nex(this,0,1)) this.drw = function(){waS(this)}; 
             else
             {   if(!nex(this,0,-1) && !nex(this,0,1))this.drw = function(){waS(this),r(this.x,this.y+this.h-1,this.w,1,'#6D798B'),r(this.x,this.y,this.w,1,'#6D798B')};
-                if(nex(this,0,-1))  this.drw = function(){waS(this),r(this.x,this.y+this.h-1,this.w,1,'#6D798B')};
-                if(nex(this,0,+1))  this.drw = function(){waS(this),r(this.x,this.y,this.w,1,'#6D798B')};
+                nex(this,0,-1) && (this.drw = function(){waS(this),r(this.x,this.y+this.h-1,this.w,1,'#6D798B')});
+                nex(this,0,+1) && (this.drw = function(){waS(this),r(this.x,this.y,this.w,1,'#6D798B')});
             }      
         }
     }
@@ -146,7 +148,7 @@ class flr extends Tle
 
     upd()
     {   for(var i = 0; i<fric.length; i++)
-                if(this.collide(fric[i]))  fric[i].fri = 0, fric[i].acel = 5;  
+                this.collide(fric[i]) && (fric[i].fri = 0, fric[i].acel = 5);  
     }
     drw(){gr(this)}
 }
@@ -155,7 +157,10 @@ class dor extends Tle
     {   super(x,y);
         this.clr = "#6b5421";
     }
-
+    drw(){
+        super.drw();
+        cpd && gr(this);
+    }
     upd()
     {   let pbx = {x:pla.x-5,y:pla.y-5,w:pla.w+10,h:pla.h+10};
         //player checker hitbox
@@ -215,8 +220,7 @@ class Btn extends Tle
                 nxt = 0;
             }
             this.cld = true;
-            if(nxt == 4)    
-                cpd = true;
+            nxt == 4 && (cpd = true);
         }
         else
             this.cld = false;
@@ -244,8 +248,7 @@ class Mor extends Tle{
     upd()
     {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50)
         {   pla.int = 1;
-            if(key[69])
-               this.i++, key[69] = !key[69];
+            key[69] && (this.i++, key[69] = !key[69]);
         }
     }
 }
@@ -298,7 +301,7 @@ class Sgn extends Tle
     }
     upd()
     {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50)
-        {   if(key[69]) adT(this.txt, "black", 100);
+        {   key[69] && adT(this.txt, "black", 100);
             pla.int = 1;
         }
     }
@@ -312,7 +315,7 @@ class Ice extends Tle{
 
     upd()
     {   for(var i = 0; i<fric.length; i++)
-            if(this.collide(fric[i]))  fric[i].fri = 0.99, fric[i].acel = 0.1;    
+            this.collide(fric[i]) && (fric[i].fri = 0.99, fric[i].acel = 0.1);    
     }
     drw()
     {   r(this.x,this.y,32,32,"lightblue");
@@ -424,5 +427,14 @@ class Cnt extends Tle
         if(enC<=13) this.cnt=enC;
         if(this.cnt == 13)this.c = 'green';
         cnt(this,this.cnt,this.c);
+    }
+}
+class F13 extends Tle
+{   constructor(x,y)
+    {   super(x,y);
+    }
+    drw()
+    {   this.clr = c13;
+        super.drw();
     }
 }

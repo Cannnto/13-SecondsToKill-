@@ -7,7 +7,7 @@ function Ddi(arr)
     while(d<10)
     {   let l = parseInt(rng()*22);
         let c = parseInt(rng()*30);
-        if(arr[l][c] == 1) arr[l][c] = 11, d++;
+        arr[l][c] == 1 && (arr[l][c] = 11, d++);
     }
 }
 function gr(e)
@@ -30,11 +30,7 @@ function mov(e)
 //change direction
 function cha(e)
 {   sav();
-    if(e.c)
-    {   tra(e.x+e.w/2, e.y+e.h/2);
-        scl(-1,1);
-        tra(-(e.x+e.w/2), -(e.y+e.h/2));
-    }
+    e.c && (tra(e.x+e.w/2, e.y+e.h/2), scl(-1,1), tra(-(e.x+e.w/2), -(e.y+e.h/2)));
 }
 //rotate 
 function RTT(e,c)
@@ -118,8 +114,8 @@ function heZ(e,c)
     {   i(e);
         var a ={x: x + w*0.30/4, y:y, w:w*3.4/4, h: h};
         shr(a,coS);
-        if(z)   r(x + w*3/4-0.5, y-0.5+an, w/4+1, h/2+1, blk), r(x + w*3/4, y+an, w/4, h/2, zC), eye(e, 7/8, -1.35/8, an,'red');
-        if(!z)  r(x + w*3.25/4, y- h*0.1/2, 2, h*1.2/2, '#D9D9D9');
+        z && r(x + w*3/4-0.5, y-0.5+an, w/4+1, h/2+1, blk), r(x + w*3/4, y+an, w/4, h/2, zC), eye(e, 7/8, -1.35/8, an,'red');
+        !z && r(x + w*3.25/4, y- h*0.1/2, 2, h*1.2/2, '#D9D9D9');
         r(x + w*0.75/4-0.5, y- h*0.1/2-0.5, w*2.5/4+1, h*1.2/2+1, blk);
         r(x + w*0.75/4, y- h*0.1/2, w*2.5/4, h*1.2/2, coB);
         pnt(a);
@@ -201,7 +197,7 @@ function heZ(e,c)
         gem(e,-c,x1+w/64 ,'#0000FF');
         gem(e,-c,x1+w/3.5/2-w/14/2,'#FF0000');
         gem(e,-c,x1+w/3.5/2+w/18,'#0000FF');
-        if(!(e.a == e.bac)) r(x+w/7+x1, y + h*1.1/3.5+c, w/7, h/14, blk), gem(e,-c,x1+w/3.5/2+w/18,'#00FF00');;
+        !(e.a == e.bac) && r(x+w/7+x1, y + h*1.1/3.5+c, w/7, h/14, blk), gem(e,-c,x1+w/3.5/2+w/18,'#00FF00');;
         //prata
         // '#C0C0C0';
         // '#636363';
@@ -239,8 +235,8 @@ function heZ(e,c)
     {   i(e);
         let b = {x:x + w*2/4, y:y + h*0.5/4, w:-(w/4)*2, h:-(h/4)*2};
         var s = 0;
-        if(e.a!=e.sid)  s=at/4;
-        if(e.a==e.sid)  RTT(b, c*-10+at); 
+        e.a!=e.sid && (s=at/4);
+        e.a==e.sid && RTT(b, c*-10+at); 
             r(x1 - 2.5, y+h/16-c +s, w/4+5, h/16, blk);
             r(x1 + w/10, y+h*0.5/4-c +s, w/16, h/4, '#552A18');
             r(x1 + w/16, y+h*1.5/4-c +s, w/8, h/8, '#6F6F6F');
@@ -251,21 +247,23 @@ function heZ(e,c)
             r(x1+w/24, y-h/2-c+s, w/6, h*9/16, cor);
 
         var a = (c*-0*pi()/180)
-        if(e.a==e.sid)   res(), a = ((c*-10+at)*pi()/180);
+        e.a==e.sid && res(), a = ((c*-10+at)*pi()/180);
         
         let bl1 = {x:(x1+w/24),y:(y-h/2 - c+s)+20*sin(a),w:w/6,h:h*9/16};
         let bl2 = {x:(x1+w/24)-h*5.1/8,y:(y-h/2 - c)+5*sin(a),w:bl1.h, h:bl1.w}; 
-        if(e.c) bl1.x-=w/4, bl2.x+=bl2.w;
+        e.c && (bl1.x-=w/4, bl2.x+=bl2.w);
         let bl = bl1;
-        if(a*180/pi()<-45)   bl = bl2;
+        a*180/pi()<-45 && (bl = bl2);
 
         // r(bl1.x,bl1.y,bl1.w,bl1.h, 'purple')
         // r(bl2.x,bl2.y,bl2.w,bl2.h,'purple')
 
         //particula de morte aq em baixo, é só a primeira a outra é o fogo
         if(e.dea)   for (let i = 0; i < 5; i++) par.push(new Par(bl, 'red', {x:bl1.x+bl1.w/2, y:bl1.y+bl1.h/2}));
-        if(f || bli) for (let i = 0; i < 5; i++) par.push(new Par(bl, 'ora'));
-    }
+        if(f || bli) for (let i = 0; i < 5; i++) 
+            !pla.dea ? par.push(new Par(bl, 'ora')) : par.push(new Par(bl, 'ora',0,0,1));
+        
+        }
     function sla(e)
     {   i(e);
         ctx.fillStyle = 'red';

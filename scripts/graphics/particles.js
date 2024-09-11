@@ -5,14 +5,15 @@ function upT(e)
     }
 }
 class Par 
-{   constructor(e, c, cen, me)
+{   constructor(e, c, cen, me, de)
     { this.x = e.x+rng()*e.w;
       this.y = e.y+rng()*e.h;
       this.vx = -1+rng()*2;
       this.vy = -5+rng()*4;
       this.a = 1;
       this.r = 3;
-      if(me)this.r = 10, this.vy = -rng()*40;
+      me && (this.r = 10, this.vy = -rng()*40);
+      de && (this.r = 5);
       this.w = e.w;
       this.h = e.h;
       this.cor = c;

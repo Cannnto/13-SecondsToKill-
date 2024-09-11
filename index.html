@@ -166,7 +166,7 @@
 
         frozen();
         
-        ang = Math.atan2(mou.y - (pla.y), mou.x - (pla.x+pla.w/2)) + pi()*rev||pi()/2;
+        !pla.dea && (ang = Math.atan2(mou.y - (pla.y), mou.x - (pla.x+pla.w/2)) + pi()*rev||pi()/2);
         pla.d.x = cos(ang);
         pla.d.y = sin(ang);
         if(key[87-rev*4])
@@ -188,8 +188,10 @@
         (tBX.t) ? (dlg(tBX.sTX, tBX.clr, tBX.t) , tBX.t--, document.addEventListener("keyup", dS)): ((tBX.aTX != "") ? adT(tBX.aTX, tBX.clr, tBX.cTM): null);
     }
     var dBg = 0;
+    var dSb = 100;
     var dt1 = 0;
     var dt2 = 0;
+    var dSw = {x:cnv.width/2, y:cnv.height/2, w:200, h:200};
     function dead(){
         if (dBg < 100) {
             dBg++;
@@ -204,40 +206,37 @@
                 if(d(All[i], All[i].w, All[i].h))    All[i].drw();
 
             for(let i = 0; i<par.length; i++)
-            if(d(par[i],0,0))par[i].drw();
+                if(d(par[i],0,0))par[i].drw();
 
             for(var i = 0;i<adi("box",lvls[clv].boxes).length;i++)
                 adi("box",lvls[clv].boxes)[i].upd();
             
             upT(pla.bal);
             upT(ENE);
+            pla.upd();
             upT(par);
+            (dBg == 99) && (par = []);
         } else {
-            dt1 < 100 ? dt1++ : (dt2 < 100 ? dt2+=5 : null),sB(0,'purple'), sB(10,'purple');
+            dt1 < 100 ? dt1++ : (dt2 < 100 ? dt2+=5 : null);
         }
         r(0,0,cnv.width,cnv.height,'rgba(0,0,0,'+dBg/100+')');
+        if (dt1 > 50) {
+            dSb -= 2;
+            console.log("sadfas")
+            swo(dSw, dSw.x-25, 0, 0,'red', 1);
+            for(let i = 0; i<par.length; i++)
+                if(d(par[i],0,0))par[i].drw();
+            upT(par);
+            r(0,0,cnv.width,cnv.height,'rgba(0,0,0,'+dSb/100+')');
+        }
+        sB(10,'purple');
         txt(cnv.width/2, cnv.height-100, 'You are dead.', cnv.width/30, 'rgba(255,0,0,'+dt1/100+')');
         txt(cnv.width/2, cnv.height-50, 'The sword lays claim to your soul.', cnv.width/30, 'rgba(255,0,0,'+dt1/100+')');
-        txt(cnv.width/2, 150, 'Press space to continue.', cnv.width/30, 'rgba(255,0,0,'+dt2/100+')')
+        txt(cnv.width/2, 150, 'Press space to restart.', cnv.width/30, 'rgba(255,0,0,'+dt2/100+')');
+        sB(0,'purple');
 
-        if (dt2 == 100) {
-            if(key[32])
-            {   pla.dea = 0;
-                pla.deC = 0;
-                dBg = 0;
-                dt1 = 0;
-                dt2 = 0;
-                clv = 0;
-                ENE = [];
-                par = [];
-                blo = [];
-                pla.tim.c = pla.tim.m;
-                clearInterval(tim);
-                tim = setInterval(menu,1000/30);
-            }
-        }
+        if (dt2 == 100) (key[32]) && window.location.reload();
         
-        pla.upd();
         frozen();
     }
     </script></body>

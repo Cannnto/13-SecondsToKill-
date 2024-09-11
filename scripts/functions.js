@@ -11,8 +11,8 @@ var mou ={
 var ang = 0
 
 function mU(event)
-{   if(event.button == 0)pla.atk = 1;
-    if(event.button == 2 && !pla.amo.c) pla.fAk = 1;
+{   if(event.button == 0 && !pla.dea)pla.atk = 1;
+    if(event.button == 2 && !pla.amo.c && !pla.dea) pla.fAk = 1;
 }
 
 function mM(event)

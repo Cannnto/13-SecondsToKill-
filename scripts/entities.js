@@ -176,16 +176,9 @@ class Pla extends Ent
         //se quiser tirar as particulas pra teste ou whatever ta la no functionDrwa swo, 
          if(this.dea) 
          {  key = [];
-            this.ataA = 1
-            this.atk = 0;
-            this.atC = 0;
-            this.spd.x = 0;
-            this.spd.y = 0; 
+            this.spd.mtp(0);
+            ang = pi()/2;
             this.deC++;
-             if(this.deC > 90)
-             {   //this.fro = function(){}, this.bac = function(){}, this.sid = function(){};
-                 //swo(this, this.x+this.w/2+rng()*1, -this.cnt, this.atC,'red', this.fsw);
-             }
              if(this.deC > 120) {
                 clearInterval(tim);
                 tim = setInterval(dead,1000/30);
@@ -217,9 +210,9 @@ class Pla extends Ent
             key[84] = !key[84];
         }
 
-        if(this.tim.c <= 0) this.dea=1; 
-        if(this.tim.c > this.tim.m) this.tim.c = this.tim.m;
-        this.tim.c > 0 ? this.tim.c-- : null; 
+        this.tim.c <= 0 && (this.dea=1); 
+        this.tim.c > this.tim.m && (this.tim.c = this.tim.m);
+        this.tim.c > 0 && this.tim.c--;
     }
 }
 class Ball extends Ent

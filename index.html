@@ -59,18 +59,20 @@
         new lvl(new Map(fill(1)),0,0,{t:1,l:50},1,),
         new lvl(new Map(lv13(fill(1))),0,0,{t:1,l:50},0,function(){}),
     ]
+
     
-    var tBX = {t:0 , sTX: "", aTX: "", clr:"", cTM :0},ENE = [], par = [], blo = [], clv = 0, enC = 0, c13 = 'green', cpd = 0,nxt = 0,dis = 200,rev = 0, tim = setInterval(menu,1000/30),pla = new Pla(cnv.width/2, cnv.height/3 , 64, 64),All = [],fric = [],hud = new Hud(), t = new Vec(0,0);
-    //menu
+    //game loop variavels
+    var tBX = {t:0 , sTX: "", aTX: "", clr:"", cTM :0}, ENE = [], par = [], blo = [], clv = 0, enC = 0, c13 = 'green', cpd = 0, nxt = 0, dis = 200, rev = 0, tim = setInterval(menu,1000/30),pla = new Pla(cnv.width/2, cnv.height/3 , 64, 64),All = [],fric = [],hud = new Hud(), t = new Vec(0,0);
+    //menu loop variavels
     var plM = new Pla(cnv.width/2-100, cnv.height/2+100, 400, 400),a = {x:-127.5, y:500,w:cnv.width*1.25,h:cnv.width*1.25},b = {x:cnv.width/2 - cnv.width/3/2, y:650, w:cnv.width/3, lif:{c:0,m:0}},p = {x:0, y:0,w:cnv.width,h:cnv.height}
-    //death
+    //death loop variavels
     var dBg = 0,dSb = 100,dt1 = 0, dt2 = 0, dSw = {x:cnv.width/2, y:cnv.height/2, w:200, h:200};
 
     const bu = zzfxM(...[[[1.5,0,130.8128,0.03,0.4,0.27,1,0.5,,,,,,0.1,,,0.07,0.64,0.04,,107],[1.1,0,65.40639,0.04,0.91,0.06,,1.2,,,,,0.4,0.1,,,,0.52,0.09,0.22],[1.3,0,65.40639132514966,,0.02,,,1.5,,,,,,5,,,,0.7,0.02],[0.5,0,260,,,0.04,,,,,,,0.1,99,,,,2,0.005,0.2]],[[[0,0,12,0,0,0,0,0,0,-1,13,0,0,0,0,0,0,-1],[0,0,,,,,15,0,0,0,0,0,0,-1,15,0,0,0],[2,0,12,-1,,,,,,,84,-1,,,,,,],[3,0,,,,,12,-1,,,,,,,12,-1,,]]],[0],120]);
 
     bu.loop = 1;
-    var m = zzfxP(...bu);
-    m.loop = 1;
+    var mu = zzfxP(...bu);
+    mu.loop = 1;
 
     function menu()
     {   r(0,0,cnv.width,cnv.height,'black');
@@ -122,7 +124,7 @@
         upT(par);
         pla.upd();
         
-        !pla.dea && (ang = Math.atan2(mou.y - (pla.y), mou.x - (pla.x+pla.w/2)) + pi()*rev||pi()/2);
+        !pla.dea && (ang = M.atan2(mou.y - (pla.y), mou.x - (pla.x+pla.w/2)) + M.PI*rev||M.PI/2);
         pla.d.x = cos(ang);
         pla.d.y = sin(ang);
         if(key[87-rev*4])

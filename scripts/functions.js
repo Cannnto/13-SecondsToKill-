@@ -3,6 +3,7 @@ document.addEventListener("keyup", kU);
 document.addEventListener("mousemove",mM);
 document.addEventListener("mouseup",mU);
 document.addEventListener('contextmenu', a=> {a.preventDefault()})
+var M=Math;
 var key = [];
 var mou ={
     x:undefined,
@@ -21,11 +22,11 @@ function mM(event)
 }
 
 function kD(event)
-{   key[event.keyCode] = true;
+{   key[event.keyCode] = 1;
     //console.log(event.keyCode)
 }
 function kU(event)
-{   key[event.keyCode] = false;
+{   key[event.keyCode] = 0;
 }
 function r(x,y,w,h,c)
 {   ctx.fillStyle = c;
@@ -34,13 +35,13 @@ function r(x,y,w,h,c)
 function bal(x,y,r,cor)
 {   ctx.fillStyle = cor
     bP();
-    ctx.arc(x, y, r, 0, pi()*2);
+    ctx.arc(x, y, r, 0, M.PI*2);
     cP();
 }
 function eli(x,y,rw,rh,an,c)
 {   ctx.fillStyle = c;
     bP();
-    ctx.ellipse(x, y, rw, rh, an, 0, pi() * 2);
+    ctx.ellipse(x, y, rw, rh, an, 0, M.PI * 2);
     ctx.fill();
 }
 function d(e, w, h)
@@ -64,7 +65,7 @@ function shf(arr)
 {   let I = arr.length;
     // While there remain elements to shuffle...
     while (I)
-    {   let rnI = Math.floor(rng() * I);
+    {   let rnI = M.floor(rng() * I);
         I--;
 
         [arr[I], arr[rnI]] = [arr[rnI], arr[I]];
@@ -106,7 +107,7 @@ function res(){ctx.restore()};
 function tra(x,y){ctx.translate(x,y)};
 function scl(x,y){ctx.scale(x,y)};
 function rtt(ang){ctx.rotate(ang)};
-function abs(a){return Math.abs(a)};
+function abs(a){return M.abs(a)};
 function bP(){ctx.beginPath()};
 function cP()
 {   ctx.closePath()
@@ -118,11 +119,11 @@ function mT(x,y,cor)
     ctx.moveTo(x,y)
 };
 function lT(x,y){ctx.lineTo(x,y)};
-function rng(){return Math.random()};
-function sin(a){return Math.sin(a)};
-function cos(a){return Math.cos(a)};
-function sqr(a){return Math.sqrt(a)};
-function pi(){return Math.PI};
+function rng(){return M.random()};
+function sin(a){return M.sin(a)};
+function cos(a){return M.cos(a)};
+function sqr(a){return M.sqrt(a)};
+function pI(a){return parseInt(a)};
 function sB(n,c)
 {   ctx.shadowColor = c;
     ctx.shadowBlur = n;
@@ -140,8 +141,8 @@ class Atk {
 function adran(arr,rn,tle)
 {   let d = 0;
     while(d<rn)
-    {   let l = parseInt((rng()*20)+2);
-        let c = parseInt((rng()*28)+2);
+    {   let l = pI((rng()*20)+2);
+        let c = pI((rng()*28)+2);
         if(arr[l+1][c] != 3 && arr[l-1][c] != 3 && arr[l][c+1] != 3 && arr[l][c-1] != 3)
             {if(arr[l][c] == 1 || arr[l][c] == 12) arr[l][c] = tle, d++;}
     }

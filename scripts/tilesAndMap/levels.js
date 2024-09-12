@@ -11,7 +11,7 @@ function cma(a)
                 case 3: a[lne][col] = new dor(col*32,lne*32);break;
                 case 4: a[lne][col] = new Spw(col*32,lne*32);break;
                 case 5: a[lne][col] = new Bxs(col*32,lne*32);break;
-                case 6: a[lne][col] = new Btn(col*32,lne*32,[false,true]);break; 
+                case 6: a[lne][col] = new Btn(col*32,lne*32,[0,1]);break; 
                 case 7: a[lne][col] = new BDT(col*32,lne*32);break;
                 case 8: a[lne][col] = new Sgn(col*32,lne*32);break;
                 //graphics
@@ -20,15 +20,15 @@ function cma(a)
                 case 11: a[lne][col] = new Gdi(col*32,lne*32);break;
                 //
                 case 12: a[lne][col] = new Ice(col*32,lne*32);break;
-                case 13: a[lne][col] = new Mor(col*32,lne*32,[".","_"], Math.round(rng()));break;
+                case 13: a[lne][col] = new Mor(col*32,lne*32,[".","_"], M.round(rng()));break;
                 //mat
-                case 14: a[lne][col] = new Mth(col*32,lne*32,"Dgt", false);break; //random digit tile, mutable
-                case 15: a[lne][col] = new Mth(col*32,lne*32,"Add", true);break;
-                case 16: a[lne][col] = new Mth(col*32,lne*32,"Sub", true);break;
-                case 17: a[lne][col] = new Mth(col*32,lne*32,"Mul", true);break;
-                case 18: a[lne][col] = new Mth(col*32,lne*32,"Div", true);break;
-                case 19: a[lne][col] = new Mth(col*32,lne*32,"Res", true);break; //result tile holds the result of the equation
-                case 20: a[lne][col] = new Mth(col*32,lne*32,"Ans", true);break;
+                case 14: a[lne][col] = new Mth(col*32,lne*32,"Dgt", 0);break; //random digit tile, mutable
+                case 15: a[lne][col] = new Mth(col*32,lne*32,"Add", 1);break;
+                case 16: a[lne][col] = new Mth(col*32,lne*32,"Sub", 1);break;
+                case 17: a[lne][col] = new Mth(col*32,lne*32,"Mul", 1);break;
+                case 18: a[lne][col] = new Mth(col*32,lne*32,"Div", 1);break;
+                case 19: a[lne][col] = new Mth(col*32,lne*32,"Res", 1);break; //result tile holds the result of the equation
+                case 20: a[lne][col] = new Mth(col*32,lne*32,"Ans", 1);break;
                 
                 case 21: a[lne][col] = new Cnt(col*32,lne*32);break;
                 case 22: a[lne][col] = new F13(col*32,lne*32);break;
@@ -45,7 +45,7 @@ var levels =
     {x:26*32.5,y:21*32},
     {x:16*31.2,y:21*32},
     {x:26*31.5,y:21*32},
-    {x:16*32.5,y:21*32}
+    // {x:16*32.5,y:21*32}
 ]
 function sqlv(a)
 {
@@ -125,7 +125,6 @@ function lv3(a)
 {   //add Walls
     Tlvl(a);
 
-    // a[4][5] = a[6][5] = a[4][7] = a[6][7] = 6;
     a[0][23] = 21;    
     
     Ddi(a);
@@ -154,8 +153,6 @@ function lv5(a)
 function lv6(a)
 {   //add Walls
     Llvl(a);
-    a[8][9] = a[3][20] = 4;
-
     a[0][20] = 21;    
     
     Ddi(a);
@@ -165,7 +162,7 @@ function lv7(a)
 {   Tlvl(a);
     a[4][22] = 14;
     a[4][23] = 17;
-    a[4][24] = new Mth(24*32,4*32,"Dgt", true, 3); //must use this method to create fixed digit tiles
+    a[4][24] = new Mth(24*32,4*32,"Dgt", 1, 3); //must use this method to create fixed digit tiles
     a[4][25] = 15;
     a[4][26] = 14;
     a[4][27] = 19;
@@ -177,7 +174,6 @@ function lv7(a)
 }
 function lv8(a)
 {   Hlvl(a);
-    a[1][1] = a[22][30] = 4;
 
     a[0][26] = 21;    
     return a;
@@ -191,8 +187,8 @@ function lv13(a)
 }
 
 function random(a,lvl,d)
-{   var iFa = parseInt(rng()*4);
-    var ro = parseInt(rng()*3)
+{   var iFa = pI(rng()*4);
+    var ro = pI(rng()*3)
     switch(iFa)
     {
         case 0: Llvl(a); levels.push({x:26*32.5,y:21*32});break; 
@@ -201,37 +197,37 @@ function random(a,lvl,d)
         case 3: Clvl(a); levels.push({x:26*32.5,y:21*32});break; 
     }
     var rmt = [
-        [14,15,new Mth(0,0,"Dgt", true, 10),16,14,19,20],
-        [14,17,new Mth(0,0,"Dgt", true, 2),16,14,19,20],
-        [14,17,new Mth(0,0,"Dgt", true, 6),15,14,19,20],
-        [14,18,new Mth(0,0,"Dgt", true, 3),15,14,19,20],
-        [14,16,new Mth(0,0,"Dgt", true, 15),15,14,19,20],
+        [14,15,new Mth(0,0,"Dgt", 1, 10),16,14,19,20],
+        [14,17,new Mth(0,0,"Dgt", 1, 2),16,14,19,20],
+        [14,17,new Mth(0,0,"Dgt", 1, 6),15,14,19,20],
+        [14,18,new Mth(0,0,"Dgt", 1, 3),15,14,19,20],
+        [14,16,new Mth(0,0,"Dgt", 1, 15),15,14,19,20],
     ]
     let di = a[1].indexOf(1)!=-1;
 
     switch(ro)
     {   case 0:
             var rn = 0
-            while(rn < 2){rn = parseInt(rng()*5)}
+            while(rn < 2){rn = pI(rng()*5)}
             adran(a,rn,5);
             adran(a,rn,7);
             lvl.c = BTU;
         break;  //box
         case 1: 
             var rn = 0
-            while(rn < 3){rn = parseInt(rng()*4)}
+            while(rn < 3){rn = pI(rng()*4)}
             adran(a,rn,6);
             lvl.c = BTNS;
         break;  //btn
         case 2:                    
-            var d = 0                //math
+            var d = 0                //M
             while(d<1)
-            {   var l = parseInt(rng()*22);
-                var c = parseInt(rng()*30);
+            {   var l = pI(rng()*22);
+                var c = pI(rng()*30);
 
                 var tr = (a[l][c] == 1 && a[l][c+1] == 1 && a[l][c+2] == 1 && a[l][c+3] == 1 && a[l][c+4] == 1 && a[l][c+5] == 1  && a[l][c+6] == 1   && a[l][c+7] == 1|| a[l][c] == 12 && a[l][c+12] == 12 && a[l][c+2] == 12 && a[l][c+3] == 12 && a[l][c+4] == 12 && a[l][c+5] == 12 && a[l][c+6] == 12   && a[l][c+7] == 12);
                 if(tr)
-                {   var ram = parseInt((rng()*rmt.length))
+                {   var ram = pI((rng()*rmt.length))
 
                     for(var i = 0; i < 7; i++)
                     {   if(rmt[ram][i].constructor.name == "Number")
@@ -293,7 +289,7 @@ function MAT(lvl)
         for (let i=0; i<lvl.maAr.length; i++) 
         {   !lvl.maAr[i].fix ? lvl.maAr[i].txC = "crimson" : lvl.maAr[i].txC = "black";
             cpd = 0;
-            if (Function("return parseInt(" + s +")==13")())
+            if (Function("return pI(" + s +")==13")())
             {   lvl.maAr[i].txC = "green";
                 cpd = 1;
                 console.log('mat')

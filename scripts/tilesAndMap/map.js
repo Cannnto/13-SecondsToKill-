@@ -1,52 +1,48 @@
 class lvl 
 {   constructor(map,b,r,s,ra,c)
-    {   this.map = map;
-        this.c = c;
+    {   let t = this;
+        t.map = map;
+        t.c = c;
         if(ra)
-        {    switch(parseInt(rng()*3))
+        {    switch(pI(rng()*3))
             {   case 0: b = 1;break;
                 case 1: r = 1;break;
-                case 2: this.map.arr = fill(12);break;
+                case 2: t.map.arr = fill(12);break;
             }
-            random(this.map.arr,this);
+            random(t.map.arr,t);
         }
-        cma(this.map.arr);
-        this.boxes = [];
-        this.btns=[];
+        cma(t.map.arr);
+        t.boxes = [];
+        t.btns=[];
         //boxtile
-        this.b = b;
-        this.r = r;
-        this.boxT = []
-        this.maAr = [];
-        this.mor = [];
-        this.spw = [];
-        sgr("Spw", this.map.arr, this.spw);
-        sgr("Mor", this.map.arr, this.mor);
-        sgr('Bxs', this.map.arr, this.boxes);
-        sgr("Btn", this.map.arr, this.btns);
-        sgr("BDT", this.map.arr, this.boxT);
-        sgr("Mth", this.map.arr, this.maAr);
-        shf(this.btns);
-        this.mor.sort((a,b) => a.x - b.x);
-        for(let i=0;i<this.spw.length;i++)
-            this.spw[i].spT = s.t*30, this.spw[i].enL = s.l;
+        t.b = b;
+        t.r = r;
+        t.boxT = []
+        t.maAr = [];
+        t.mor = [];
+        t.spw = [];
+        sgr("Spw", t.map.arr, t.spw);
+        sgr("Mor", t.map.arr, t.mor);
+        sgr('Bxs', t.map.arr, t.boxes);
+        sgr("Btn", t.map.arr, t.btns);
+        sgr("BDT", t.map.arr, t.boxT);
+        sgr("Mth", t.map.arr, t.maAr);
+        shf(t.btns);
+        t.mor.sort((a,b) => a.x - b.x);
+        for(let i=0;i<t.spw.length;i++)
+            t.spw[i].spT = s.t*30, t.spw[i].enL = s.l;
         
-        this.txt = ".____...__";
-        // box target. target number.        current number 
-        // for(var lne = 0;lne < this.map.arr.length; lne++) 
-        //     for(var col = 0; col < this.map.arr[lne].length; col++)
-        //         if(this.map.arr[lne][col].constructor.name == "Bxs") this.boxes.push(this.map.arr[lne][col].box);
+        t.txt = ".____...__";
     }
     
     upd()
-    {   
-        // console.log(this);
+    {   let t = this;
         
-        bli = this.b;
-        rev = this.r;
+        bli = t.b;
+        rev = t.r;
         
-        this.map.upd();
-        this.c(this);
+        t.map.upd();
+        t.c(t);
     }
 }
 class Map
@@ -55,37 +51,39 @@ class Map
     }
 
     upd() // Draw
-    {   for(var lne = 0;lne < this.arr.length; lne++) // Linhas
-            for(var col = 0; col < this.arr[lne].length; col++)
-            {   (this.arr[lne][col] && d(this.arr[lne][col], 32, 32)) && this.arr[lne][col].drw();
+    {   let t = this;
+        for(var lne = 0;lne < t.arr.length; lne++) // Linhas
+            for(var col = 0; col < t.arr[lne].length; col++)
+            {   (t.arr[lne][col] && d(t.arr[lne][col], 32, 32)) && t.arr[lne][col].drw();
                 
-                this.arr[lne][col] && this.arr[lne][col].upd(); // Draw each tile 
+                t.arr[lne][col] && t.arr[lne][col].upd(); // Draw each tile 
             }
     }
 }
 class Tle
 {   constructor(x,y)
-    {   this.x = x;
-        this.y = y;
-        this.w = this.h = 32;
-        this.add = 0;
-        //this.clr = "black"; // Color
-        this.tim = {c:0,m:30*3}
+    {   let t = this;
+        t.x = x;
+        t.y = y;
+        t.w = t.h = 32;
+        t.add = 0;
+        //t.clr = "black"; // Color
+        t.tim = {c:0,m:30*3}
     }
 
     drw() // Draw
-    {   ctx.fillStyle = this.clr;
-        ctx.fillRect(this.x,this.y,32,32);
+    {   r(this.x,this.y,32,32,this.clr);
     }
     upd(){}
     collide(other)
-    {   if (this.x + 32 >= other.x &&
-            this.x <= other.x + other.w &&
-            this.y + 32 >= other.y &&
-            this.y <= other.y + other.h) {
-            return true;
+    {   let t = this;
+        if (t.x + 32 >= other.x &&
+            t.x <= other.x + other.w &&
+            t.y + 32 >= other.y &&
+            t.y <= other.y + other.h) {
+            return 1;
         }
-        return false;
+        return 0;
     }
     uFr()
     {   this.tim.c++;
@@ -99,16 +97,17 @@ class Tle
 class Wal extends Tle
 {   constructor(x,y)
     {   super(x,y);
-        this.col = true;
+        this.col = 1;
     }
     drw()
-    {   if(nex(this,1,0) && nex(this,-1,0)) this.drw = function(){gr(this),waF(this)};
+    {   let t = this;
+        if(nex(t,1,0) && nex(t,-1,0)) t.drw = function(){gr(t),waF(t)};
         else
-        {   if(nex(this,0,-1) && nex(this,0,1)) this.drw = function(){waS(this)}; 
+        {   if(nex(t,0,-1) && nex(t,0,1)) t.drw = function(){waS(t)}; 
             else
-            {   if(!nex(this,0,-1) && !nex(this,0,1))this.drw = function(){waS(this),r(this.x,this.y+this.h-1,this.w,1,'#6D798B'),r(this.x,this.y,this.w,1,'#6D798B')};
-                nex(this,0,-1) && (this.drw = function(){waS(this),r(this.x,this.y+this.h-1,this.w,1,'#6D798B')});
-                nex(this,0,+1) && (this.drw = function(){waS(this),r(this.x,this.y,this.w,1,'#6D798B')});
+            {   if(!nex(t,0,-1) && !nex(t,0,1))t.drw = function(){waS(t),r(t.x,t.y+t.h-1,t.w,1,'#6D798B'),r(t.x,t.y,t.w,1,'#6D798B')};
+                nex(t,0,-1) && (t.drw = function(){waS(t),r(t.x,t.y+t.h-1,t.w,1,'#6D798B')});
+                nex(t,0,+1) && (t.drw = function(){waS(t),r(t.x,t.y,t.w,1,'#6D798B')});
             }      
         }
     }
@@ -116,8 +115,6 @@ class Wal extends Tle
 class flr extends Tle
 {   constructor(x,y)
     {   super(x,y);
-        this.f = 1;
-        this.fre = 0;
     }
 
     upd()
@@ -142,6 +139,7 @@ class dor extends Tle
         {   clv++;
             pla.x = levels[clv].x;
             pla.y = levels[clv].y;
+            pla.tim.c = pla.tim.m;
             ENE = [];
             blo = [];
             par = [];
@@ -160,19 +158,21 @@ class dor extends Tle
 class Spw extends Tle
 {   constructor(x,y) 
     {   super(x,y);
-        this.enL = 0;
-        this.spT = 0;
-        this.cuT = 0;
-        this.c = 0;
+        let t = this;
+        t.enL = 0;
+        t.spT = 0;
+        t.cuT = 0;
+        t.c = 0;
     }
 
     arT() 
-    {   if(this.cuT == this.spT) 
-        {   rng()<0.9?ENE.push(new Min(this.x,this.y,64,64,this)):ENE.push(new Cur(this.x,this.y,64,64,this));
-            this.cuT = 0;
-            this.c++;
+    {   let t = this;
+        if(t.cuT == t.spT) 
+        {   rng()<0.9?ENE.push(new Min(t.x,t.y,64,64,t)):ENE.push(new Cur(t.x,t.y,64,64,t));
+            t.cuT = 0;
+            t.c++;
         } 
-        this.cuT++;
+        t.cuT++;
     }
     drw()
     {   gr(this);
@@ -186,25 +186,26 @@ class Btn extends Tle
 {   constructor(x,y)
     {   super(x,y);
         this.clr = "red";
-        this.cld = false;
+        this.cld = 0;
     }
 
     upd()
-    {   if(this.collide(pla))
-        {   if(lvls[clv].btns[nxt] == this && !this.cld)
-            {   this.clr = "green";
+    {   let t = this;
+        if(t.collide(pla))
+        {   if(lvls[clv].btns[nxt] == t && !t.cld)
+            {   t.clr = "green";
                 nxt++;
             }
-            else if(!this.cld)
+            else if(!t.cld)
             {   for(var i =0;i<lvls[clv].btns.length;i++)
                     lvls[clv].btns[i].clr = "red";
                 nxt = 0;
             }
-            this.cld = true;
-            nxt == 4 && (cpd = true);
+            t.cld = 1;
+            nxt == 4 && (cpd = 1);
         }
         else
-            this.cld = false;
+            t.cld = 0;
     }
     drw()
     {   gr(this);
@@ -214,30 +215,34 @@ class Btn extends Tle
 class Mor extends Tle{
     constructor(x,y,val,i)
     {   super(x,y);
-        this.clr = "red";
-        this.cld = 0;
-        this.val = val;
-        this.i = i;
+        let t = this;
+        t.clr = "red";
+        t.cld = 0;
+        t.val = val;
+        t.i = i;
     }
 
     drw()
-    {   gr(this);
-        btn(this, this.clr);
-        mor(this);
+    {   let t = this;
+        gr(t);
+        btn(t, t.clr);
+        mor(t);
     }
 
     upd()
-    {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50)
+    {   let t = this;
+        if(sqr(((t.x+t.w/2) - (pla.x+pla.w/2))**2 + ((t.y+t.h/2) - (pla.y+pla.h/2))**2)<50)
         {   pla.int = 1;
-            key[69] && (this.i++, key[69] = !key[69]);
+            key[69] && (t.i++, key[69] = !key[69]);
         }
     }
 }
 class Bxs extends Tle {
     constructor (x,y)
     {   super(x,y);
-        this.clr = "#FF9633"
-        this.box = new Box(this.x,this.y);
+        let t = this;
+        t.clr = "#FF9633"
+        t.box = new Box(t.x,t.y);
     }
 }
 //box destiny tile
@@ -248,20 +253,22 @@ class BDT extends Tle {
         this.clr = "purple";
     }
     //box collide
-    bCD() {
+    bCD() 
+    {   let t = this;
         var len = lvls[clv].boxes.length;
         for (var i = 0; i < len; i++) {
-            if (this.x + 32 >= lvls[clv].boxes[i].box.x &&    
-                this.x <= lvls[clv].boxes[i].box.x + lvls[clv].boxes[i].box.w &&      
-                this.y + 32 >= lvls[clv].boxes[i].box.y &&      
-                this.y <= lvls[clv].boxes[i].box.y + lvls[clv].boxes[i].box.h) {
+            if (t.x + 32 >= lvls[clv].boxes[i].box.x &&    
+                t.x <= lvls[clv].boxes[i].box.x + lvls[clv].boxes[i].box.w &&      
+                t.y + 32 >= lvls[clv].boxes[i].box.y &&      
+                t.y <= lvls[clv].boxes[i].box.y + lvls[clv].boxes[i].box.h) {
                 return 1;
             }
         }
     }
     upd() 
-    {   this.act = this.bCD();
-        this.bCD()?this.clr = "green":this.clr = "red";
+    {   let t = this;
+        t.act = t.bCD();
+        t.bCD()?t.clr = "green":t.clr = "red";
     }
     drw()
     {   gr(this);
@@ -281,8 +288,9 @@ class Sgn extends Tle
         sgn(this);
     }
     upd()
-    {   if(sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50)
-        {   key[69] && adT(this.txt, "black", 100);
+    {   let t = this;
+        if(sqr(((t.x+t.w/2) - (pla.x+pla.w/2))**2 + ((t.y+t.h/2) - (pla.y+pla.h/2))**2)<50)
+        {   key[69] && adT(t.txt, "black", 100);
             pla.int = 1;
         }
     }
@@ -290,8 +298,6 @@ class Sgn extends Tle
 class Ice extends Tle{
     constructor(x,y)
     {   super(x,y);
-        this.f = 1;
-        this.fre = 1;
     }
 
     upd()
@@ -305,37 +311,39 @@ class Ice extends Tle{
 class Mth extends Tle{
     constructor(x,y,typ,fix,num)
     {   super(x,y);
+        let t = this;
         // this.txC = "red";
-        this.typ = typ; //Dgt, Add, Sub, Mul, Div, Res, Ans
-        this.fix = fix;
-        this.fix ? this.txC = "black" : this.txC = "crimson";
-        this.val = 0;
-        switch (this.typ)
+        t.typ = typ; //Dgt, Add, Sub, Mul, Div, Res, Ans
+        t.fix = fix;
+        t.fix ? t.txC = "black" : t.txC = "crimson";
+        t.val = 0;
+        switch (t.typ)
         {   case "Dgt":
-                !this.fix ? this.val = Math.floor(Math.random()*21) : this.val = num%21;
-                this.dgt = this.val;
+                !t.fix ? t.val = M.floor(M.random()*21) : t.val = num%21;
+                t.dgt = t.val;
             break;
-            case "Add":this.dgt = "+";break;
-            case "Sub":this.dgt = "-";break;
-            case "Mul":this.dgt = "*";break;
-            case "Div":this.dgt = "/";break;
-            case "Res":this.dgt = "=";break;
-            case "Ans":this.dgt = 13;break;       
+            case "Add":t.dgt = "+";break;
+            case "Sub":t.dgt = "-";break;
+            case "Mul":t.dgt = "*";break;
+            case "Div":t.dgt = "/";break;
+            case "Res":t.dgt = "=";break;
+            case "Ans":t.dgt = 13;break;       
         }
-        this.str = this.val;
+        t.str = t.val;
     }
 
     opr(pre,nxt){
-        switch (this.typ)
+        let t = this;
+        switch (t.typ)
         {   case "Add":nxt.str = pre.str + nxt.val;break;
             case "Sub":nxt.str = pre.str - nxt.val;break;
             case "Mul":nxt.str = pre.str * nxt.val;break;
             case "Div":nxt.str = pre.str / nxt.val;break;
             case "Res":
-                this.str = pre.str;
+                t.str = pre.str;
                 nxt.str = pre.str;
             break;
-            case "Ans":this.str = this.dgt = this.val = 13;break;          
+            case "Ans":t.str = t.dgt = t.val = 13;break;          
         }
         return;
     }
@@ -345,18 +353,20 @@ class Mth extends Tle{
     }
 
     drw()
-    {   mat(this);
-        txt(this.x+this.w/2, this.y+this.h/2, this.dgt, this.w/1.5, this.txC);
+    {   let t = this;
+        mat(t);
+        txt(t.x+t.w/2, t.y+t.h/2, t.dgt, t.w/1.5, t.txC);
     }
-    upd(){
-        if((sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)<50) && !this.fix){
+    upd()
+    {   let t = this;
+        if((sqr(((t.x+t.w/2) - (pla.x+pla.w/2))**2 + ((t.y+t.h/2) - (pla.y+pla.h/2))**2)<50) && !t.fix){
             pla.int = 1;
             if(key[69])
-            {   this.val++;
-                this.val %= 21;
-                this.dgt = this.val;
-                this.str = this.val;
-                key[69] = false;
+            {   t.val++;
+                t.val %= 21;
+                t.dgt = t.val;
+                t.str = t.val;
+                key[69] = 0;
             }
         }
     }
@@ -365,9 +375,10 @@ class Mth extends Tle{
 class Gbx extends Tle
 {   constructor(x,y)
     {   super(x,y);
-        this.col = true;
-        this.bx1 = {x:this.x, y:this.y, w:this.w, h:this.h};
-        this.bx2 = {x:this.x, y:this.y-this.h/1.4, w:this.w, h:this.h};
+        let t = this;
+        t.col = 1;
+        t.bx1 = {x:t.x, y:t.y, w:t.w, h:t.h};
+        t.bx2 = {x:t.x, y:t.y-t.h/1.4, w:t.w, h:t.h};
     }
     drw()
     {   box(this.bx1);
@@ -377,16 +388,14 @@ class Gbx extends Tle
 class Gbo extends Tle
 {   constructor(x,y)
     {   super(x,y);
-        this.col = true;
+        this.col = 1;
     }
     drw(){box(this)};
 }
 class Gdi extends Tle
 {   constructor(x,y)
     {   super(x,y);
-        this.r = (90*parseInt(rng()*4));
-        this.f = 1;
-        this.fre = 0;
+        this.r = (90*pI(rng()*4));
     }
     drw()
     {   gr(this);
@@ -404,10 +413,11 @@ class Cnt extends Tle
         this.col = 1;
     }
     drw()
-    {   waS(this);
-        if(enC<=13) this.cnt=enC;
-        if(this.cnt == 13)this.c = 'green';
-        cnt(this,this.cnt,this.c);
+    {   let t = this;
+        waS(t);
+        if(enC<=13) t.cnt=enC;
+        if(t.cnt == 13)t.c = 'green';
+        cnt(t,t.cnt,t.c);
     }
 }
 class F13 extends Tle

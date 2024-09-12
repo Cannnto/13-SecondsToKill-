@@ -54,7 +54,7 @@ function Dbd(e,s,b)
     
     ctx.fillStyle = '#450462';
     bP();
-    ctx.ellipse(x+w/2, y-h/12, w/2.25*s,h/4.5*s,0,pi()-(60*pi()/180), pi()*2-(30*pi()/180));
+    ctx.ellipse(x+w/2, y-h/12, w/2.25*s,h/4.5*s,0,M.PI-(60*M.PI/180), M.PI*2-(30*M.PI/180));
     ctx.fill();
     
     //capuz

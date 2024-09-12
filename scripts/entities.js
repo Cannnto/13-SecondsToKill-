@@ -20,8 +20,9 @@ class Vec
     }
 
     lim(v) {
-        this.x = Math.min(Math.max(this.x, -v), v);
-        this.y = Math.min(Math.max(this.y, -v), v);
+        let t = this;
+        t.x = M.min(M.max(t.x, -v), v);
+        t.y = M.min(M.max(t.y, -v), v);
     }
 }
 class Ent
@@ -37,9 +38,7 @@ class Ent
         t.c = 0;
         t.cn = 1;
         t.rot = 0;
-        t.par = [];
         t.fri = 0;
-        t.acel = 0;
     }
 
     drw()
@@ -57,9 +56,7 @@ class Ent
         }
         else    t.cn>0 ? t.cn-=0.25 : (t.cn<0 ? t.cn+=0.25 : null);
         t.a();
-        t.lfB();
     }
-    lfB(){}
     a(){this.fro()};
 
     cld(oth)
@@ -68,7 +65,7 @@ class Ent
         {   if (t.x + t.w >= oth[i].x &&     
             t.x <= oth[i].x + oth[i].w &&       
             t.y + t.h >= oth[i].y &&       
-            t.y <= oth[i].y + oth[i].h)    return true;
+            t.y <= oth[i].y + oth[i].h)    return 1;
         }
     }
     
@@ -77,10 +74,10 @@ class Ent
     
     CWL()
     {   let t = this;
-        t.mp1 = {c:parseInt((t.x)/32), l:parseInt((t.y)/32)};
-        t.mp2 = {c:parseInt((t.x+t.w)/32), l:parseInt((t.y)/32)};
-        t.mp3 = {c:parseInt((t.x+t.w)/32), l:parseInt((t.y+t.h)/32)};
-        t.mp4 = {c:parseInt((t.x)/32), l:parseInt((t.y+t.h)/32)};
+        t.mp1 = {c:pI((t.x)/32), l:pI((t.y)/32)};
+        t.mp2 = {c:pI((t.x+t.w)/32), l:pI((t.y)/32)};
+        t.mp3 = {c:pI((t.x+t.w)/32), l:pI((t.y+t.h)/32)};
+        t.mp4 = {c:pI((t.x)/32), l:pI((t.y+t.h)/32)};
         return (t.u(t.mp1) || t.u(t.mp2) ||t.u(t.mp3) ||t.u(t.mp4));
     }
 }
@@ -191,7 +188,7 @@ class Pla extends Ent
          if(t.dea) 
          {  key = [];
             t.spd.mtp(0);
-            ang = pi()/2;
+            ang = M.PI/2;
             t.deC++;
              if(t.deC > 120) {
                 clearInterval(tim);
@@ -215,7 +212,7 @@ class Pla extends Ent
 
         // t.cn==3 && zzfx(...[2,.2,70,.05,.1,.15,4,.8,,.1,,,,.1,.5,0,.3,.5]);
         
-        let mp = {c:parseInt((t.x+t.w/2)/32), l:parseInt((t.y+t.h/2)/32)}
+        let mp = {c:pI((t.x+t.w/2)/32), l:pI((t.y+t.h/2)/32)}
         if(t.ice)
             for(let l=-1;l<2;l++)
                 for(let c=-1;c<2;c++)
@@ -253,7 +250,7 @@ class Ball extends Ent
         t.x += cos(t.a)*10;
         t.y += sin(t.a)*10;
 
-        let mp = {c:parseInt((t.x+t.w/2)/32), l:parseInt((t.y+t.h/2)/32)}
+        let mp = {c:pI((t.x+t.w/2)/32), l:pI((t.y+t.h/2)/32)}
         lvls[clv].map.arr[mp.l][mp.c].constructor.name == "Ice" && change(mp, new flr(mp.c*32,mp.l*32),30);
     }
 }
@@ -270,7 +267,7 @@ class DBal extends Ball
 
         if (pla.cld([t])) {
             pla.tim.c -= 30;
-            return 1
+            return 1;
         }    
     }
     upd()
@@ -278,7 +275,7 @@ class DBal extends Ball
         super.drw();
         t.x += cos(t.a)*15;
         t.y += sin(t.a)*15;
-        let mp = {c:parseInt((t.x+t.w/2)/32), l:parseInt((t.y+t.h/2)/32)}
+        let mp = {c:pI((t.x+t.w/2)/32), l:pI((t.y+t.h/2)/32)}
         !lvls[clv].map.arr[mp.l][mp.c].uFr && (lvls[clv].map.arr[mp.l][mp.c].uFr = 1);
     }
 }
@@ -360,6 +357,16 @@ class Ene extends Ent
     wlk(x,y) 
     {   this.x += x;
         this.y += y;
+    }
+    lfB(t)
+    {   t.anC>=15 && (t.dea = 1, pla.tim.c+=t.rec, enC++);
+        if(t.lif.c<=0)
+        {   t.anC += 1;
+            for (let i = 0; i < 5; i++) par.push(new Par(t, 'red'));
+            blo.push(new Blo(t));
+            zzfx(...[,,31,.04,.1,.71,4,.1,5,6,,,,1.1,,1,,.35,.25,.19]);
+            return 1;
+        }
     }
     upd()
     {   let t = this;
@@ -452,8 +459,8 @@ class Min extends Ene
         HAN(t, t.cn, zC,0);
         leg(t, (t.cn<0 ? 0.8 : (!t.cn ? 1 : 1.2)), (t.cn>0 ? 0.8 : (!t.cn ? 1 : 1.2)), zC,zC,0);
         
-        mov(this);
-            bdB(this, '#5C0C0C', '#5C0C0C',1);
+        mov(t);
+            bdB(t, '#5C0C0C', '#5C0C0C',1);
         res();
     }
     fro()
@@ -465,20 +472,10 @@ class Min extends Ene
         HAN(t, t.cn, zC,0);
         leg(t, (t.cn<0 ? 0.8 : (!t.cn ? 1 : 1.2)), (t.cn>0 ? 0.8 : (!t.cn ? 1 : 1.2)), zC,zC,0);
     }
-    lfB()
+    drw()
     {   let t = this;
-        if(t.y-0.5+t.h/2+1+t.anC > t.y+t.h) t.dea = 1, pla.tim.c+=t.rec, enC++;
-        if(t.lif.c<=0)
-        {   t.gra += 0.25;
-            t.anC += t.gra;
-            for (let i = 0; i < 5; i++) par.push(new Par(t, 'red'));
-            blo.push(new Blo(t));
-            zzfx(...[,,31,.04,.1,.71,4,.1,5,6,,,,1.1,,1,,.35,.25,.19]);
-        }
-        else
-        {   lB(t, wh,t.h/4,3,3,0);
-            lB(t, 'red',t.h/4,3,3,1);
-        } 
+        super.drw();
+        !t.lfB(t) && (lB(t, wh,t.h/4,3,3,0),lB(t, 'red',t.h/4,3,3,1));
     }
 }
 //currepted
@@ -531,20 +528,10 @@ class Cur extends Ene
         //swo(t, t.x+t.w*3/4, t.cn, 0, '#4E4E50');    
         leg(t, (t.cn<0 ? 0.8 : (!t.cn ? 1 : 1.2)), (t.cn>0 ? 0.8 : (!t.cn ? 1 : 1.2)), zC,wh,1);
     }
-    lfB()
+    drw()
     {   let t = this;
-        if(t.y-0.5+t.h/2+1+t.anC > t.y+t.h) t.dea = 1, pla.tim.c+=t.rec;
-        if(t.lif.c<=0)
-        {   t.gra += 0.25;
-            t.anC += t.gra;
-            for (let i = 0; i < 5; i++) par.push(new Par(t, 'red'));
-            blo.push(new Blo(t));
-            zzfx(...[,,31,.04,.1,.71,4,.1,5,6,,,,1.1,,1,,.35,.25,.19]);
-        }
-        else
-        {   lB(t, wh,t.h/1.3,5,3,0);
-            lB(t, 'red',t.h/1.3,5,3,1);
-        } 
+        super.drw();
+        !t.lfB(t) && (lB(t, wh,t.h/1.3,5,3,0),lB(t, 'red',t.h/1.3,5,3,1));
     }
 }
 class Dre extends Ene
@@ -561,9 +548,9 @@ class Dre extends Ene
         t.tpc = {c:0, m:30*5};
         t.tpc.c = t.tpc.m;
         //attack stuff
-        t.ats = [new Atk("Frb", 2, false, 0.5),
-                    new Atk("Ice", 6, false),
-                    new Atk("Mtr", 5, false, 0.5),
+        t.ats = [new Atk("Frb", 2, 0, 0.5),
+                    new Atk("Ice", 6, 0),
+                    new Atk("Mtr", 5, 0, 0.5),
         ]; //Fireball, Wall, Ice, Meteor, Aura.
         //fireball array
         t.bal = [];
@@ -612,25 +599,11 @@ class Dre extends Ene
         tra(0,-t.cn/8)   
         for (let i = 0; i < 10; i++) par.push(new Par(t, 'bla'));
     }
-    lfB()
-    {   let t = this;
-        if(t.y-0.5+t.h/2+1+t.anC > t.y+t.h) t.dea = 1;
-        if(t.lif.c<=0)
-        {   t.gra += 0.25;
-            t.anC += t.gra;
-            for (let i = 0; i < 5; i++) par.push(new Par(t, 'red'));
-            blo.push(new Blo(t));
-        }
-        else {
-            lB(t, wh,t.h/1.5,5,4,0);
-            lB(t, 'purple',t.h/1.5,5,4,1);
-        } 
-    }
     tlp() {
         let t = this;
         t.tpt = [];
         sgr("flr", lvls[clv].map.arr, t.tpt);
-        var chs = t.tpt[parseInt(Math.random()*(t.tpt.length))];
+        var chs = t.tpt[pI(M.random()*(t.tpt.length))];
         t.x = chs.x-t.w/2;
         t.y = chs.y-t.h/2;
         let dp = sqr(((t.x+t.w/2) - (pla.x+pla.w/2))**2 + ((t.y+t.h/2) - (pla.y+pla.h/2))**2);
@@ -638,21 +611,21 @@ class Dre extends Ene
     }
     raG() {
         let t = this;
-        let slA = Math.floor(Math.random()*(t.ats.length));
+        let slA = M.floor(M.random()*(t.ats.length));
         switch (t.ats[slA].nam) {
             case "Frb":
-                t.ats[0].act = true;
+                t.ats[0].act = 1;
                 t.ats[0].tmr.c = t.ats[0].tmr.m;
                 t.ats[0].atm.c = t.ats[0].atm.m;
                 adT("Die!;", "purple", 100);
                 break;
             case "Ice":
-                t.ats[1].act = true;
+                t.ats[1].act = 1;
                 t.ats[1].tmr.c = t.ats[1].tmr.m;
                 adT("Freeze, insect!;", "purple", 100);
                 break;        
             case "Mtr":
-                t.ats[2].act = true;
+                t.ats[2].act = 1;
                 t.ats[2].tmr.c = t.ats[2].tmr.m;
                 t.ats[2].atm.c = t.ats[2].atm.m;
                 sgr("flr", lvls[clv].map.arr, t.mtT);
@@ -665,29 +638,34 @@ class Dre extends Ene
         let t = this;
         t.ats[0].tmr.c--;
         t.ats[0].atm.c--;
-        var ang = Math.atan2(pla.y - (t.y), pla.x - (t.x+t.w/2))
+        var ang = M.atan2(pla.y - (t.y), pla.x - (t.x+t.w/2))
         !t.ats[0].atm.c && (t.bal.push(new DBal(t.x, t.y, 40, 40, ang)), t.ats[0].atm.c = t.ats[0].atm.m);
-        !t.ats[0].tmr.c && (t.ats[0].act = false);
+        !t.ats[0].tmr.c && (t.ats[0].act = 0);
     }
     //set ice
     sIc() {
         let t = this;
         t.ats[1].tmr.c--;
-        !t.ats[1].tmr.c && (t.ats[1].act = false, pla.ice = 0);
+        !t.ats[1].tmr.c && (t.ats[1].act = 0, pla.ice = 0);
     }
     //set meteor
     sMt() {
         let t = this;
         t.ats[2].tmr.c--;
         t.ats[2].atm.c--;
-        var chs = t.mtT[parseInt(Math.random()*(t.mtT.length))];
-        !t.ats[2].atm.c && (t.mtr.push(new Met(chs.x, chs.y, 40, 40, 135*Math.PI/180)), t.ats[2].atm.c = t.ats[2].atm.m);
-        !t.ats[2].tmr.c && (t.ats[2].act = false, t.mtT = []);
+        var chs = t.mtT[pI(M.random()*(t.mtT.length))];
+        !t.ats[2].atm.c && (t.mtr.push(new Met(chs.x, chs.y, 40, 40, 135*M.PI/180)), t.ats[2].atm.c = t.ats[2].atm.m);
+        !t.ats[2].tmr.c && (t.ats[2].act = 0, t.mtT = []);
+    }
+    drw()
+    {   let t = this;
+        super.drw();
+        !t.lfB(t) && (lB(t, wh,t.h/1.5,5,4,0),lB(t, 'purple',t.h/1.5,5,4,1));
     }
     upd() {
         let t = this;
         t.tpc.c > 0 ? t.tpc.c-- : (t.tpc.c = t.tpc.m, t.raG(), t.tlp());
-        super.upd();
+        super.upd(t);
         t.ats[0].act && (t.sFb());
         t.ats[1].act && (pla.ice = 1, t.sIc());
         t.ats[2].act && (t.sMt());
@@ -695,6 +673,6 @@ class Dre extends Ene
             t.mtr[i].upd();
             if (t.mtr[i].y+t.mtr[i].h/2 >= t.mtr[i].dty || t.mtr.x <= t.mtr[i].dtx) t.mtr.splice(i,1), i--;
         }
-        upT(t.bal)
+        upT(t.bal);
     }
 }

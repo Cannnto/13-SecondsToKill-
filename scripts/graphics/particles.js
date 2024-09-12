@@ -23,7 +23,7 @@ class Par
       this.cen = cen;
       if(cen)
       {   var magP = rng()*100;
-          var angP = rng()*(2*pi()); 
+          var angP = rng()*(2*M.PI); 
           var vecP = {x: magP*cos(angP), y: magP*sin(angP)}
           this.x += vecP.x;
           this.y += vecP.y;
@@ -42,8 +42,8 @@ class Par
       }
       else
       {  this.upd = function()
-        { var mag = Math.sqrt((this.cen.x - this.x)**2 + (this.cen.y - this.y)**2)/50;
-          var ang = Math.atan2((this.cen.y - this.y)*2,(this.cen.x - this.x)*2); 
+        { var mag = M.sqrt((this.cen.x - this.x)**2 + (this.cen.y - this.y)**2)/50;
+          var ang = M.atan2((this.cen.y - this.y)*2,(this.cen.x - this.x)*2); 
           var vec = {x: mag * cos(ang)*5, y: mag * sin(ang)*5};
 
           this.x+=vec.x;
@@ -66,16 +66,16 @@ class Par
           this.drw = function(){bal(this.x, this.y, this.r, `rgba(${rng()*10}, ${rng()*10}, ${rng()*10}, ${this.a})`)}
         break;
         case 'blu': this.y=this.e.y+this.e.h;
-          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${10}, ${50+Math.random()*100}, ${200+Math.random()*30}, ${this.a})`)}
+          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${10}, ${50+M.random()*100}, ${200+M.random()*30}, ${this.a})`)}
         break;
         case 'gre': this.y=this.e.y+this.e.h;
-          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${0+Math.random()*50}, ${100+Math.random()*255}, ${0+Math.random()*50}, ${this.a})`)}
+          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${0+M.random()*50}, ${100+M.random()*255}, ${0+M.random()*50}, ${this.a})`)}
         break;
       } 
       // SCL(this,0.5)
       // ctx.fillStyle = "rgba("+(260-(this.life*2))+","+((this.life*2)+50)+","+(this.life*2)+","+(((this.max-this.life)/this.max)*0.4)+")";
       //blue
-      //bal(this.x,this.y,this.r,`rgba(${10}, ${50+Math.random()*100}, ${200+Math.random()*30}, ${this.a})`)
+      //bal(this.x,this.y,this.r,`rgba(${10}, ${50+M.random()*100}, ${200+M.random()*30}, ${this.a})`)
       //red
       //bal(this.x,this.y,this.r,`rgba(${200+rng()*30}, ${50+rng()*100}, ${10}, ${this.a})`)
       //green

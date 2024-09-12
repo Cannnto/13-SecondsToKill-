@@ -603,7 +603,7 @@ class Dre extends Ene
         let t = this;
         t.tpt = [];
         sgr("flr", lvls[clv].map.arr, t.tpt);
-        var chs = t.tpt[pI(M.random()*(t.tpt.length))];
+        var chs = t.tpt[pI(rng()*(t.tpt.length))];
         t.x = chs.x-t.w/2;
         t.y = chs.y-t.h/2;
         let dp = sqr(((t.x+t.w/2) - (pla.x+pla.w/2))**2 + ((t.y+t.h/2) - (pla.y+pla.h/2))**2);
@@ -611,7 +611,7 @@ class Dre extends Ene
     }
     raG() {
         let t = this;
-        let slA = M.floor(M.random()*(t.ats.length));
+        let slA = M.floor(rng()*(t.ats.length));
         switch (t.ats[slA].nam) {
             case "Frb":
                 t.ats[0].act = 1;
@@ -653,7 +653,7 @@ class Dre extends Ene
         let t = this;
         t.ats[2].tmr.c--;
         t.ats[2].atm.c--;
-        var chs = t.mtT[pI(M.random()*(t.mtT.length))];
+        var chs = t.mtT[pI(rng()*(t.mtT.length))];
         !t.ats[2].atm.c && (t.mtr.push(new Met(chs.x, chs.y, 40, 40, 135*M.PI/180)), t.ats[2].atm.c = t.ats[2].atm.m);
         !t.ats[2].tmr.c && (t.ats[2].act = 0, t.mtT = []);
     }

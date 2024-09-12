@@ -319,7 +319,7 @@ class Mth extends Tle{
         t.val = 0;
         switch (t.typ)
         {   case "Dgt":
-                !t.fix ? t.val = M.floor(M.random()*21) : t.val = num%21;
+                !t.fix ? t.val = M.floor(rng()*21) : t.val = num%21;
                 t.dgt = t.val;
             break;
             case "Add":t.dgt = "+";break;

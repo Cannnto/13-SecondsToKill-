@@ -66,16 +66,16 @@ class Par
           this.drw = function(){bal(this.x, this.y, this.r, `rgba(${rng()*10}, ${rng()*10}, ${rng()*10}, ${this.a})`)}
         break;
         case 'blu': this.y=this.e.y+this.e.h;
-          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${10}, ${50+M.random()*100}, ${200+M.random()*30}, ${this.a})`)}
+          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${10}, ${50+rng()*100}, ${200+rng()*30}, ${this.a})`)}
         break;
         case 'gre': this.y=this.e.y+this.e.h;
-          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${0+M.random()*50}, ${100+M.random()*255}, ${0+M.random()*50}, ${this.a})`)}
+          this.drw = function(){bal(this.x, this.y, this.r, `rgba(${0+rng()*50}, ${100+rng()*255}, ${0+rng()*50}, ${this.a})`)}
         break;
       } 
       // SCL(this,0.5)
       // ctx.fillStyle = "rgba("+(260-(this.life*2))+","+((this.life*2)+50)+","+(this.life*2)+","+(((this.max-this.life)/this.max)*0.4)+")";
       //blue
-      //bal(this.x,this.y,this.r,`rgba(${10}, ${50+M.random()*100}, ${200+M.random()*30}, ${this.a})`)
+      //bal(this.x,this.y,this.r,`rgba(${10}, ${50+rng()*100}, ${200+rng()*30}, ${this.a})`)
       //red
       //bal(this.x,this.y,this.r,`rgba(${200+rng()*30}, ${50+rng()*100}, ${10}, ${this.a})`)
       //green

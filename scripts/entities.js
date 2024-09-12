@@ -26,45 +26,49 @@ class Vec
 }
 class Ent
 {   constructor(x, y, w, h)
-    {   this.x = x; 
-        this.y = y; 
-        this.w = w/2;
-        this.h = h/2;
+    {   let t = this;
+        t.x = x; 
+        t.y = y; 
+        t.w = w/2;
+        t.h = h/2;
 
-        this.d = new Vec(0,0);
-        this.spd = new Vec(0,0);
-        this.c = 0;
-        this.cnt = 1;
-        this.rot = 0;
-        this.par = [];
-        this.fri = 0;
-        this.acel = 0;
+        t.d = new Vec(0,0);
+        t.spd = new Vec(0,0);
+        t.c = 0;
+        t.cn = 1;
+        t.rot = 0;
+        t.par = [];
+        t.fri = 0;
+        t.acel = 0;
     }
 
     drw()
-    {   if(this.d.x){   this.a = this.sid, this.c = 0; if(this.d.x<0) this.c = 1;}
-        if(this.d.y>0 && abs(this.d.y)>abs(this.d.x))  this.a = this.fro, this.c=0;
-        if(this.d.y<0 && abs(this.d.y)>abs(this.d.x))  this.a = this.bac, this.c=0;
+    {   let t = this;
 
-        if(this.spd.x || this.spd.y)
-        {   this.cnt++;
-            if(this.rot)    this.cnt-=2;
+        if(t.d.x){   t.a = t.sid, t.c = 0; if(t.d.x<0) t.c = 1;}
+        if(t.d.y>0 && abs(t.d.y)>abs(t.d.x))  t.a = t.fro, t.c=0;
+        if(t.d.y<0 && abs(t.d.y)>abs(t.d.x))  t.a = t.bac, t.c=0;
 
-            if(this.cnt>=3 || this.cnt<=-3)this.rot = !this.rot;
+        if(t.spd.x || t.spd.y)
+        {   t.cn++;
+            if(t.rot)    t.cn-=2;
+
+            if(t.cn>=3 || t.cn<=-3)t.rot = !t.rot;
         }
-        else    this.cnt>0 ? this.cnt-=0.25 : (this.cnt<0 ? this.cnt+=0.25 : null);
-        this.a();
-        this.lfB();
+        else    t.cn>0 ? t.cn-=0.25 : (t.cn<0 ? t.cn+=0.25 : null);
+        t.a();
+        t.lfB();
     }
     lfB(){}
     a(){this.fro()};
 
     cld(oth)
-    {   for(let i=0;i<oth.length;i++)
-        {   if (this.x + this.w >= oth[i].x &&     
-            this.x <= oth[i].x + oth[i].w &&       
-            this.y + this.h >= oth[i].y &&       
-            this.y <= oth[i].y + oth[i].h)    return true;
+    {   let t = this;
+        for(let i=0;i<oth.length;i++)
+        {   if (t.x + t.w >= oth[i].x &&     
+            t.x <= oth[i].x + oth[i].w &&       
+            t.y + t.h >= oth[i].y &&       
+            t.y <= oth[i].y + oth[i].h)    return true;
         }
     }
     
@@ -72,71 +76,77 @@ class Ent
     {   return (lvls[clv].map.arr[o.l][o.c].col || lvls[clv].map.arr[o.l][o.c].constructor.name == "dor");}
     
     CWL()
-    {   this.mp1 = {c:parseInt((this.x)/32), l:parseInt((this.y)/32)};
-        this.mp2 = {c:parseInt((this.x+this.w)/32), l:parseInt((this.y)/32)};
-        this.mp3 = {c:parseInt((this.x+this.w)/32), l:parseInt((this.y+this.h)/32)};
-        this.mp4 = {c:parseInt((this.x)/32), l:parseInt((this.y+this.h)/32)};
-        return (this.u(this.mp1) || this.u(this.mp2) ||this.u(this.mp3) ||this.u(this.mp4));
+    {   let t = this;
+        t.mp1 = {c:parseInt((t.x)/32), l:parseInt((t.y)/32)};
+        t.mp2 = {c:parseInt((t.x+t.w)/32), l:parseInt((t.y)/32)};
+        t.mp3 = {c:parseInt((t.x+t.w)/32), l:parseInt((t.y+t.h)/32)};
+        t.mp4 = {c:parseInt((t.x)/32), l:parseInt((t.y+t.h)/32)};
+        return (t.u(t.mp1) || t.u(t.mp2) ||t.u(t.mp3) ||t.u(t.mp4));
     }
 }
 class Pla extends Ent
 {   constructor(x,y,w,h)
     {   super(x,y,w,h)
-        this.atC = 0;
-        this.fAC = 0;
-        this.fsw = 0;
+        let t = this;
+        t.atC = 0;
+        t.fAC = 0;
+        t.fsw = 0;
 
-        this.bal = [];
-        this.msp = 5;
-        this.int = 0;
-        this.ice = 0;
-        this.tim = {c:390, m:390};
-        this.amo = {c:0, m:60};
-        this.dea = 0;
-        this.deC = 0;
+        t.bal = [];
+        t.msp = 5;
+        t.int = 0;
+        t.ice = 0;
+        t.tim = {c:1/0, m:1/0};
+        t.amo = {c:0, m:60};
+        t.dea = 0;
+        t.deC = 0;
     }
     sid()
-    {   cha(this);
-            //gaS(this,this.cnt);
-            hs1(this, this.cnt,wh);
-            le1(this, this.cnt,wh);
-            mov(this);
-                heS(this);
-                bdS(this, '#6F6F6F','#424242',0);
+    {   let t = this;
+        cha(t);
+            //gaS(t,t.cn);
+            hs1(t, t.cn,wh);
+            le1(t, t.cn,wh);
+            mov(t);
+                heS(t);
+                bdS(t, '#6F6F6F','#424242',0);
             res();
-            swo(this, this.x+this.w*2/4, this.cnt, this.atC,'red', this.fsw);
-            hs2(this, this.cnt,wh, this.atC,0);
-            le2(this, this.cnt,wh,0);
+            swo(t, t.x+t.w*2/4, t.cn, t.atC,'red', t.fsw);
+            hs2(t, t.cn,wh, t.atC,0);
+            le2(t, t.cn,wh,0);
         res();
     }
     bac()
-    {   swo(this, this.x, -this.cnt, this.atC,'red', this.fsw);
+    {   let t = this;
+        swo(t, t.x, -t.cn, t.atC,'red', t.fsw);
         
-        han(this, -this.cnt, 0, this.atC, wh,0);
-        han(this, this.cnt, this.w*3/4, 0, wh,0);
-        //gau(this, -this.cnt, this.w*3/4)
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), wh,wh,0);
+        han(t, -t.cn, 0, t.atC, wh,0);
+        han(t, t.cn, t.w*3/4, 0, wh,0);
+        //gau(t, -t.cn, t.w*3/4)
+        leg(t, (t.cn<0 ? 0.8 : (!t.cn ? 1 : 1.2)), (t.cn>0 ? 0.8 : (!t.cn ? 1 : 1.2)), wh,wh,0);
         
-        mov(this);
-            heB(this,'#424242');
-            bdB(this,'#6F6F6F','#424242', 1);
+        mov(t);
+            heB(t,'#424242');
+            bdB(t,'#6F6F6F','#424242', 1);
         res();
     }
     fro()
-    {   mov(this);
-            heF(this);
-            bdF(this);
+    {   let t = this;
+        mov(t);
+            heF(t);
+            bdF(t);
         res();
-        han(this, this.cnt, this.w*3/4, this.atC, wh,0);
-        han(this, -this.cnt, this.w*0/4, 0, wh,0);
-        // HAN(this, this.cnt, wh, 0);
-        swo(this, this.x+this.w*3/4, this.cnt, this.atC,'red', this.fsw);
-        //gau(this, this.cnt, 0);
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), wh,wh,0);
+        han(t, t.cn, t.w*3/4, t.atC, wh,0);
+        han(t, -t.cn, t.w*0/4, 0, wh,0);
+        // HAN(t, t.cn, wh, 0);
+        swo(t, t.x+t.w*3/4, t.cn, t.atC,'red', t.fsw);
+        //gau(t, t.cn, 0);
+        leg(t, (t.cn<0 ? 0.8 : (!t.cn ? 1 : 1.2)), (t.cn>0 ? 0.8 : (!t.cn ? 1 : 1.2)), wh,wh,0);
     }
     ATK()
-    {   var hit = {x:this.x + 40*this.d.x, y:this.y + 60*this.d.y-this.h/2, w:this.h, h:this.w*1.5};
-        //r(this.x + 40*this.d.x, this.y + 60*this.d.y-this.h/2, this.h, this.w*1.5,"red");
+    {   let t = this;
+        var hit = {x:t.x + 40*t.d.x, y:t.y + 60*t.d.y-t.h/2, w:t.h, h:t.w*1.5};
+        //r(t.x + 40*t.d.x, t.y + 60*t.d.y-t.h/2, t.h, t.w*1.5,"red");
         sla(hit);
         zzfxP(hitS);
 
@@ -148,70 +158,72 @@ class Pla extends Ent
         }
     }
     fir()
-    {   this.bal.push(new Ball(this.x+this.w/2, this.y, 16, 16, ang)),this.amo.c++;
+    {   let t = this;
+        zzfxP(firS)
+        t.bal.push(new Ball(t.x+t.w/2, t.y, 16, 16, ang)),t.amo.c++;
     }
 
     move(o) 
-    {   this.x += this.spd.x*abs(this.spd.x/this.len)*o, this.y += this.spd.y*abs(this.spd.y/this.len)*o;}
+    {   let t = this;
+        t.x += t.spd.x*abs(t.spd.x/t.len)*o, t.y += t.spd.y*abs(t.spd.y/t.len)*o;}
 
     upd()
-    {   this.amo.c && this.amo.c++;
-        if(this.amo.c == this.amo.m) this.amo.c = 0;
+    {   let t = this;
+        t.amo.c && t.amo.c++;
+        if(t.amo.c == t.amo.m) t.amo.c = 0;
         //atack animation functions
-        if(this.atA)
-        {   this.atC+=20;
-            this.atk = 0;
-            !this.atC && (this.ATK(), this.atA = 0);
+        if(t.atA)
+        {   t.atC+=20;
+            t.atk = 0;
+            t.atC>0 && (t.atC=0, t.ATK(), t.atA = 0);
         }        
-        if(this.atk)
-        {   this.atC-=10;
-            if(this.atC<-90) this.atA = 1;
+        if(t.atk)
+        {   t.atC-=15;
+            if(t.atC<-90) t.atA = 1;
         }
-        if(this.fAk && !this.amo.c)
-        {   this.fAC++;
-            this.fsw = 1;
-            if(this.fAC > 30) this.fsw = 0, this.fAC = 0,this.fAk = 0, this.fir();
+        if(t.fAk && !t.amo.c)
+        {   t.fAC++;
+            t.fsw = 1;
+            if(t.fAC > 30) t.fsw = 0, t.fAC = 0,t.fAk = 0, t.fir();
         }
         //dead checker, ta comentado rogerão mete bala meu velho!
         //se quiser tirar as particulas pra teste ou whatever ta la no functionDrwa swo, 
-         if(this.dea) 
+         if(t.dea) 
          {  key = [];
-            this.spd.mtp(0);
+            t.spd.mtp(0);
             ang = pi()/2;
-            this.deC++;
-             if(this.deC > 120) {
+            t.deC++;
+             if(t.deC > 120) {
                 clearInterval(tim);
                 tim = setInterval(dead,1000/30);
              }
         }
 
-        this.int && int(this);
-        this.int = 0; 
+        t.int && int(t);
+        t.int = 0; 
         
-        this.len = this.spd.x||this.spd.y ? sqr(this.spd.x**2+this.spd.y**2) : 1;
-        this.move(1);
-        this.CWL() && (this.move(-1), this.spd.mtp(0));
+        t.len = t.spd.x||t.spd.y ? sqr(t.spd.x**2+t.spd.y**2) : 1;
+        t.move(1);
+        t.CWL() && (t.move(-1), t.spd.mtp(0));
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            this.cld([lvls[clv].boxes[i].box]) && (lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.move(-1));
+            t.cld([lvls[clv].boxes[i].box]) && (lvls[clv].boxes[i].box.psh(t, t.d.x, t.d.y), t.move(-1));
         
-        this.spd.x *= this.fri;
-        this.spd.y *= this.fri;
-        if(abs(this.spd.x)<0.05) this.spd.x = 0;
-        if(abs(this.spd.y)<0.05) this.spd.y = 0;
+        t.spd.x *= t.fri;
+        t.spd.y *= t.fri;
+        if(abs(t.spd.x)<0.05) t.spd.x = 0;
+        if(abs(t.spd.y)<0.05) t.spd.y = 0;
 
+        // t.cn==3 && zzfx(...[2,.2,70,.05,.1,.15,4,.8,,.1,,,,.1,.5,0,.3,.5]);
         
-        let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
-        this.ice && setFro(mp, new Ice());
-        
-        //temporário
-        if(key[84])
-        {   this.ice = !this.ice;
-            key[84] = !key[84];
-        }
-
-        this.tim.c <= 0 && (this.dea=1); 
-        this.tim.c > this.tim.m && (this.tim.c = this.tim.m);
-        this.tim.c > 0 && this.tim.c--;
+        let mp = {c:parseInt((t.x+t.w/2)/32), l:parseInt((t.y+t.h/2)/32)}
+        if(t.ice)
+            for(let l=-1;l<2;l++)
+                for(let c=-1;c<2;c++)
+                    change({l:l+mp.l,c:c+mp.c}, new Ice((c+mp.c)*32,(l+mp.l)*32),300);
+                
+        t.tim.c <= 0 && (t.dea=1); 
+        t.tim.c > t.tim.m && (t.tim.c = t.tim.m);
+        t.tim.c > 0 && t.tim.c--;
     }
 }
 class Ball extends Ent
@@ -220,28 +232,29 @@ class Ball extends Ent
         this.a = a;
     }
     drw()
-    {   r(this.x,this.y,this.w,this.h,'red');
-        for (let i = 0; i < 5; i++) par.push(new Par(this, 'ora'));
+    {   let t = this;
+        r(t.x,t.y,t.w,t.h,'red');
+        for (let i = 0; i < 5; i++) par.push(new Par(t, 'ora'));
     }
     die()
-    {   if(this.CWL())  return 1;
+    {   let t = this;
+        if(t.CWL())  return 1;
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            if(this.cld([lvls[clv].boxes[i].box])) return 1;
+            if(t.cld([lvls[clv].boxes[i].box])) return 1;
 
         for(var i = 0; i<ENE.length; i++)
-            if(ENE[i].cld([this]))
+            if(ENE[i].cld([t]))
             {   ENE[i].lif.c-=100;
                 return 1;
             }
     }
     upd()
-    {   this.x += cos(this.a)*10;
-        this.y += sin(this.a)*10;
+    {   let t = this;
+        t.x += cos(t.a)*10;
+        t.y += sin(t.a)*10;
 
-        let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
-        // console.log(lvls[clv].map.arr[mp.l][mp.c].fre)
-        lvls[clv].map.arr[mp.l][mp.c].fre && setFro(mp, new flr());
-
+        let mp = {c:parseInt((t.x+t.w/2)/32), l:parseInt((t.y+t.h/2)/32)}
+        lvls[clv].map.arr[mp.l][mp.c].constructor.name == "Ice" && change(mp, new flr(mp.c*32,mp.l*32),30);
     }
 }
 class DBal extends Ball 
@@ -250,39 +263,43 @@ class DBal extends Ball
         this.x += this.w/2;
     }
     die()
-    {   if(this.CWL())      return 1;
+    {   let t = this;
+        if(t.CWL())      return 1;
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            if(this.cld([lvls[clv].boxes[i].box])) return 1;
+            if(t.cld([lvls[clv].boxes[i].box])) return 1;
 
-        if (pla.cld([this])) {
+        if (pla.cld([t])) {
             pla.tim.c -= 30;
             return 1
         }    
     }
     upd()
-    {   super.drw();
-        this.x += cos(this.a)*15;
-        this.y += sin(this.a)*15;
-        let mp = {c:parseInt((this.x+this.w/2)/32), l:parseInt((this.y+this.h/2)/32)}
+    {   let t = this;
+        super.drw();
+        t.x += cos(t.a)*15;
+        t.y += sin(t.a)*15;
+        let mp = {c:parseInt((t.x+t.w/2)/32), l:parseInt((t.y+t.h/2)/32)}
         !lvls[clv].map.arr[mp.l][mp.c].uFr && (lvls[clv].map.arr[mp.l][mp.c].uFr = 1);
     }
 }
 class Met{
     constructor(dtx,dty,w,h,a) {
-        this.dtx = dtx;
-        this.dty = dty;
-        this.w = w;
-        this.h = h;
-        this.a = a;
-        this.x = cos(a)*(-400)+dtx;
-        this.y = sin(a)*(-400)+dty-h;
+        let t = this;
+        t.dtx = dtx;
+        t.dty = dty;
+        t.w = w;
+        t.h = h;
+        t.a = a;
+        t.x = cos(a)*(-400)+dtx;
+        t.y = sin(a)*(-400)+dty-h;
     }
     upd()
-    {   r(this.x,this.y,this.w,this.h,"rgb(161, 81, 35)");
-        for (let i = 0; i < 5; i++) par.push(new Par(this, 'ora'));
-        this.x += cos(this.a)*10;
-        this.y += sin(this.a)*10;
-        bal(this.dtx, this.dty, 50, "rgba(255,0,0,"+(((100*this.y)/this.dty)/5)/100+")");
+    {   let t = this;
+        r(t.x,t.y,t.w,t.h,"rgb(161, 81, 35)");
+        for (let i = 0; i < 5; i++) par.push(new Par(t, 'ora'));
+        t.x += cos(t.a)*10;
+        t.y += sin(t.a)*10;
+        bal(t.dtx, t.dty, 50, "rgba(255,0,0,"+(((100*t.y)/t.dty)/5)/100+")");
     }
 }
 
@@ -293,7 +310,8 @@ class Box extends Ent
         this.spY = y;
     }
     psh(obj)
-    {   this.spd.x = obj.spd.x, this.spd.y = obj.spd.y;
+    {   let t = this;
+        t.spd.x = obj.spd.x, t.spd.y = obj.spd.y;
     }
 
     drw()
@@ -301,38 +319,40 @@ class Box extends Ent
     }
 
     upd()
-    {   this.x += this.spd.x
-        this.y += this.spd.y
+    {   let t = this;
+        t.x += t.spd.x
+        t.y += t.spd.y
 
-        this.CWL() && (this.x -= this.spd.x,this.y -= this.spd.y,this.spd.x = 0,this.spd.y = 0);
+        t.CWL() && (t.x -= t.spd.x,t.y -= t.spd.y,t.spd.x = 0,t.spd.y = 0);
         
-        this.spd.x *= this.fri;
-        this.spd.y *= this.fri;
-        abs(this.spd.x)<0.05 && (this.spd.x = 0);
-        abs(this.spd.y)<0.05 && (this.spd.y = 0);
+        t.spd.x *= t.fri;
+        t.spd.y *= t.fri;
+        abs(t.spd.x)<0.05 && (t.spd.x = 0);
+        abs(t.spd.y)<0.05 && (t.spd.y = 0);
     }
 
 }
 class Ene extends Ent
 {   constructor(x,y,w,h)
     {   super(x,y,w,h);
-        this.anC = 0;
-        this.gra = 0;
+        let t = this;
+        t.anC = 0;
+        t.gra = 0;
 
-        this.spe = 1;
-        this.spV = new Vec(0,0);
-        this.acV = new Vec(0,0);
-        this.sVM = 2;
-        this.tVM = 1.25;
-        this.r = 50;
+        t.spe = 1;
+        t.spV = new Vec(0,0);
+        t.acV = new Vec(0,0);
+        t.sVM = 2;
+        t.tVM = 1.25;
+        t.r = 50;
         //enemy radius
-        this.raE = 50;
+        t.raE = 50;
         //player radius
-        this.raP = 400;
+        t.raP = 400;
         //player max radius
-        this.rPM = 600;
-        this.wH = 1;
-        this.wHa = 1;
+        t.rPM = 600;
+        t.wH = 1;
+        t.wHa = 1;
     }
     die()
     {  return this.dea;
@@ -342,113 +362,122 @@ class Ene extends Ent
         this.y += y;
     }
     upd()
-    {   //animate functions
+    {   let t = this;
+        //animate functions
         //vetor da soma entre todos os inimigos
         let sV = new Vec(0,0);
         //vetor entre o inimigo e o player
         let tV = new Vec(0,0);
-        //cnt inimigos
-        let cnt = 0;
+        //cn inimigos
+        let cn = 0;
 
         for (let oth of ENE) 
         {   //distancia entre os inimigos
-            let d = sqr(((this.x+this.w/2) - (oth.x+oth.w/2))**2 + ((this.y+this.h/2) - (oth.y+oth.h/2))**2);
+            let d = sqr(((t.x+t.w/2) - (oth.x+oth.w/2))**2 + ((t.y+t.h/2) - (oth.y+oth.h/2))**2);
             //distancia entre o inimigo e o player
-            let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2);
-            
+            let dp = sqr(((t.x+t.w/2) - (pla.x+pla.w/2))**2 + ((t.y+t.h/2) - (pla.y+pla.h/2))**2);
             //persegue o player caso o player esteja dentro do seu raio de detecção
-            if (dp <= this.raP) {
-                tV = new Vec((pla.x+pla.w/2) - (this.x+this.w/2), (pla.y+pla.h/2) - (this.y+this.h/2));
-                this.raP = this.rPM;
+            if (dp <= t.raP) {
+                tV = new Vec((pla.x+pla.w/2) - (t.x+t.w/2), (pla.y+pla.h/2) - (t.y+t.h/2));
+                t.raP = t.rPM;
             } else {
                 //diminui o raio de detecção após o player sair
-                if (this.raP > 150) this.raP -= 0.2;
+                if (t.raP > 150) t.raP -= 0.2;
             }
 
-            if (this != oth && d <= this.raP && (oth.raP > this.raP || this.raP > oth.raP)) oth.raP = this.raP;
+            if (t != oth && d <= t.raP && (oth.raP > t.raP || t.raP > oth.raP)) oth.raP = t.raP;
             
 
-            if (this != oth && d <= this.raE) 
-            {   let v = new Vec((this.x+this.w/2) - (oth.x+oth.w/2), (this.y+this.h/2) - (oth.y+this.h/2));
-                cnt++;
+            if (t != oth && d <= t.raE) 
+            {   let v = new Vec((t.x+t.w/2) - (oth.x+oth.w/2), (t.y+t.h/2) - (oth.y+t.h/2));
+                cn++;
                 sV.sum(v);
             }
             
-            cnt && sV.div(cnt);
+            cn && sV.div(cn);
             let s1 = sqr((sV.x)**2 + (sV.y)**2);
             s1 && sV.div(s1);
-            sV.mtp(this.spe*this.sVM);
+            sV.mtp(t.spe*t.sVM);
             
             let s2 = sqr((tV.x)**2 + (tV.y)**2);
             s2 && tV.div(s2);
             
-            tV.mtp(this.spe*this.tVM);
-            this.acV.sum(sV);
-            this.acV.sum(tV);
-            this.spV.sum(this.acV);
-            this.spV.lim(this.spe);
+            tV.mtp(t.spe*t.tVM);
+            t.acV.sum(sV);
+            t.acV.sum(tV);
+            t.spV.sum(t.acV);
+            t.spV.lim(t.spe);
+            
+            dp<28 && (pla.tim.c-=t.dmg, (t.wlk(-t.spV.x, -t.spV.y)));
 
-            this.anC && (this.spV.mtp(0), tV.mtp(0));
-            this.d = tV;
-            this.spd = tV;
+            t.anC && (t.spV.mtp(0), tV.mtp(0));
+            t.d = tV;
+            t.spd = tV;
         }
 
-        this.wlk(this.spV.x,this.spV.y);
-        this.CWL() && (this.wlk(-this.spV.x, -this.spV.y));   
+        t.wlk(t.spV.x,t.spV.y);
+        t.CWL() && (t.wlk(-t.spV.x, -t.spV.y));   
         for(var i=0; i<lvls[clv].boxes.length; i++)
-            this.cld([lvls[clv].boxes[i].box]) && (lvls[clv].boxes[i].box.psh(this, this.d.x, this.d.y), this.wlk(-this.spV.x, -this.spV.y));
-        this.acV.mtp(0);
+            t.cld([lvls[clv].boxes[i].box]) && (lvls[clv].boxes[i].box.psh(t, t.d.x, t.d.y), t.wlk(-t.spV.x, -t.spV.y));
+        t.acV.mtp(0);
 
-        this.spV.x *= this.fri;
-        this.spV.y *= this.fri;
-        this.spV.x<0.1 && (this.spV.x = 0);
-        this.spV.y<0.1 && (this.spV.y = 0);
+        
+        t.spV.x *= t.fri;
+        t.spV.y *= t.fri;
+        t.spV.x<0.1 && (t.spV.x = 0);
+        t.spV.y<0.1 && (t.spV.y = 0);
     }
 }
 class Min extends Ene
 {   constructor(x,y,w,h)
     {   super(x,y,w,h);
-        this.lif = {m:100,c:100};
-        this.rec = 60;
+        let t = this;
+        t.lif = {m:100,c:100};
+        t.rec = 60;
+        t.dmg = .5;
     }
     sid()
-    {   cha(this);
-            le1(this, this.cnt, zC);
-            mov(this);
-                bdS(this, '#5C0C0C', '#5C0C0C',1, this.anC);
+    {   let t = this;
+        cha(t);
+            le1(t, t.cn, zC);
+            mov(t);
+                bdS(t, '#5C0C0C', '#5C0C0C',1, t.anC);
             res();
-            hs2(this, this.cnt, zC, 0,0);
-            le2(this, this.cnt, zC,0);
+            hs2(t, t.cn, zC, 0,0);
+            le2(t, t.cn, zC,0);
         res();
     }
     bac()
-    {   HAN(this, this.cnt, zC,0);
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), zC,zC,0);
+    {   let t = this;
+        HAN(t, t.cn, zC,0);
+        leg(t, (t.cn<0 ? 0.8 : (!t.cn ? 1 : 1.2)), (t.cn>0 ? 0.8 : (!t.cn ? 1 : 1.2)), zC,zC,0);
         
         mov(this);
             bdB(this, '#5C0C0C', '#5C0C0C',1);
         res();
     }
     fro()
-    {   mov(this);
-            bdB(this, '#5C0C0C', '#5C0C0C',1);
-            ZhF(this, this.anC);
+    {   let t = this;
+        mov(t);
+            bdB(t, '#5C0C0C', '#5C0C0C',1);
+            ZhF(t, t.anC);
         res();
-        HAN(this, this.cnt, zC,0);
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), zC,zC,0);
+        HAN(t, t.cn, zC,0);
+        leg(t, (t.cn<0 ? 0.8 : (!t.cn ? 1 : 1.2)), (t.cn>0 ? 0.8 : (!t.cn ? 1 : 1.2)), zC,zC,0);
     }
     lfB()
-    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1, pla.tim.c+=this.rec, enC++;
-        if(this.lif.c<=0)
-        {   this.gra += 0.25;
-            this.anC += this.gra;
-            for (let i = 0; i < 5; i++) par.push(new Par(this, 'red'));
-            blo.push(new Blo(this));
-            zzfx(...[,,31,.04,.1,.71,4,.1,5,6,,,,1.1,,1,,.35,.25,.19])
+    {   let t = this;
+        if(t.y-0.5+t.h/2+1+t.anC > t.y+t.h) t.dea = 1, pla.tim.c+=t.rec, enC++;
+        if(t.lif.c<=0)
+        {   t.gra += 0.25;
+            t.anC += t.gra;
+            for (let i = 0; i < 5; i++) par.push(new Par(t, 'red'));
+            blo.push(new Blo(t));
+            zzfx(...[,,31,.04,.1,.71,4,.1,5,6,,,,1.1,,1,,.35,.25,.19]);
         }
         else
-        {   lB(this, wh,this.h/4,3,3,0);
-            lB(this, 'red',this.h/4,3,3,1);
+        {   lB(t, wh,t.h/4,3,3,0);
+            lB(t, 'red',t.h/4,3,3,1);
         } 
     }
 }
@@ -456,222 +485,216 @@ class Min extends Ene
 class Cur extends Ene
 {   constructor(x,y,w,h)
     {   super(x,y,w,h);
-        this.lif = {m:200,c:200};
-        this.spd.x = 0;
-        this.rec = 90;
+        let t = this;
+        t.lif = {m:200,c:200};
+        t.spd.x = 0;
+        t.rec = pla.tim.m;
+        t.dmg = 1;
     }
     sid()
-    {   cha(this);
-            le1(this, this.cnt, zC);
-            hs1(this, this.cnt, zC);
-            mov(this);
-                heS(this,1);
-                bdS(this, '#5C0C0C', '#B40F0F',0, this.anC);
+    {   let t = this;
+        cha(t);
+            le1(t, t.cn, zC);
+            hs1(t, t.cn, zC);
+            mov(t);
+                heS(t,1);
+                bdS(t, '#5C0C0C', '#B40F0F',0, t.anC);
             res();
-            //swo(this, this.x+this.w*2/4, this.cnt, 0,'#4E4E50');
-            hs2(this, this.cnt, wh, 0,1);
-            le2(this, this.cnt, wh,1);
+            //swo(t, t.x+t.w*2/4, t.cn, 0,'#4E4E50');
+            hs2(t, t.cn, wh, 0,1);
+            le2(t, t.cn, wh,1);
         res();
     }
     bac()
-    {   //swo(this, this.x, -this.cnt, 0,'#4E4E50');
-        han(this, this.cnt, this.w*3/4,0,zC,0);
-        han(this,-this.cnt, 0,0,wh,1);
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), wh,zC,0);
+    {   let t = this;
+        //swo(t, t.x, -t.cn, 0,'#4E4E50');
+        han(t, t.cn, t.w*3/4,0,zC,0);
+        han(t,-t.cn, 0,0,wh,1);
+        leg(t, (t.cn<0 ? 0.8 : (!t.cn ? 1 : 1.2)), (t.cn>0 ? 0.8 : (!t.cn ? 1 : 1.2)), wh,zC,0);
 
-        mov(this);
-            heB(this,1);
-            bdB(this, '#5C0C0C', '#B40F0F',0);
+        mov(t);
+            heB(t,1);
+            bdB(t, '#5C0C0C', '#B40F0F',0);
         res();
     }
     fro()
-    {   mov(this);
-            bdB(this, '#5C0C0C', '#5C0C0C',1);
-            heF(this, this.anC);
-            cHe(this, this.anC);
-            siJ(this, '#B40F0F')
+    {   let t = this;
+        mov(t);
+            bdB(t, '#5C0C0C', '#5C0C0C',1);
+            heF(t, t.anC);
+            cHe(t, t.anC);
+            siJ(t, '#B40F0F')
         res();
-        // HAN(this, this.cnt, zC);
-        han(this, this.cnt, this.w*3/4,0,wh,1);
-        han(this,-this.cnt, 0,0,zC,0);
-        //swo(this, this.x+this.w*3/4, this.cnt, 0, '#4E4E50');    
-        leg(this, (this.cnt<0 ? 0.8 : (!this.cnt ? 1 : 1.2)), (this.cnt>0 ? 0.8 : (!this.cnt ? 1 : 1.2)), zC,wh,1);
+        // HAN(this, this.cn, zC);
+        han(t, t.cn, t.w*3/4,0,wh,1);
+        han(t,-t.cn, 0,0,zC,0);
+        //swo(t, t.x+t.w*3/4, t.cn, 0, '#4E4E50');    
+        leg(t, (t.cn<0 ? 0.8 : (!t.cn ? 1 : 1.2)), (t.cn>0 ? 0.8 : (!t.cn ? 1 : 1.2)), zC,wh,1);
     }
     lfB()
-    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1, pla.tim.c+=this.rec;
-        if(this.lif.c<=0)
-        {   this.gra += 0.25;
-            this.anC += this.gra;
-            for (let i = 0; i < 5; i++) par.push(new Par(this, 'red'));
-            blo.push(new Blo(this));
+    {   let t = this;
+        if(t.y-0.5+t.h/2+1+t.anC > t.y+t.h) t.dea = 1, pla.tim.c+=t.rec;
+        if(t.lif.c<=0)
+        {   t.gra += 0.25;
+            t.anC += t.gra;
+            for (let i = 0; i < 5; i++) par.push(new Par(t, 'red'));
+            blo.push(new Blo(t));
+            zzfx(...[,,31,.04,.1,.71,4,.1,5,6,,,,1.1,,1,,.35,.25,.19]);
         }
         else
-        {   lB(this, wh,this.h/1.3,5,3,0);
-            lB(this, 'red',this.h/1.3,5,3,1);
+        {   lB(t, wh,t.h/1.3,5,3,0);
+            lB(t, 'red',t.h/1.3,5,3,1);
         } 
     }
 }
 class Dre extends Ene
 {   constructor(x,y,w,h)
     {   super(x,y,w,h);
-        this.lif = {m:5000,c:5000};
-        this.spd.x = 1;
-        //flee
-        this.fle = true;
+        let t = this;
+        t.lif = {m:5000,c:5000};
+        t.spd.x = 1;
+        t.sVM *= -1;
+        t.tVM *= -1;
         //teleport tile
-        this.tpt = []
+        t.tpt = []
         //teleport clock
-        this.tpc = {c:0, m:30*2};
-        this.tpc.c = this.tpc.m;
+        t.tpc = {c:0, m:30*5};
+        t.tpc.c = t.tpc.m;
         //attack stuff
-        this.ats = [new Atk("Frb", 2, false, 0.5),
-                    new Atk("Ice", 10, false),
+        t.ats = [new Atk("Frb", 2, false, 0.5),
+                    new Atk("Ice", 6, false),
                     new Atk("Mtr", 5, false, 0.5),
-                    new Atk("Aur", 7, false)
         ]; //Fireball, Wall, Ice, Meteor, Aura.
         //fireball array
-        this.bal = [];
-        //aura radius
-        this.auR = 100;
+        t.bal = [];
         //meteor tile
-        this.mtT = [];
+        t.mtT = [];
         //meteor array
-        this.mtr = [];
+        t.mtr = [];
 
     }
     sid()
-    {   sB(15*!this.fle,'red');
-        cha(this);
-            gaS(this,this.cnt);
-            tra(0,this.cnt/8)    
-                Dbd(this, 1);
-                spk(this,0);
-                spk(this,this.w/3);
-                spk(this,this.w/1.6);
-            tra(0,-this.cnt/8)    
-            stf(this, this.cnt/5);
-            hs2(this, this.cnt/5,blk, 0,0);
+    {   let t = this;
+        cha(t);
+            gaS(t,t.cn);
+            tra(0,t.cn/8)    
+                Dbd(t, 1);
+                spk(t,0);
+                spk(t,t.w/3);
+                spk(t,t.w/1.6);
+            tra(0,-t.cn/8)    
+            stf(t, t.cn/5);
+            hs2(t, t.cn/5,blk, 0,0);
         res();
-        sB(0);
-        for (let i = 0; i < 10; i++) par.push(new Par(this, 'bla'));
+        for (let i = 0; i < 10; i++) par.push(new Par(t, 'bla'));
     }
     fro()
-    {   sB(15*!this.fle,'red');
-        tra(0,this.cnt/8);
-            DFb(this, this.cnt);
-            DFh(this, this.cnt);
-        tra(0,-this.cnt/8);
-        HAN(this, this.cnt, blk,0);
-        stf(this, this.cnt);
-        gau(this, this.cnt, 0);
-        sB(0);
-        for (let i = 0; i < 10; i++) par.push(new Par(this, 'bla'));
+    {   let t = this;
+        tra(0,t.cn/8);
+            DFb(t, t.cn);
+            DFh(t, t.cn);
+        tra(0,-t.cn/8);
+        HAN(t, t.cn, blk,0);
+        stf(t, t.cn);
+        gau(t, t.cn, 0);
+        for (let i = 0; i < 10; i++) par.push(new Par(t, 'bla'));
     }
     bac()
-    {   sB(15*!this.fle,'red');
-        stf(this, -this.cnt,1);
-        HAN(this, this.cnt, blk,0);
-        gau(this, -this.cnt, this.w*3/4);
-        tra(0,this.cnt/8)    
-            Dbd(this, 0, 1);
-            spk(this,0);
-            spk(this,this.w/3);
-            spk(this,this.w/1.6);
-        tra(0,-this.cnt/8)   
-        sB(0); 
-        for (let i = 0; i < 10; i++) par.push(new Par(this, 'bla'));
+    {   let t = this;
+        stf(t, -t.cn,1);
+        HAN(t, t.cn, blk,0);
+        gau(t, -t.cn, t.w*3/4);
+        tra(0,t.cn/8)    
+            Dbd(t, 0, 1);
+            spk(t,0);
+            spk(t,t.w/3);
+            spk(t,t.w/1.6);
+        tra(0,-t.cn/8)   
+        for (let i = 0; i < 10; i++) par.push(new Par(t, 'bla'));
     }
     lfB()
-    {   if(this.y-0.5+this.h/2+1+this.anC > this.y+this.h) this.dea = 1;
-        if(this.lif.c<=0)
-        {   this.gra += 0.25;
-            this.anC += this.gra;
-            for (let i = 0; i < 5; i++) par.push(new Par(this, 'red'));
-            blo.push(new Blo(this));
+    {   let t = this;
+        if(t.y-0.5+t.h/2+1+t.anC > t.y+t.h) t.dea = 1;
+        if(t.lif.c<=0)
+        {   t.gra += 0.25;
+            t.anC += t.gra;
+            for (let i = 0; i < 5; i++) par.push(new Par(t, 'red'));
+            blo.push(new Blo(t));
         }
         else {
-            lB(this, wh,this.h/1.5,5,4,0);
-            lB(this, 'purple',this.h/1.5,5,4,1);
+            lB(t, wh,t.h/1.5,5,4,0);
+            lB(t, 'purple',t.h/1.5,5,4,1);
         } 
     }
     tlp() {
-        this.tpt = [];
-        sgr("flr", lvls[clv].map.arr, this.tpt);
-        var chs = this.tpt[parseInt(Math.random()*(this.tpt.length))];
-        this.x = chs.x-this.w/2;
-        this.y = chs.y-this.h/2;
-        let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2)
-        !this.ats[3].act ? ((this.CWL() || chs.x == undefined || chs.y == undefined || (dp < 250 || dp > 800)) ? this.tlp() : null) : ((this.CWL() || chs.x == undefined || chs.y == undefined || dp > 100) ? this.tlp() : null)
+        let t = this;
+        t.tpt = [];
+        sgr("flr", lvls[clv].map.arr, t.tpt);
+        var chs = t.tpt[parseInt(Math.random()*(t.tpt.length))];
+        t.x = chs.x-t.w/2;
+        t.y = chs.y-t.h/2;
+        let dp = sqr(((t.x+t.w/2) - (pla.x+pla.w/2))**2 + ((t.y+t.h/2) - (pla.y+pla.h/2))**2);
+        (t.CWL() || chs.x == undefined || chs.y == undefined || (dp < 250 || dp > 700)) && t.tlp();
     }
     raG() {
-        let slA = Math.floor(Math.random()*(this.ats.length));
-        switch (this.ats[slA].nam) {
+        let t = this;
+        let slA = Math.floor(Math.random()*(t.ats.length));
+        switch (t.ats[slA].nam) {
             case "Frb":
-                this.ats[0].act = true;
-                this.ats[0].tmr.c = this.ats[0].tmr.m;
-                this.ats[0].atm.c = this.ats[0].atm.m;
+                t.ats[0].act = true;
+                t.ats[0].tmr.c = t.ats[0].tmr.m;
+                t.ats[0].atm.c = t.ats[0].atm.m;
                 adT("Die!;", "purple", 100);
                 break;
             case "Ice":
-                this.ats[1].act = true;
-                this.ats[1].tmr.c = this.ats[1].tmr.m;
+                t.ats[1].act = true;
+                t.ats[1].tmr.c = t.ats[1].tmr.m;
                 adT("Freeze, insect!;", "purple", 100);
                 break;        
             case "Mtr":
-                this.ats[2].act = true;
-                this.ats[2].tmr.c = this.ats[2].tmr.m;
-                this.ats[2].atm.c = this.ats[2].atm.m;
-                sgr("flr", lvls[clv].map.arr, this.mtT);
+                t.ats[2].act = true;
+                t.ats[2].tmr.c = t.ats[2].tmr.m;
+                t.ats[2].atm.c = t.ats[2].atm.m;
+                sgr("flr", lvls[clv].map.arr, t.mtT);
                 adT("Behold the heaven's wrath!;", "purple", 100);
-                break;
-            case "Aur":
-                this.ats[3].act = true;
-                this.ats[3].tmr.c = this.ats[3].tmr.m;
-                adT("Burn, insect!;", "purple", 100);
-                break;    
+                break;  
         }
     }
     //set fireball
     sFb() {
-        this.ats[0].tmr.c--;
-        this.ats[0].atm.c--;
-        var ang = Math.atan2(pla.y - (this.y), pla.x - (this.x+this.w/2))
-        !this.ats[0].atm.c && (this.bal.push(new DBal(this.x, this.y, 40, 40, ang)), this.ats[0].atm.c = this.ats[0].atm.m);
-        !this.ats[0].tmr.c && (this.ats[0].act = false);
+        let t = this;
+        t.ats[0].tmr.c--;
+        t.ats[0].atm.c--;
+        var ang = Math.atan2(pla.y - (t.y), pla.x - (t.x+t.w/2))
+        !t.ats[0].atm.c && (t.bal.push(new DBal(t.x, t.y, 40, 40, ang)), t.ats[0].atm.c = t.ats[0].atm.m);
+        !t.ats[0].tmr.c && (t.ats[0].act = false);
     }
     //set ice
     sIc() {
-        this.ats[1].tmr.c--;
-        !this.ats[1].tmr.c && (this.ats[1].act = false, pla.ice = 0);
+        let t = this;
+        t.ats[1].tmr.c--;
+        !t.ats[1].tmr.c && (t.ats[1].act = false, pla.ice = 0);
     }
     //set meteor
     sMt() {
-        this.ats[2].tmr.c--;
-        this.ats[2].atm.c--;
-        var chs = this.mtT[parseInt(Math.random()*(this.mtT.length))];
-        !this.ats[2].atm.c && (this.mtr.push(new Met(chs.x, chs.y, 40, 40, 135*Math.PI/180)), this.ats[2].atm.c = this.ats[2].atm.m);
-        !this.ats[2].tmr.c && (this.ats[2].act = false, this.mtT = []);
-    }
-    //set aura
-    sAu() {
-        let dp = sqr(((this.x+this.w/2) - (pla.x+pla.w/2))**2 + ((this.y+this.h/2) - (pla.y+pla.h/2))**2);
-        dp<this.auR && pla.tim.c--;
-        this.ats[3].tmr.c--;
-        !this.ats[3].tmr.c && (this.ats[3].act = false, this.fle = true);
+        let t = this;
+        t.ats[2].tmr.c--;
+        t.ats[2].atm.c--;
+        var chs = t.mtT[parseInt(Math.random()*(t.mtT.length))];
+        !t.ats[2].atm.c && (t.mtr.push(new Met(chs.x, chs.y, 40, 40, 135*Math.PI/180)), t.ats[2].atm.c = t.ats[2].atm.m);
+        !t.ats[2].tmr.c && (t.ats[2].act = false, t.mtT = []);
     }
     upd() {
-        this.tpc.c > 0 ? this.tpc.c-- : (this.tpc.c = this.tpc.m, this.raG(), this.tlp());
-        //fleeing detector
-        this.fle ? ((this.sVM > 0 ? this.sVM *= -1 : null), (this.tVM > 0 ? this.tVM *= -1 : null)) : ((this.sVM < 0 ? this.sVM *= -1 : null), (this.tVM < 0 ? this.tVM *= -1 : null));   
+        let t = this;
+        t.tpc.c > 0 ? t.tpc.c-- : (t.tpc.c = t.tpc.m, t.raG(), t.tlp());
         super.upd();
-        this.ats[0].act && (this.sFb());
-        this.ats[1].act && (pla.ice = 1, this.sIc());
-        this.ats[2].act && (this.sMt());
-        this.ats[3].act && (this.fle = false, this.sAu());
-        for (let i = 0; i < this.mtr.length; i++) {
-            this.mtr[i].upd();
-            if (this.mtr[i].y+this.mtr[i].h/2 >= this.mtr[i].dty || this.mtr.x <= this.mtr[i].dtx) this.mtr.splice(i,1), i--;
+        t.ats[0].act && (t.sFb());
+        t.ats[1].act && (pla.ice = 1, t.sIc());
+        t.ats[2].act && (t.sMt());
+        for (let i = 0; i < t.mtr.length; i++) {
+            t.mtr[i].upd();
+            if (t.mtr[i].y+t.mtr[i].h/2 >= t.mtr[i].dty || t.mtr.x <= t.mtr[i].dtx) t.mtr.splice(i,1), i--;
         }
-        upT(this.bal)
+        upT(t.bal)
     }
 }

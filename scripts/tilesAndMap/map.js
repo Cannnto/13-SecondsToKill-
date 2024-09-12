@@ -1,6 +1,15 @@
 class lvl 
-{   constructor(map,b,r,s)
+{   constructor(map,b,r,s,ra,c)
     {   this.map = map;
+        this.c = c;
+        if(ra)
+        {    switch(parseInt(rng()*3))
+            {   case 0: b = 1;break;
+                case 1: r = 1;break;
+                case 2: this.map.arr = fill(12);break;
+            }
+            random(this.map.arr,this);
+        }
         cma(this.map.arr);
         this.boxes = [];
         this.btns=[];
@@ -28,51 +37,16 @@ class lvl
         //     for(var col = 0; col < this.map.arr[lne].length; col++)
         //         if(this.map.arr[lne][col].constructor.name == "Bxs") this.boxes.push(this.map.arr[lne][col].box);
     }
-
-    drw()
-    {   this.map.drw();
-
+    
+    upd()
+    {   
+        // console.log(this);
+        
         bli = this.b;
         rev = this.r;
-        //boxcurrentmatch sla n pensei no nome
-        //do jeito que tá, o método de passar tá hardcoded, tem que mudar isso ainda
-        var bCM = 0;
-        for(let i=0; i<this.boxT.length;i++) 
-            this.boxT[i].act && bCM++;
-    
-        if(enC>=13) cpd = 1;
-
-        // //se não tiver caixas ele não passa imediatamente        
-        // //bCM == this.boxT.length && bCM != 0?cpd = true:cpd = true;
-
-        // if (this.maAr.length)
-        // {   for (let i = 1; i < this.maAr.length; i++) 
-        //         this.maAr[i].opr(this.maAr[i-1], this.maAr[i+1]);
-            
-        //     for (let i=0; i<this.maAr.length; i++) 
-        //     {   !this.maAr[i].fix ? this.maAr[i].txC = "crimson" : this.maAr[i].txC = "black";
-        //         cpd = 0;
-        //         if (this.maAr[this.maAr.length-2].str == 13)
-        //         {   this.maAr[i].txC = "green";
-        //             cpd = 1;
-        //         };
-        //     }
-        // }
-        var tr = 0
-        //Checar os switchs para ver se pode passar de level
-        for(var i = 0; i<this.mor.length; i++)
-        {   if(this.mor[i].val[this.mor[i].i%this.mor[i].val.length] == this.txt[i])  tr++;
-            
-            if(tr == this.mor.length)
-            {   for(var j = 0; j<this.mor.length; j++)
-                    this.mor[j].clr = "green";
-                    cpd = 1;
-            }
-            else{
-                for(var j = 0; j<this.mor.length; j++)
-                    this.mor[j].clr = "red";
-            }
-        }
+        
+        this.map.upd();
+        this.c(this);
     }
 }
 class Map
@@ -80,10 +54,10 @@ class Map
     {   this.arr = arr;
     }
 
-    drw() // Draw
+    upd() // Draw
     {   for(var lne = 0;lne < this.arr.length; lne++) // Linhas
             for(var col = 0; col < this.arr[lne].length; col++)
-            {   if(this.arr[lne][col] && d(this.arr[lne][col], 32, 32)) this.arr[lne][col].drw();
+            {   (this.arr[lne][col] && d(this.arr[lne][col], 32, 32)) && this.arr[lne][col].drw();
                 
                 this.arr[lne][col] && this.arr[lne][col].upd(); // Draw each tile 
             }
@@ -166,13 +140,20 @@ class dor extends Tle
         //player checker hitbox
         if(this.collide(pbx) && cpd)
         {   clv++;
-            enC = 0;
-            pla.x = levels[clv].spwPoint.x;
-            pla.y = levels[clv].spwPoint.y;
+            pla.x = levels[clv].x;
+            pla.y = levels[clv].y;
             ENE = [];
             blo = [];
             par = [];
             pla.bal = [];
+            cpd = 0;
+            tles2 = [];
+            tles = [];
+            endTimes = [];
+            times = [];
+            mps = [];
+            enC = 0;
+            clv==12 && ENE.push(new Dre(cnv.width/2,cnv.height/2,128,128));
         }
     }
 }
@@ -187,7 +168,7 @@ class Spw extends Tle
 
     arT() 
     {   if(this.cuT == this.spT) 
-        {   ENE.push(new Min(this.x,this.y,64,64,this));
+        {   rng()<0.9?ENE.push(new Min(this.x,this.y,64,64,this)):ENE.push(new Cur(this.x,this.y,64,64,this));
             this.cuT = 0;
             this.c++;
         } 
@@ -372,7 +353,7 @@ class Mth extends Tle{
             pla.int = 1;
             if(key[69])
             {   this.val++;
-                this.val %= 20;
+                this.val %= 21;
                 this.dgt = this.val;
                 this.str = this.val;
                 key[69] = false;

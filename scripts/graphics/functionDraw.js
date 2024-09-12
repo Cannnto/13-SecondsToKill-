@@ -114,7 +114,7 @@ function heZ(e,c)
     {   i(e);
         var a ={x: x + w*0.30/4, y:y, w:w*3.4/4, h: h};
         shr(a,coS);
-        z && r(x + w*3/4-0.5, y-0.5+an, w/4+1, h/2+1, blk), r(x + w*3/4, y+an, w/4, h/2, zC), eye(e, 7/8, -1.35/8, an,'red');
+        z && (r(x + w*3/4-0.5, y-0.5+an, w/4+1, h/2+1, blk), r(x + w*3/4, y+an, w/4, h/2, zC), eye(e, 7/8, -1.35/8, an,'red'));
         !z && r(x + w*3.25/4, y- h*0.1/2, 2, h*1.2/2, '#D9D9D9');
         r(x + w*0.75/4-0.5, y- h*0.1/2-0.5, w*2.5/4+1, h*1.2/2+1, blk);
         r(x + w*0.75/4, y- h*0.1/2, w*2.5/4, h*1.2/2, coB);
@@ -247,7 +247,7 @@ function heZ(e,c)
             r(x1+w/24, y-h/2-c+s, w/6, h*9/16, cor);
 
         var a = (c*-0*pi()/180)
-        e.a==e.sid && res(), a = ((c*-10+at)*pi()/180);
+        e.a==e.sid && (res(), a = ((c*-10+at)*pi()/180));
         
         let bl1 = {x:(x1+w/24),y:(y-h/2 - c+s)+20*sin(a),w:w/6,h:h*9/16};
         let bl2 = {x:(x1+w/24)-h*5.1/8,y:(y-h/2 - c)+5*sin(a),w:bl1.h, h:bl1.w}; 

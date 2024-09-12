@@ -119,7 +119,7 @@ function stf(e,c,b)
     e.c = b;
     let x1=0;
     let a = {x:x + w*2/4, y:y + h*0.5/4-c, w:-(w/4)*2, h:-(h/4)*2};
-    e.a==e.sid && RTT(a, c*-10),x1 = 15;
+    e.a==e.sid && (RTT(a, c*-10),x1 = 15);
         cha(e);
             sB(5,'red');
             mT(x+w*3/4-x1, y+h/1.05-c, '#880D41');

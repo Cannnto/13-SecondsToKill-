@@ -9,7 +9,7 @@ var mou ={
     y:undefined
 }
 var ang = 0
-
+function T(t,a){ return t = a;}
 function mU(event)
 {   if(event.button == 0 && !pla.dea)pla.atk = 1;
     if(event.button == 2 && !pla.amo.c && !pla.dea) pla.fAk = 1;
@@ -64,7 +64,7 @@ function shf(arr)
 {   let I = arr.length;
     // While there remain elements to shuffle...
     while (I)
-    {   let rnI = Math.floor(Math.random() * I);
+    {   let rnI = Math.floor(rng() * I);
         I--;
 
         [arr[I], arr[rnI]] = [arr[rnI], arr[I]];
@@ -137,53 +137,60 @@ class Atk {
     }
 }
 
-//frzen 
-function frozen()
-{   for(let i =0; i<fr.c.length; i++)
-    {   let x = fr.c[i].x, y = fr.c[i].y, tlI = new Ice(x*32,y*32), tlF = new flr(x*32,y*32);
-        
-        let a = lvls[clv].map.arr[y][x].add;
-        if(fr.a[i].fre != lvls[clv].map.arr[y][x].fre && a) a+=1;
-        
-        fr.a[i].fre ? lvls[clv].map.arr[y][x] = tlI : lvls[clv].map.arr[y][x] = tlF, lvls[clv].map.arr[y][x].add++;
-            
-        if(a==2) {
-            r(x*32,y*32,32,32,'red')
-            fr.p[x*32+y]=undefined, fr.c.splice(i, 1), fr.a.splice(i, 1);
-            i--;
-            continue;   
-        }
-        
-        fr.c[i].cnt++;
-        if(fr.c[i].cnt>150)
-        {   !fr.a[i].fre ? lvls[clv].map.arr[y][x] = tlI : lvls[clv].map.arr[y][x] = tlF;
-            fr.p[x*32+y]=undefined, fr.c.splice(i, 1), fr.a.splice(i, 1);
-            i--;
-        };
-        // console.log(fr)
+function adran(arr,rn,tle)
+{   let d = 0;
+    while(d<rn)
+    {   let l = parseInt((rng()*20)+2);
+        let c = parseInt((rng()*28)+2);
+        if(arr[l+1][c] != 3 && arr[l-1][c] != 3 && arr[l][c+1] != 3 && arr[l][c-1] != 3)
+            {if(arr[l][c] == 1 || arr[l][c] == 12) arr[l][c] = tle, d++;}
     }
 }
-function setFro(mp,tla)
-{   for(let l=-1;l<2;l++)
-    {   for(let c=-1;c<2;c++)
-        {   //if(!lvls[clv].map.arr[mp.l+l]) break;
-            let cmp = lvls[clv].map.arr[mp.l+l][mp.c+c];
-            if(fr.p[(mp.c+c)*32+(mp.l+l)]!=tla.fre && cmp.f)
-            {   let p = porra(mp,c,l);
-                p && fr.c.splice(p,1), fr.a.splice(p,1);
 
-                fr.c.push({x:mp.c+c, y:mp.l+l, cnt:0});      
-                fr.a.push(tla);
-                fr.p[(mp.c+c)*32+(mp.l+l)]=tla.fre;
-            }
-        }
+//frzen 
+var tles = [];
+var tles2 = [];
+var mps = [];
+var times = [];
+var endTimes = [];
+function change(mp,tle2,time)
+{   var index = tles2.indexOf(lvls[clv].map.arr[mp.l][mp.c])
+    if(index == -1 && lvls[clv].map.arr[mp.l][mp.c].constructor.name!='Wal')
+    {
+        tles.push(lvls[clv].map.arr[mp.l][mp.c]);
+        lvls[clv].map.arr[mp.l][mp.c] = tle2;
+        mps.push(mp);
+        tles2.push(lvls[clv].map.arr[mp.l][mp.c]);
+        times.push(0);
+        endTimes.push(time);
+    }else if(lvls[clv].map.arr[mp.l][mp.c].constructor.name!='Wal'){
+        lvls[clv].map.arr[mp.l][mp.c] = tle2;
+        tles2[index] = lvls[clv].map.arr[mp.l][mp.c];
+        times[index] = 0;
+        endTimes[index] = time;
     }
-    // console.log(fr)
 }
-function porra(mp,c,l)
-{   for(let i=0;i<fr.c.length;i++){
-        // console.log(fr.c[i].x== mp.c+c && fr.c[i].y == mp.l+l)
-        if(fr.c[i].x == mp.c+c && fr.c[i].y == mp.l+l)
-            return i;
+
+function count()
+{   for(var i = 0; i<times.length;i++)
+    {   if(times[i] >= endTimes[i])
+        {   lvls[clv].map.arr[mps[i].l][mps[i].c] = tles[i]
+            tles2.splice(i,1);
+            tles.splice(i,1);
+            endTimes.splice(i,1);
+            times.splice(i,1);
+            mps.splice(i,1);
+            i--;
+            continue;
+        }
+        if(tles[i].constructor.name == tles2[i].constructor.name)
+        {   tles2.splice(i,1);
+            tles.splice(i,1);
+            endTimes.splice(i,1);
+            times.splice(i,1);
+            mps.splice(i,1);
+            i--;
+        }
+        times[i]++;
     }
 }

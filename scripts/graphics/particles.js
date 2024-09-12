@@ -1,7 +1,7 @@
 function upT(e)
 {   for (let i = 0; i < e.length; i++)
     {   e[i].upd();
-        if (e[i].die()) e.splice(i, 1), i++;
+        if (e[i].die()) e.splice(i, 1), i--;
     }
 }
 class Par 

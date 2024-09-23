@@ -239,5 +239,11 @@
         
         frozen();
     }
+    function vic(){
+        dbg < 100 ? dbg++ : dt1 < 100 ? dt1++ : (dt2 < 100 && (dt2+=5));
+        r(0,0,cnv.width,cnv.height,'rgba(0,0,0,'+dBg/100+')');
+        txt(cnv.width/2, cnv.height/2, 'Congratulations!', cnv.width/30, 'rgba(255,0,0,'+dt1/100+')');
+        txt(cnv.width/2, cnv.height/2+50, 'Now get out.', cnv.width/30, 'rgba(255,0,0,'+dt2/100+')');
+    }
     </script></body>
 </html>

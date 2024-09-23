@@ -610,6 +610,11 @@ class Dre extends Ene
     }
     raG() {
         let slA = Math.floor(Math.random()*(this.ats.length));
+        var slc = 0;
+        this.ats[slA].nam = "Frb" && adT("Die!;", "purple", 100);
+        this.ats[slA].nam = "Ice" && (adT("Freeze, insect!;", "purple", 100), slc=1);
+        this.ats[slA].nam = "Mtr" && (adT("Behold the heaven's wrath!;", "purple", 100), slc=2);
+
         switch (this.ats[slA].nam) {
             case "Frb":
                 this.ats[0].act = true;
@@ -635,6 +640,10 @@ class Dre extends Ene
                 adT("Burn, insect!;", "purple", 100);
                 break;    
         }
+        this.ats[slc].act = true;
+        this.ats[slc].tmr.c = this.ats[0].tmr.m;
+        (this.ats[slc].nam == ("Frb" || "Mtr")) && (this.ats[slc].atm.c=this.ats[0].atm.m);
+        
     }
     //set fireball
     sFb() {
@@ -675,7 +684,8 @@ class Dre extends Ene
         if (this.ats[3].act) (this.fle = false, this.sAu());
         for (let i = 0; i < this.mtr.length; i++) {
             this.mtr[i].upd();
-            if (this.mtr[i].y+this.mtr[i].h/2 >= this.mtr[i].dty || this.mtr.x <= this.mtr[i].dtx) this.mtr.splice(i,1), i--;
+            let dp = sqr(((this.mtr[i].dtx) - (pla.x+pla.w/2))**2 + ((this.mtr[i].dty) - (pla.y+pla.h/2))**2);
+            if (this.mtr[i].y+this.mtr[i].h/2 >= this.mtr[i].dty || this.mtr.x <= this.mtr[i].dtx) ((dp < 50 && (pla.tim.c-=90)),this.mtr.splice(i,1), i--);
         }
         upT(this.bal)
     }
